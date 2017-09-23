@@ -3,7 +3,7 @@
 
 Please note that there is a chance this module will not work on some Moodle environment. Also, this package is only available in English. Stay tuned to future versions for other language supports.
 
-YU Kaltura Media Assignment for Moodle
+YU Kaltura Media Assign for Moodle
 ------
 This is an activity module. Each student can submit a media from their "My Media", and teachers can play submitted medias, and grade each media.
 This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-mod_kalmediaassign/).
