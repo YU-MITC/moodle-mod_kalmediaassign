@@ -40,7 +40,7 @@ require_login($course);
 
 global $SESSION, $CFG;
 
-$strplural = get_string("modulenameplural", "mod_kalmediaassign");
+$strplural = get_string("modulenameplural", "kalmediaassign");
 $PAGE->set_url('/mod/kalmediaassign/index.php', array('id' => $id));
 $PAGE->set_pagelayout('incourse');
 $PAGE->navbar->add($strplural);

@@ -1208,7 +1208,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $strplural = get_string('modulenameplural', 'kalmediaassign');
 
         if (!$cms = get_coursemodules_in_course('kalmediaassign', $course->id, 'm.timedue')) {
-            echo get_string('noassignments', 'mod_kalmediaassign');
+            echo get_string('noassignments', 'kalmediaassign');
             echo $OUTPUT->continue_button($CFG->wwwroot.'/course/view.php?id='.$course->id);
         }
 
@@ -1225,41 +1225,43 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $currentsection = '';
         $assignmentcount = 0;
 
-        foreach ($modinfo->instances['kalmediaassign'] as $cm) {
-            if (!$cm->uservisible) {
-                continue;
-            }
-
-            $assignmentcount++;
-            $timedue = $cms[$cm->id]->timedue;
-
-            $sectionname = '';
-            if ($usesections && $cm->sectionnum) {
-                $sectionname = get_section_name($course, $sections[$cm->sectionnum]);
-            }
-
-            $submitted = '';
-            $context = context_module::instance($cm->id);
-
-            if (has_capability('mod/kalmediaassign:gradesubmission', $context)) {
-                $submitted = $DB->count_records('kalmediaassign_submission', array('mediaassignid' => $cm->instance));
-            } else if (has_capability('mod/kalmediaassign:submit', $context)) {
-                if ($DB->count_records('kalmediaassign_submission',
-                                       array('mediaassignid' => $cm->instance, 'userid' => $USER->id)) > 0) {
-                    $submitted = get_string('submitted', 'mod_kalmediaassign');
-                } else {
-                    $submitted = get_string('nosubmission', 'mod_kalmediaassign');
+        if (!empty($modinfo) && !empty($modinfo->instances['kalmeidaassign'])) {
+            foreach ($modinfo->instances['kalmediaassign'] as $cm) {
+                if (!$cm->uservisible) {
+                    continue;
                 }
-            }
 
-            $gradinginfo = grade_get_grades($course->id, 'mod', 'kalmediaassign', $cm->instance, $USER->id);
-            if (isset($gradinginfo->items[0]->grades[$USER->id]) && !$gradinginfo->items[0]->grades[$USER->id]->hidden ) {
-                $grade = $gradinginfo->items[0]->grades[$USER->id]->str_grade;
-            } else {
-                $grade = '-';
-            }
+                $assignmentcount++;
+                $timedue = $cms[$cm->id]->timedue;
 
-            $courseindexsummary->add_assign_info($cm->id, $cm->name, $sectionname, $timedue, $submitted, $grade);
+                $sectionname = '';
+                if ($usesections && $cm->sectionnum) {
+                    $sectionname = get_section_name($course, $sections[$cm->sectionnum]);
+                }
+
+                $submitted = '';
+                $context = context_module::instance($cm->id);
+
+                if (has_capability('mod/kalmediaassign:gradesubmission', $context)) {
+                    $submitted = $DB->count_records('kalmediaassign_submission', array('mediaassignid' => $cm->instance));
+                } else if (has_capability('mod/kalmediaassign:submit', $context)) {
+                    if ($DB->count_records('kalmediaassign_submission',
+                                           array('mediaassignid' => $cm->instance, 'userid' => $USER->id)) > 0) {
+                        $submitted = get_string('submitted', 'mod_kalmediaassign');
+                    } else {
+                        $submitted = get_string('nosubmission', 'mod_kalmediaassign');
+                    }
+                }
+
+                $gradinginfo = grade_get_grades($course->id, 'mod', 'kalmediaassign', $cm->instance, $USER->id);
+                if (isset($gradinginfo->items[0]->grades[$USER->id]) && !$gradinginfo->items[0]->grades[$USER->id]->hidden ) {
+                    $grade = $gradinginfo->items[0]->grades[$USER->id]->str_grade;
+                } else {
+                    $grade = '-';
+                }
+
+                $courseindexsummary->add_assign_info($cm->id, $cm->name, $sectionname, $timedue, $submitted, $grade);
+            }
         }
 
         if ($assignmentcount > 0) {
