@@ -25,8 +25,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-require_login();
-
 $plugin->component = 'mod_kalmediaassign';
 $plugin->version = 2017092301;
 $plugin->release = 'YU Kaltura Media Assignment 1.0.1';
