@@ -317,7 +317,8 @@ class submissions_table extends table_sql {
                 if (KalturaMediaType::IMAGE == $entryobject->mediaType) {
                     // Determine if the mobile theme is being used.
                     $theme = core_useragent::get_device_type_theme();
-                    $markup .= local_yukaltura_create_image_markup($entryobject, $entryobject->name, $theme, $modalwidth, $modalheight);
+                    $markup .= local_yukaltura_create_image_markup($entryobject, $entryobject->name,
+                                                                   $theme, $modalwidth, $modalheight);
                     $markup .= '<br><br>';
                 } else {
                     $kalturahost = local_yukaltura_get_host();
@@ -390,7 +391,6 @@ class submissions_table extends table_sql {
      * @return string - HTML markup for status of submission.
      */
     public function col_status($data) {
-        global $CFG;
 
         require_once(dirname(dirname(dirname(__FILE__))) . '/lib/weblib.php');
 
@@ -786,8 +786,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $col1->attributes['style'] = '';
         $col1->attributes['width'] = '25%';
 
-        $col2 = new html_table_cell('');
-
         if (!empty($kalmediaobj->timeavailable)) {
             $str = userdate($kalmediaobj->timeavailable);
             if (!kalmediaassign_assignment_submission_opened($kalmediaobj)) {
@@ -819,8 +817,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             }
 
             $col2 = new html_table_cell($str);
-        }
-        else {
+        } else {
             $col2 = new html_table_cell('-');
         }
 
@@ -832,11 +829,12 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $col1 = new html_table_cell(get_string('remainingtime', 'kalmediaassign'));
         $col1->attributes['style'] = '';
         $col1->attributes['width'] = '25%';
-        $col2 = new html_table_cell('-');
 
         if (!empty($kalmediaobj->timedue)) {
             $remain = kalmediaassign_get_remainingdate($kalmediaobj->timedue);
             $col2 = new html_table_cell($remain);
+        } else {
+            $col2 = new html_table_cell('-');
         }
 
         $col2->attributes['style'] = '';
@@ -857,12 +855,11 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             }
 
             $col2 = new html_table_cell($str);
-        }
-        else {
+        } else {
             $col2 = new html_table_cell('-');
         }
 
-        $cell2->attributes['style'] = '';
+        $col2->attributes['style'] = '';
         $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
