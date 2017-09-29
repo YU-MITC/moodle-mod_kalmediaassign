@@ -17,8 +17,7 @@
 /**
  * Kaltura media assignment single submission form
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,11 +31,22 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
+
+/**
+ * Class for display single submission form.
+ * @package   mod_kalmediaasign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class kalmediaassign_singlesubmission_form extends moodleform {
 
-    /**
-     * This function defines the forums elments that are to be displayed
-     */
+   /**
+    * This function defines the forums elements that are to be displayed.
+    * @access public
+    * @param none.
+    * @return nithing.
+    */
     public function definition() {
         global $CFG, $PAGE, $COURSE;
 
@@ -88,7 +98,6 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         }
 
         if (!empty($entryobject)) {
-            $courseid = $this->_customdata->context->get_course_context(false);
             $courseid = $COURSE->id;
 
             // Set the session.
@@ -107,9 +116,9 @@ class kalmediaassign_singlesubmission_form extends moodleform {
             } else {
                 list($entryobject->width, $entryobject->height) = kalmediaassign_get_player_dimensions();
                 if (0 == strcmp($theme, 'mymobile')) {
-                        $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $courseid, $session);
+                        $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $session);
                 } else {
-                    $markup = local_yukaltura_get_kdp_code($entryobject, $uiconfid, $courseid, $session);
+                    $markup = local_yukaltura_get_kdp_code($entryobject, $uiconfid, $session);
                 }
             }
 
@@ -240,6 +249,12 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         $this->add_action_buttons();
     }
 
+   /**
+    * This function defines the forums elements that are to be displayed.
+    * @access public
+    * @param object $data - submission object.
+    * @return nithing.
+    */
     public function set_data($data) {
 
         if (!isset($data->submission->format)) {
@@ -254,6 +269,12 @@ class kalmediaassign_singlesubmission_form extends moodleform {
 
     }
 
+   /**
+    * This function defines the forums elements that are to be displayed.
+    * @access protected
+    * @param none.
+    * @return array - list of setting data of assignment.
+    */
     protected function get_editor_options() {
 
         $editoroptions = array();

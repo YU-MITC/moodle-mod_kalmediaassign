@@ -34,11 +34,19 @@ if (!defined('MOODLE_INTERNAL')) {
 global $CFG;
 
 /**
- * @group mod_kalmediaassign
+ * Class of Moodle course unit test.
+ *
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2008-2014 Remote-Learner Inc <http://www.remote-learner.net>
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class locallib_testcase extends advanced_testcase {
     /**
-     * This function tests output from kalmediaassign_get_player_dimensions()
+     * This function tests output from kalmediaassign_get_player_dimensions().
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_kalmediaassign_get_player_dimensions_return_defaults() {
         $this->resetAfterTest(true);
@@ -51,7 +59,10 @@ class locallib_testcase extends advanced_testcase {
     }
 
     /**
-     * This function tests output from kalmediaassign_get_player_dimensions()
+     * This function tests output from kalmediaassign_get_player_dimensions().
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_kalmediaassign_get_player_dimensions_return_configured_results() {
         $this->resetAfterTest(true);
@@ -67,7 +78,10 @@ class locallib_testcase extends advanced_testcase {
     }
 
     /**
-     * This function tests output from kalmediaassign_get_player_dimensions()
+     * This function tests output from kalmediaassign_get_player_dimensions().
+     * @access public
+     * @param none.
+     * @return nothing.
      */
     public function test_kalmediaassign_get_player_dimensions_return_default_results_when_empty() {
         $this->resetAfterTest(true);

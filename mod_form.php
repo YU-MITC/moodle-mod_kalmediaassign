@@ -15,12 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Kaltura media assignment form
+ * YU Kaltura media assignment form.
  *
- * @package    mod
- * @subpackage kalmediaassign
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_kalmediaassign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
@@ -31,8 +30,22 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
 
+/**
+ * class of YU Kaltura Media assignment grade/submission form.
+ * @package mod_kalmediaasign
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_kalmediaassign_mod_form extends moodleform_mod {
+
+    /**
+     * This function outputs a submission information form.
+     * @access public
+     * @param none.
+     * @return nothing.
+     */
     public function definition() {
         global $CFG, $COURSE;
 

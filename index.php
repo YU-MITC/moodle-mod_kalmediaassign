@@ -17,8 +17,7 @@
 /**
  * Displays information about all the assignment modules in the requested course
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,6 +30,8 @@ if (!defined('MOODLE_INTERNAL')) {
     // It must be included from a Moodle page.
     die('Direct access to this script is forbidden.');
 }
+
+require_login();
 
 $id = required_param('id', PARAM_INT); // Course ID.
 

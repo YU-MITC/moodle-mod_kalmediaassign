@@ -15,10 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Kaltura Media assignment locallib
+ * YU Kaltura Media assignment locallib
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -42,7 +41,7 @@ if (!defined('MOODLE_INTERNAL')) {
  * Check if the assignment submission end date has passed or if late submissions
  * are prohibited.
  *
- * @param object - Kaltura instance media assignment object.
+ * @param object $kalmediassign - Kaltura media assignment instance object.
  * @return bool - true if expired, otherwise false.
  */
 function kalmediaassign_assignment_submission_expired($kalmediaassign) {
@@ -80,8 +79,8 @@ function kalmediaassign_assignment_submission_opened($kalmediaassign) {
  * Check if the assignment resubmission is allowed.
  * are prohibited
  *
- * @param object - Kaltura instance media assignment object.
- * @param object - Kaltura media entry object.
+ * @param object $kalmediassign - Kaltura instance media assignment object.
+ * @param object $entryobj - Kaltura media entry object.
  * @return bool - true if resubmission is allowed, otherwise false.
  */
 function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobj) {
@@ -115,7 +114,7 @@ function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryob
 /**
  * This function returns remaining time to assignment closed.
  *
- * @param int due time in seconds.
+ * @param int $duetime - due time in seconds.
  *
  * @return bool - true if assignment submission period is over else false.
  */
@@ -140,6 +139,11 @@ function kalmediaassign_get_remainingdate($duetime) {
     return $remain;
 }
 
+/**
+ * This function submit Kaltura media assignment.
+ * @param string $mode - submission mode.
+ * @return function - selected function from $mode.
+ */
 function kalmediaassign_submissions($mode) {
     // Make user global so we can use the id.
     global $USER, $OUTPUT, $DB, $PAGE;
@@ -235,14 +239,20 @@ function kalmediaassign_get_submission($kalmediaassignid, $userid) {
 
 }
 
+/**
+ * This function returns submission grade object.
+ * @param int $instanceid - id of instance which is modifid by teacher.
+ * @param int $userid - id of user which is affected by teacher.
+ * @return object - submission grade object.
+ */
 function kalmediaassign_get_submission_grade_object($instanceid, $userid) {
     global $DB;
 
     $param = array('kmedia' => $instanceid,
                    'userid' => $userid);
 
-    $sql = "SELECT u.id, u.id AS userid, s.grade AS rawgrade, s.submissioncomment AS feedback, s.format AS feedbackformat,
-                   s.teacher AS usermodified, s.timemarked AS dategraded, s.timemodified AS datesubmitted
+    $sql = "SELECT u.id userid, s.grade rawgrade, s.submissioncomment feedback, s.format AS feedbackformat,
+                   s.teacher usermodified, s.timemarked dategraded, s.timemodified datesubmitted
             FROM {user} u, {kalmediaassign_submission} s
             WHERE u.id = s.userid AND s.mediaassignid = :kmedia
                    AND u.id = :userid";
@@ -256,6 +266,11 @@ function kalmediaassign_get_submission_grade_object($instanceid, $userid) {
     return $data;
 }
 
+/**
+ * This function validate Kasltura Media assignment module.
+ * @param int $cmid - id of assignment which teacher want to view.
+ * @return object - serach result.
+ */
 function kalmediaassign_validate_cmid ($cmid) {
     global $DB;
 
@@ -275,6 +290,12 @@ function kalmediaassign_validate_cmid ($cmid) {
 
 }
 
+/*
+ * This function returns string about lateness of submission.
+ * @param int $timesubmitted - timestamp which student submitted a media.
+ * @param int $timedue - end time of media submission.
+ * @return string - HTML markup for lateness of submission.
+ */
 function kalmediaassign_display_lateness($timesubmitted, $timedue) {
     if (!$timedue) {
         return '';
@@ -289,6 +310,11 @@ function kalmediaassign_display_lateness($timesubmitted, $timedue) {
     }
 }
 
+/**
+ * This function return media properties.
+ * @param none.
+ * @return array - list of media properties.
+ */
 function kalmediaassign_get_media_properties() {
     return array('width' => '400',
                  'height' => '365',
@@ -305,11 +331,11 @@ function kalmediaassign_get_media_properties() {
  *
  * @global object
  * @global object
- * @param object - kaltura media assignment course module object
- * @param string - name of the media assignment instance
- * @param object - $submission object The submission that has changed
- * @param object - $context
- * @return void
+ * @param object $cm - kaltura media assignment course module object
+ * @param string $name - name of the media assignment instance
+ * @param object $submission - object The submission that has changed
+ * @param object $context - context object of submission.
+ * @return nothing.
  */
 function kalmediaassign_email_teachers($cm, $name, $submission, $context) {
     global $CFG, $DB;
@@ -359,10 +385,10 @@ function kalmediaassign_email_teachers($cm, $name, $submission, $context) {
 /**
  * Returns a list of teachers that should be grading given submission
  *
- * @param object - kaltura media assignment course module object
- * @param object - $user
- * @param object - a context object
- * @return array
+ * @param object $cm - kaltura media assignment course module object
+ * @param object $user - moodle user object.
+ * @param object $context - a context object.
+ * @return array - list of graders.
  */
 function kalmediaassign_get_graders($cm, $user, $context) {
     // Potential graders.
@@ -406,8 +432,8 @@ function kalmediaassign_get_graders($cm, $user, $context) {
 /**
  * Creates the text content for emails to teachers
  *
- * @param $info object The info used by the 'emailteachermail' language string
- * @return string
+ * @param object $info - The info used by the 'emailteachermail' language string
+ * @return string - posted message.
  */
 function kalmediaassign_email_teachers_text($info) {
     global $DB;
@@ -431,8 +457,8 @@ function kalmediaassign_email_teachers_text($info) {
  /**
   * Creates the html content for emails to teachers
   *
-  * @param $info object The info used by the 'emailteachermailhtml' language string
-  * @return string
+  * @param object $info - The info used by the 'emailteachermailhtml' language string
+  * @return string - HTML markup which prints posted messages.
   */
 function kalmediaassign_email_teachers_html($info) {
     global $CFG, $DB;
@@ -454,7 +480,11 @@ function kalmediaassign_email_teachers_html($info) {
     return $posthtml;
 }
 
-
+/**
+ * This function returns list of student about a Kaltura Media assignment.
+ * @param int $cmid - module id of submission.
+ * @return array - list of student.
+ */
 function kalmediaassign_get_assignment_students($cm) {
     global $CFG;
 
@@ -466,7 +496,8 @@ function kalmediaassign_get_assignment_students($cm) {
 
 /**
  * This functions returns an array with the height and width used in the configiruation for displaying a media.
- * @return array An array whose first value is the width and second value is the height.
+ * @param none.
+ * @return array - An array whose first value is the width and second value is the height.
  */
 function kalmediaassign_get_player_dimensions() {
     $kalturaconfig = get_config(KALTURA_PLUGIN_NAME);
@@ -483,7 +514,8 @@ function kalmediaassign_get_player_dimensions() {
 
 /**
  * This functions returns an array with the height and width used in the configiruation for displaying a media.
- * @return array An array whose first value is the width and second value is the height.
+ * @param none.
+ * @return array - An array whose first value is the width and second value is the height.
  */
 function kalmediaassign_get_popup_player_dimensions() {
     $kalturaconfig = get_config(KALTURA_PLUGIN_NAME);

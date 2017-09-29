@@ -35,6 +35,7 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
 
 /**
  * Given an object containing all the necessary data,
@@ -42,8 +43,8 @@ if (!defined('MOODLE_INTERNAL')) {
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param object $kalmediaassign An object from the form in mod_form.php
- * @return int The id of the newly inserted kalmediaassign record
+ * @param object $kalmediaassign - An object from the form in mod_form.php
+ * @return int - The id of the newly inserted kalmediaassign record
  */
 function kalmediaassign_add_instance($kalmediaassign) {
     global $DB;
@@ -78,8 +79,8 @@ function kalmediaassign_add_instance($kalmediaassign) {
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
- * @param object $kalmediaassign An object from the form in mod_form.php
- * @return boolean Success/Fail
+ * @param object $kalmediaassign - An object from the form in mod_form.php
+ * @return boolean - Success/Fail
  */
 function kalmediaassign_update_instance($kalmediaassign) {
     global $DB;
@@ -133,8 +134,8 @@ function kalmediaassign_update_instance($kalmediaassign) {
  * this function will permanently delete the instance
  * and any data that depends on it.
  *
- * @param int $id Id of the module instance
- * @return boolean Success/Failure
+ * @param int $id - Id of the module instance
+ * @return boolean - Success/Failure
  */
 function kalmediaassign_delete_instance($id) {
     global $DB;
@@ -169,8 +170,11 @@ function kalmediaassign_delete_instance($id) {
  * Used for user activity reports.
  * $return->time = the time they did it
  * $return->info = a short text description
- *
- * @return null
+ * @param object $course - Moodle course object.
+ * @param object $user - Moodle user object.
+ * @param object $mod - Moodle moduble object.
+ * @param object $kalmediaassign - An object from the form in mod_form.php.
+ * @return object - outline of user.
  * @todo Finish documenting this function
  */
 function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
@@ -184,7 +188,10 @@ function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
 /**
  * Print a detailed representation of what a user has done with
  * a given particular instance of this module, for user activity reports.
- *
+ * @param object $course - Moodle course object.
+ * @param object $user - Moodle user object.
+ * @param object $mod - Moodle module obuject.
+ * @param object $kalmediassign - An object from the form in mod_form.php.
  * @return boolean
  * @todo Finish documenting this function
  */
@@ -196,8 +203,10 @@ function kalmediaassign_user_complete($course, $user, $mod, $kalmediaassign) {
  * Given a course and a time, this module should find recent activity
  * that has occurred in kalmediaassign activities and print it out.
  * Return true if there was output, or false is there was none.
- *
- * @return boolean
+ * @param object $course - Moodle course object.
+ * @param array $viewfullnames - fullnames of course.
+ * @param int $timestart - timestamp.
+ * @return boolean - True if anything was printed, otherwise false.
  * @todo Finish documenting this function
  */
 function kalmediaassign_print_recent_activity($course, $viewfullnames, $timestart) {
@@ -212,8 +221,8 @@ function kalmediaassign_print_recent_activity($course, $viewfullnames, $timestar
  * independient of his role (student, teacher, admin...). The returned objects
  * must contain at least id property. See other modules as example.
  *
- * @param int $kalmediaassign ID of an instance of this module
- * @return boolean|array false if no participants, array of objects otherwise
+ * @param int $kalmediaassign - ID of an instance of this module
+ * @return boolean|array - false if no participants, array of objects otherwise
  */
 function kalmediaassign_get_participants($kalmediaassignid) {
     // TODO: finish this function.
@@ -227,12 +236,12 @@ function kalmediaassign_get_participants($kalmediaassignid) {
  * modified if necessary. See forum, glossary or journal modules
  * as reference.
  *
- * @param int $kalmediaassign id ID of an instance of this module
- * @return mixed
+ * @param int $kalmediaassign - id of an instance of this module
+ * @param int $scaleid - id of scale.
+ * @return mixed - now, this function anywhere returns "false".
  * @todo Finish documenting this function
  */
 function kalmediaassign_scale_used($kalmediaassignid, $scaleid) {
-    global $DB;
 
     $return = false;
 
@@ -244,8 +253,8 @@ function kalmediaassign_scale_used($kalmediaassignid, $scaleid) {
  * This function was added in 1.9
  *
  * This is used to find out if scale used anywhere
- * @param $scaleid int
- * @return boolean True if the scale is used by any kalmediaassign
+ * @param $scaleid int - id of scale.
+ * @return boolean - True if the scale is used by any kalmediaassign
  */
 function kalmediaassign_scale_used_anywhere($scaleid) {
     global $DB;
@@ -259,8 +268,9 @@ function kalmediaassign_scale_used_anywhere($scaleid) {
 }
 
 /**
- * @param string $feature FEATURE_xx constant for requested feature
- * @return mixed True if module supports feature, null if doesn't know
+ * This function returns support status about a feature which is received as argument.
+ * @param string $feature - FEATURE_xx constant for requested feature
+ * @return mixed - True if module supports feature, null if doesn't know
  */
 function kalmediaassign_supports($feature) {
     switch($feature) {
@@ -289,10 +299,10 @@ function kalmediaassign_supports($feature) {
 /**
  * Create/update grade item for given kaltura media assignment
  *
- * @global object
- * @param object kalmediaassign object with extra cmidnumber
- * @param mixed optional array/object of grade(s); 'reset' means reset grades in gradebook
- * @return int, 0 if ok, error code otherwise
+ * @global object.
+ * @param object - kalmediaassign object with extra cmidnumber
+ * @param mixed - optional array/object of grade(s); 'reset' means reset grades in gradebook
+ * @return int - 0 if ok, error code otherwise
  */
 function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
     global $CFG;
@@ -328,13 +338,14 @@ function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
  * Removes all grades from gradebook
  *
  * @global object
- * @param int $courseid
- * @param string optional type
+ * @param int $courseid - id of course.
+ * @param string  $type - optional type.
+ * @return nothing.
  */
 function kalmediaassign_reset_gradebook($courseid, $type='') {
     global $DB;
 
-    $sql = "SELECT l.*, cm.idnumber as cmidnumber, l.course as courseid
+    $sql = "SELECT l.*, cm.idnumber as cmidnumber, l.course courseid
               FROM {kalmediaassign} l, {course_modules} cm, {modules} m
              WHERE m.name='kalmediaassign' AND m.id=cm.module AND cm.instance=l.id AND l.course=:course";
 
@@ -356,8 +367,8 @@ function kalmediaassign_reset_gradebook($courseid, $type='') {
  *
  * @global stdClass
  * @global object
- * @param object $data the data submitted from the reset course.
- * @return array status array
+ * @param object $data - the data submitted from the reset course.
+ * @return array - status array.
  *
  * TODO: test user data reset feature
  */
@@ -398,6 +409,16 @@ function kalmediaassign_reset_userdata($data) {
     return $status;
 }
 
+/**
+ * This function deeltes a grade item.
+ *
+ * @global stdClass
+ * @global object
+ * @param object $data - the data submitted from the reset course.
+ * @return array - status array.
+ *
+ * TODO: test user data reset feature
+ */
 function kalmediaassign_grade_item_delete($kalmediaassign) {
     global $CFG;
     require_once($CFG->libdir . '/gradelib.php');
@@ -408,9 +429,10 @@ function kalmediaassign_grade_item_delete($kalmediaassign) {
 
 
 /**
- * Function to be run periodically according to the moodle cron
- *
- * Finds all assignment notifications that have yet to be mailed out, and mails them
+ * Function to be run periodically according to the moodle cron.
+ * Finds all assignment notifications that have yet to be mailed out, and mails them.
+ * @param none.
+ * @return nothing.
  */
 function kalmediaassign_cron () {
     return false;
@@ -419,7 +441,9 @@ function kalmediaassign_cron () {
 /**
  * Return list of marked submissions that have not been mailed out for currently enrolled students
  *
- * @return array
+ * @param int $starttime - start time for search submissions.
+ * @param int $endtime - end time for search submissions.
+ * @return array - list of marked submissions.
  */
 function kalmediaassign_get_unmailed_submissions($starttime, $endtime) {
 

@@ -17,8 +17,7 @@
 /**
  * Kaltura media assignment renderer class
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2013 onwards Remote-Learner {@link http://www.remote-learner.ca/}
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -35,8 +34,13 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+require_login();
+
 /**
- * Table class for displaying media submissions for grading
+ * Table class for displaying media submissions for grading.
+ * @package   mod_kalmediaasign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submissions_table extends table_sql {
 
@@ -53,6 +57,19 @@ class submissions_table extends table_sql {
     protected $_access_all_groups = false;
     protected $_connection = false;
 
+   /**
+    * This function is a cunstructor of renderer class.
+    * @param int $uniqueid - id of this submission.
+    * @param int $cm - id of Kaltura Media assignment module.
+    * @param object $gradeinfo - gradeing information object.
+    * @param bool $quickgrade - true/false of quick grade is on.
+    * @param string $tifirst - time of first submission.
+    * @param string $tilast - time of last submission.
+    * @param int $page - number of view page.
+    * @param array $entries - arrat of submissions.
+    * @param object $connection - connection object between client and Kaltura server.
+    * @return nithing.
+    */
     public function __construct($uniqueid, $cm, $gradinginfo, $quickgrade = false,
                          $tifirst = '', $tilast = '', $page = 0, $entries = array(),
                          $connection) {
@@ -81,6 +98,12 @@ class submissions_table extends table_sql {
 
     }
 
+    /**
+     * This function return HTML markup of picture of student.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup of picture of user.
+     */
     public function col_picture($data) {
         global $OUTPUT;
 
@@ -106,6 +129,12 @@ class submissions_table extends table_sql {
         return $output;
     }
 
+    /**
+     * This function return HTML markup for grade selecting.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup for grade selecting.
+     */
     public function col_selectgrade($data) {
         global $CFG;
 
@@ -168,6 +197,12 @@ class submissions_table extends table_sql {
     }
 
 
+    /**
+     * This function return HTML markup for submission comment.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup for submission comment.
+     */
     public function col_submissioncomment($data) {
         global $OUTPUT;
 
@@ -200,6 +235,12 @@ class submissions_table extends table_sql {
         return $output;
     }
 
+    /**
+     * This function return HTML markup for marked grade.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup for marked grade.
+     */
     public function col_grademarked($data) {
 
         $output = '';
@@ -211,6 +252,12 @@ class submissions_table extends table_sql {
         return $output;
     }
 
+    /**
+     * This function return HTML markup for modified time of submission.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup for modified time of submission.
+     */
     public function col_timemodified($data) {
 
         $attr = array('id' => 'ts'.$data->id);
@@ -301,6 +348,12 @@ class submissions_table extends table_sql {
         return $output;
     }
 
+    /**
+     * This function return HTML markup for grade.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup forgrade.
+     */
     public function col_grade($data) {
         $finalgrade = false;
 
@@ -333,6 +386,12 @@ class submissions_table extends table_sql {
     }
 
 
+    /**
+     * This function return HTML markup for status.
+     * @access public
+     * @param object $data - user data.
+     * @return string - HTML markup for status of submission.
+     */
     public function col_status($data) {
         global $OUTPUT, $CFG;
 
@@ -377,8 +436,8 @@ class submissions_table extends table_sql {
      *  Return a grade in user-friendly form, whether it's a scale or not
      *
      * @global object
-     * @param mixed $grade
-     * @return string User-friendly representation of grade
+     * @param mixed $grade - grading point (int) or message (ex. "non", "yet", etc.)
+     * @return string - User-friendly representation of grade.
      *
      * TODO: Move this to locallib.php
      */
@@ -416,8 +475,22 @@ class submissions_table extends table_sql {
 
 }
 
+/**
+ * Renderer class of YU Kaltura media submissions.
+ * @package   mod_kalmediaasign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
+    /**
+     * This function display media submission.
+     * @access public
+     * @param object $kalmediaobj - kalmediaassign object.
+     * @param int $userid - id of user.
+     * @param object $entryobj - object of media entry.
+     * @return string - HTML markup to display submission.
+     */
     public function display_submission($kalmediaobj, $userid, $entryobj = null) {
         global $CFG, $OUTPUT;
 
@@ -460,6 +533,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     }
 
+    /**
+     * This function display header of form.
+     * @access public
+     * @param object $kalmediaobj - kalmediaassign object.
+     * @param object $coursecontext - course context object which kalmediaassign module is placed.
+     * @return string - HTML markup for header part of form.
+     */
     public function display_mod_header($kalmediaobj, $coursecontext) {
         global $DB, $COURSE;
 
@@ -477,6 +557,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * This function display summary of grading.
+     * @access public
+     * @param object $cm - module context object.
+     * @param object $kalmediaobj - kalmediaassign object.
+     * @param object $coursecontext - course context object which kalmediaassign module is placed.
+     * @return string - HTML markup for gurading summary.
+     */
     public function display_grading_summary($cm, $kalmediaobj, $coursecontext) {
         global $DB, $COURSE;
         $html = '';
@@ -634,6 +722,15 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         return $html;
     }
 
+
+    /**
+     * This function display submission status.
+     * @access public
+     * @param object $cm - module context object.
+     * @param object $kalmediaobj - kalmediaassign object.
+     * @param object $coursecontext - course context object which kalmediaassign module is placed.
+     * @return string - HTML markup for submission status.
+     */
     public function display_submission_status($cm, $kalmediaobj, $coursecontext) {
         global $DB, $COURSE, $USER;
         $html = '';
@@ -774,6 +871,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * This function return HTML markup for submit button for student.
+     * @access public
+     * @param object $cm - module context object.
+     * @param int $userid - id of user (student).
+     * @param bool $disablesubmit - User can submit media to this assignment.
+     * @return string - HTML markup for submit button for student.
+     */
     public function display_student_submit_buttons($cm, $userid, $disablesubmit = false) {
 
         $html = '';
@@ -831,6 +936,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * This function display resubmit button.
+     * @access public
+     * @param object $cm - module context object.
+     * @param int $userid - id of user (student).
+     * @param bool $disablesubmit - User can submit media to this assignment.
+     * @return string - HTML markup to display resubmit button.
+     */
     public function display_student_resubmit_buttons($cm, $userid, $disablesubmit = false) {
         global $DB;
 
@@ -896,6 +1009,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     }
 
+    /**
+     * This function display buttons for instructor.
+     * @access public
+     * @param object $cm - module context object.
+     * @param int $userid - id of user (student).
+     * @return string - HTML markup to display buttons for instructor.
+     */
     public function display_instructor_buttons($cm,  $userid) {
 
         $html = '';
@@ -931,6 +1051,19 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         return $html;
     }
 
+    /**
+     * This function display submissions table.
+     * @access public
+     * @param object $cm - module context object.
+     * @param int $groupfileter - group filter option.
+     * @param string $filter - view filer option.
+     * @param int $perpage - submissions per page.
+     * @param bool $quickgrade - if quick grade is elable, return "true". Otherwise return "false".
+     * @param string $tifirst - first time of submissions.
+     * @param string $tilast - lasttime of submissions.
+     * @param int $page - number of page.
+     * @return nothing.
+     */
     public function display_submissions_table($cm, $groupfilter = 0, $filter = 'all', $perpage, $quickgrade = false,
                                        $tifirst = '', $tilast = '', $page = 0) {
 
@@ -1094,7 +1227,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
          * User ID has to be the first column returned and must be returned as id.
          * Otherwise the table will display links to user profiles that are incorrect or do not exist.
          */
-        $columns = '{user}.id, {kalmediaassign_submission}.id as submitid, {user}.firstname, {user}.lastname, ' .
+        $columns = '{user}.id, {kalmediaassign_submission}.id submitid, {user}.firstname, {user}.lastname, ' .
                    '{user}.picture, {user}.firstnamephonetic, {user}.lastnamephonetic, {user}.middlename, ' .
                    '{user}.alternatename, {user}.imagealt, {user}.email, '.
                    '{kalmediaassign_submission}.grade, {kalmediaassign_submission}.submissioncomment, ' .
@@ -1198,7 +1331,8 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     /**
      * Displays the assignments listing table.
      *
-     * @param object $course The course odject.
+     * @param object $course - The course odject.
+     * @return nothing.
      */
     public function display_kalmediaassignments_table($course) {
         global $CFG, $DB, $PAGE, $OUTPUT, $USER;
@@ -1273,15 +1407,16 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Display the feedback to the student
-     *
+     * This function return HTML markup for feedback to student.
      * This default method prints the teacher picture and name, date when marked,
      * grade and teacher submissioncomment.
      *
      * @global object
      * @global object
      * @global object
-     * @param object $submission The submission object or NULL in which case it will be loaded
+     * @param object $kalmediaassign - The submission object or NULL in which case it will be loaded.
+     * @param object $context - context object.
+     * @return string - HTML markup for feedback.
      *
      * TODO: correct documentation for this function
      */
@@ -1373,10 +1508,11 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Render a course index summary.
+     * This function return course index summary.
      *
-     * @param kalmediaassign_course_index_summary $indexsummary Structure for index summary.
-     * @return string HTML for assignments summary table
+     * @access public
+     * @param kalmediaassign_course_index_summary $indexsummary - Structure for index summary.
+     * @return string - HTML markup for course index summary.
      */
     public function render_kalmediaassign_course_index_summary(kalmediaassign_course_index_summary $indexsummary) {
         $strplural = get_string('modulenameplural', 'kalmediaassign');

@@ -17,8 +17,7 @@
 /**
  * Kaltura media assignment single submission page
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,12 +33,11 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-$id     = required_param('cmid', PARAM_INT); // Course Module ID.
+$id = required_param('cmid', PARAM_INT); // Course Module ID.
 $userid = required_param('userid', PARAM_INT);
 $tifirst = optional_param('tifirst', '', PARAM_TEXT);
-$tilast  = optional_param('tilast', '', PARAM_TEXT);
-$page    = optional_param('page', 0, PARAM_INT);
-
+$tilast = optional_param('tilast', '', PARAM_TEXT);
+$page = optional_param('page', 0, PARAM_INT);
 
 list($cm, $course, $kalmediaassignobj) = kalmediaassign_validate_cmid($id);
 
@@ -260,7 +258,7 @@ if ($result) {
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player');
-    $url = new moodle_url(local_yukaltura_htm5_javascript_url($uiconfid));
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
     $url = new moodle_url('/local/yukaltura/js/frameapi.js');
     $PAGE->requires->js($url, true);

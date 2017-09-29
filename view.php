@@ -17,10 +17,9 @@
 /**
  * Kaltura media assignment
  *
- * @package    mod
- * @subpackage kalmediaassign
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_kalmediaassign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
@@ -66,8 +65,9 @@ if ($connection) {
     $partnerid = local_yukaltura_get_partner_id();
     $host = local_yukaltura_get_host();
 
-    $PAGE->requires->js('/local/yukaltura/js/jquery.js', true);
+    $PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
     $PAGE->requires->js('/local/yukaltura/js/simple_selector.js', true);
+    $PAGE->requires->js_call_amd('local_yukaltura/simple_selector');
     $PAGE->requires->css('/local/yukaltura/css/simple_selector.css');
 }
 

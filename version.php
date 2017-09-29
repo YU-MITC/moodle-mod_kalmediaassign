@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,6 +24,8 @@ if (!defined('MOODLE_INTERNAL')) {
     // It must be included from a Moodle page.
     die('Direct access to this script is forbidden.');
 }
+
+require_login();
 
 $plugin->component = 'mod_kalmediaassign';
 $plugin->version = 2017092301;

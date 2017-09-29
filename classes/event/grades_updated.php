@@ -17,16 +17,29 @@
 /**
  * The grades_updated event.
  *
- * @package    mod
- * @subpackage kalmediaasign
- * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   mod_kalmediaasign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_kalmediaassign\event;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Event class of YU Kaltura Media assign.
+ *
+ * @package   mod_kalmediaasign
+ * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class grades_updated extends \core\event\base {
+
+    /**
+     * This function set default value.
+     * @access protected
+     * @param none.
+     * @return nothing.
+     */
     protected function init() {
         /*
          * Select flags. c(reate), r(ead), u(pdate), d(elete).
@@ -36,19 +49,43 @@ class grades_updated extends \core\event\base {
         $this->data['objecttable'] = 'kalmediaassign';
     }
 
+    /**
+     * This function return event name.
+     * @access public
+     * @param none.
+     * @return string - event name.
+     */
     public static function get_name() {
         return get_string('event_grades_updated', 'kalmediaassign');
     }
 
+    /**
+     * This function return description of submission.
+     * @access public
+     * @param none.
+     * @return string - description of event.
+     */
     public function get_description() {
         return "The user with id '{$this->userid}' updated grades of Kaltura media assign with "
         . "the course module id '{$this->contextinstanceid}'.";
     }
 
+    /**
+     * This function return object url.
+     * @access public
+     * @param none.
+     * @return string - URL of target submission.
+     */
     public function get_url() {
         return new \moodle_url('/mod/kalmediaassign/grade_submissions.php', array('cmid' => $this->contextinstanceid));
     }
 
+    /**
+     * This function return object url.
+     * @access public
+     * @param none.
+     * @return array - log data.
+     */
     public function get_legacy_logdata() {
         return array($this->courseid, 'kalmediaassign', 'updated grades of submissions',
             $this->get_url(), $this->objectid, $this->contextinstanceid);

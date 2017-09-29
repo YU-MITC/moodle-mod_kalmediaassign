@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    moodlecore
- * @subpackage backup-moodle2
+ * @package    moodlecore_backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -30,14 +29,24 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 /**
- * Define all the backup steps that will be used by the backup_kalmediaassign_activity_task
+ * Define all the backup steps that will be used by the backup_kalmediaassign_activity_task.
  */
 
 /**
- * Define the complete kalmediaassign structure for backup, with file and id annotations
+ * Define the complete kalmediaassign structure for backup, with file and id annotations.
+ * @package    moodlecore_backup-moodle2
+ * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
+ * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_kalmediaassign_activity_structure_step extends backup_activity_structure_step {
 
+    /**
+     * Define (add) particular settings this activity can have.
+     * @access protected
+     * @param none.
+     * @return object - define structure.
+     */
     protected function define_structure() {
 
         // To know if we are including userinfo.

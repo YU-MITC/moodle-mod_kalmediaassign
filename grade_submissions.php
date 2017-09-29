@@ -17,8 +17,7 @@
 /**
  * Kaltura media assignment grade submission page
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,6 +32,8 @@ if (!defined('MOODLE_INTERNAL')) {
     // It must be included from a Moodle page.
     die('Direct access to this script is forbidden.');
 }
+
+requre_login();
 
 $id      = required_param('cmid', PARAM_INT); // Course Module ID.
 $mode    = optional_param('mode', 0, PARAM_TEXT);
@@ -71,8 +72,6 @@ $PAGE->set_title(format_string($kalmediaassignobj->name));
 $PAGE->set_heading($course->fullname);
 $PAGE->navbar->add($currentcrumb);
 
-$url = new moodle_url('/local/mod/kalmediaassign/grade_submission.js');
-
 $renderer = $PAGE->get_renderer('mod_kalmediaassign');
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
@@ -82,8 +81,8 @@ if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_ht
 }
 
 $PAGE->requires->css('/mod/kalmediaassign/css/kalmediaassign.css', true);
-$PAGE->requires->js('/local/yukaltura/js/jquery.js', true);
-$PAGE->requires->js('/mod/kalmediaassign/js/grade_submission.js', true);
+$PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
+$PAGE->requires->js('/mod/kalmediassign/js/grade_submission', true);
 
 $courseid    = $course->id;
 $uiconfid    = local_yukaltura_get_player_uiconf('player_resource');

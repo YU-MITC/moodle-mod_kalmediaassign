@@ -26,8 +26,7 @@
  * Please do not forget to use upgrade_set_timeout()
  * before any action that may take longer time to finish.
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2010 onwards  Aparup Banerjee  http://moodle.com
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
