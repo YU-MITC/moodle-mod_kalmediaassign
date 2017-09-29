@@ -21,13 +21,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/*global $:false */
+
 var modalX = 0;
 var modalY = 0;
 
 /**
  * callback when window loaed.
- * @param none
- * @return nithing
+ * @param none.
+ * @return nithing.
  */
 window.onload = function() {
     var images = document.getElementsByClassName('media_thumbnail_cl');
@@ -43,21 +45,20 @@ window.onload = function() {
 
 /**
  * Entry a uload event callback
- * @param none
- * @return nothing
+ * @param none.
+ * @return nothing.
  */
 window.unload = function() {
-};
-
     /*
      * if window is resize, call modal window centerize function.
      */
     window.onresize = centeringModalSyncer;
+};
 
 /**
  * This function centerize modal window.
- * @param none
- * @return nothing
+ * @param none.
+ * @return nothing.
  */
 function centeringModalSyncer(){
 
@@ -83,8 +84,8 @@ function centeringModalSyncer(){
 
 /**
  * This function print modal window.
- * @param none
- * @return nothing
+ * @param none.
+ * @return nothing.
  */
 function fadeInModalWindow() {
     // All contents in web page release focus.
@@ -117,8 +118,8 @@ function fadeInModalWindow() {
 
 /**
  * This function delete content area and modal window.
- * @param none
- * @return nothing
+ * @param none.
+ * @return nothing.
  */
 function fadeOutModalWindow() {
     // Rescore scroll position to web brawser.
@@ -150,7 +151,7 @@ function ev(elem, event, func, useCapture){
 /**
  * This function create preview panel
  * @param {object} - Event object
- * @return nothing
+ * @return nothing.
  */
 function createPreviewPanel(event) {
     // View modal window.
@@ -182,12 +183,12 @@ function createPreviewPanel(event) {
     str += "</center>";
 
     $("#modal_content").append(str);
-    }
+}
 
 /**
  * This function add back buttion to modal window.
  * @param {string} - url of target page.
- * @return nothing
+ * @return nothing.
  */
 function addBackButton(url) {
     var content_html = "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" ";
