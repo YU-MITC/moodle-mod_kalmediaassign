@@ -34,8 +34,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-require_login();
-
 /**
  * Table class for displaying media submissions for grading.
  * @package   mod_kalmediaasign

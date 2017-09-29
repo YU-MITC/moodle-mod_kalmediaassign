@@ -33,8 +33,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-requre_login();
-
 $id      = required_param('cmid', PARAM_INT); // Course Module ID.
 $mode    = optional_param('mode', 0, PARAM_TEXT);
 $tifirst = optional_param('tifirst', '', PARAM_TEXT);

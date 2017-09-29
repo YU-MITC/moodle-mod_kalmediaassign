@@ -32,8 +32,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-require_login();
-
 /**
  * Grade preferencees class of mod_kalmediassign
  * @package mod_kalmediaassign

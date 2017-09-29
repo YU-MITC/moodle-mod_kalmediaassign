@@ -31,8 +31,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-require_login();
-
 $id = required_param('id', PARAM_INT); // Course ID.
 
 $course = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
