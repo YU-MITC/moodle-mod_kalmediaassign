@@ -55,19 +55,19 @@ class submissions_table extends table_sql {
     protected $_access_all_groups = false;
     protected $_connection = false;
 
-   /**
-    * This function is a cunstructor of renderer class.
-    * @param int $uniqueid - id of this submission.
-    * @param int $cm - id of Kaltura Media assignment module.
-    * @param object $gradeinfo - gradeing information object.
-    * @param bool $quickgrade - true/false of quick grade is on.
-    * @param string $tifirst - time of first submission.
-    * @param string $tilast - time of last submission.
-    * @param int $page - number of view page.
-    * @param array $entries - arrat of submissions.
-    * @param object $connection - connection object between client and Kaltura server.
-    * @return nithing.
-    */
+    /**
+     * This function is a cunstructor of renderer class.
+     * @param int $uniqueid - id of this submission.
+     * @param int $cm - id of Kaltura Media assignment module.
+     * @param object $gradeinfo - gradeing information object.
+     * @param bool $quickgrade - true/false of quick grade is on.
+     * @param string $tifirst - time of first submission.
+     * @param string $tilast - time of last submission.
+     * @param int $page - number of view page.
+     * @param array $entries - arrat of submissions.
+     * @param object $connection - connection object between client and Kaltura server.
+     * @return nithing.
+     */
     public function __construct($uniqueid, $cm, $gradinginfo, $quickgrade = false,
                          $tifirst = '', $tilast = '', $page = 0, $entries = array(),
                          $connection) {
