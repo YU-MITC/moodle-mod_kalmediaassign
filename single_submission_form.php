@@ -46,7 +46,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
      * @return nithing.
      */
     public function definition() {
-        global $CFG, $COURSE;
+        global $CFG;
 
         $mform =& $this->_form;
 
