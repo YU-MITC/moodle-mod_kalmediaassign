@@ -52,7 +52,7 @@ window.unload = function() {
     /*
      * if window is resize, call modal window centerize function.
      */
-    $(window).resize(centeringModalSyncer);
+    window.onresize = centeringModalSyncer;
 
 /**
  * This function centerize modal window.

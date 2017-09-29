@@ -39,14 +39,14 @@ if (!defined('MOODLE_INTERNAL')) {
  */
 class kalmediaassign_singlesubmission_form extends moodleform {
 
-   /**
-    * This function defines the forums elements that are to be displayed.
-    * @access public
-    * @param none.
-    * @return nithing.
-    */
+    /**
+     * This function defines the forums elements that are to be displayed.
+     * @access public
+     * @param none.
+     * @return nithing.
+     */
     public function definition() {
-        global $CFG, $PAGE, $COURSE;
+        global $CFG, $COURSE;
 
         $mform =& $this->_form;
 
@@ -74,10 +74,9 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         /* Media preview */
         $mform->addElement('header', 'single_submission_2', get_string('previewmedia', 'kalmediaassign'));
 
-        $submission   = $this->_customdata->submission;
-        $gradinginfo  = $this->_customdata->grading_info;
-        $entryobject  = '';
-        $timemodified = '';
+        $submission  = $this->_customdata->submission;
+        $gradinginfo = $this->_customdata->grading_info;
+        $entryobject = '';
 
         if (!empty($submission->entry_id)) {
 
@@ -96,7 +95,6 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         }
 
         if (!empty($entryobject)) {
-            $courseid = $COURSE->id;
 
             // Set the session.
             $session = local_yukaltura_generate_kaltura_session(array($entryobject->id));
@@ -247,12 +245,12 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         $this->add_action_buttons();
     }
 
-   /**
-    * This function defines the forums elements that are to be displayed.
-    * @access public
-    * @param object $data - submission object.
-    * @return nithing.
-    */
+    /**
+     * This function defines the forums elements that are to be displayed.
+     * @access public
+     * @param object $data - submission object.
+     * @return nithing.
+     */
     public function set_data($data) {
 
         if (!isset($data->submission->format)) {
@@ -261,18 +259,18 @@ class kalmediaassign_singlesubmission_form extends moodleform {
             $data->textformat = $data->submission->format;
         }
 
-        $editoroptions = $this->get_editor_options();
+        $data->editor_options = $this->get_editor_options();
 
         return parent::set_data($data);
 
     }
 
-   /**
-    * This function defines the forums elements that are to be displayed.
-    * @access protected
-    * @param none.
-    * @return array - list of setting data of assignment.
-    */
+    /**
+     * This function defines the forums elements that are to be displayed.
+     * @access protected
+     * @param none.
+     * @return array - list of setting data of assignment.
+     */
     protected function get_editor_options() {
 
         $editoroptions = array();

@@ -113,11 +113,11 @@ if (empty($connection)) {
 
 }
 
-echo $renderer->display_mod_header($kalmediaassign, $coursecontext);
+echo $renderer->display_mod_header($kalmediaassign);
 
 if (has_capability('mod/kalmediaassign:gradesubmission', $coursecontext)) {
     echo $renderer->display_grading_summary($cm, $kalmediaassign, $coursecontext);
-    echo $renderer->display_instructor_buttons($cm, $USER->id);
+    echo $renderer->display_instructor_buttons($cm);
 }
 
 if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
@@ -135,11 +135,11 @@ if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
                 kalmediaassign_assignment_submission_expired($kalmediaassign) &&
                 $kalmediaassign->preventlate;
 
-    echo $renderer->display_submission($cm, $USER->id, $entryobject);
+    echo $renderer->display_submission($entryobject);
 
     if (empty($submission->entry_id) and empty($submission->timecreated)) {
 
-        echo $renderer->display_student_submit_buttons($cm, $USER->id, $disabled);
+        echo $renderer->display_student_submit_buttons($cm, $disabled);
 
     } else {
         if ($disabled ||

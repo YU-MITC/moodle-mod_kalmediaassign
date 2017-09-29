@@ -145,8 +145,6 @@ function kalmediaassign_get_remainingdate($duetime) {
  * @return function - selected function from $mode.
  */
 function kalmediaassign_submissions($mode) {
-    // Make user global so we can use the id.
-    global $USER, $OUTPUT, $DB, $PAGE;
 
     $mailinfo = optional_param('mailinfo', null, PARAM_BOOL);
 
@@ -344,8 +342,6 @@ function kalmediaassign_email_teachers($cm, $name, $submission, $context) {
 
     if ($teachers = kalmediaassign_get_graders($cm, $user, $context)) {
 
-        $strassignments = get_string('modulenameplural', 'kalmediaassign');
-        $strassignment  = get_string('modulename', 'kalmediaassign');
         $strsubmitted   = get_string('submitted', 'kalmediaassign');
 
         foreach ($teachers as $teacher) {
@@ -486,7 +482,6 @@ function kalmediaassign_email_teachers_html($info) {
  * @return array - list of student.
  */
 function kalmediaassign_get_assignment_students($cm) {
-    global $CFG;
 
     $context = context_module::instance($cm->id);
     $users = get_enrolled_users($context, 'mod/kalmediaassign:submit', 0, 'u.id');

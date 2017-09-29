@@ -202,7 +202,6 @@ class submissions_table extends table_sql {
      * @return string - HTML markup for submission comment.
      */
     public function col_submissioncomment($data) {
-        global $OUTPUT;
 
         $output      = '';
         $finalgrade = false;
@@ -377,7 +376,7 @@ class submissions_table extends table_sql {
                 $output = html_writer::tag('div', userdate($data->timemarked), $attr);
 
         } else {
-            $otuput = '-';
+            $output = '-';
         }
 
         return $output;
@@ -391,7 +390,7 @@ class submissions_table extends table_sql {
      * @return string - HTML markup for status of submission.
      */
     public function col_status($data) {
-        global $OUTPUT, $CFG;
+        global $CFG;
 
         require_once(dirname(dirname(dirname(__FILE__))) . '/lib/weblib.php');
 
@@ -489,7 +488,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param object $entryobj - object of media entry.
      * @return string - HTML markup to display submission.
      */
-    public function display_submission($kalmediaobj, $userid, $entryobj = null) {
+    public function display_submission($entryobj = null) {
         global $CFG, $OUTPUT;
 
         $imgsource = '';
@@ -509,11 +508,11 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         if (!empty($entryobj)) {
 
-            $imgname   = $entryobj->name;
+            $imgname = $entryobj->name;
             $imgsource = $entryobj->thumbnailUrl;
 
         } else {
-            $imgname   = 'Media submission';
+            $imgname = 'Media submission';
             $imgsource = $CFG->wwwroot . '/local/yukaltura/pix/vidThumb.png';
         }
 
@@ -538,8 +537,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param object $coursecontext - course context object which kalmediaassign module is placed.
      * @return string - HTML markup for header part of form.
      */
-    public function display_mod_header($kalmediaobj, $coursecontext) {
-        global $DB, $COURSE;
+    public function display_mod_header($kalmediaobj) {
 
         $html = '';
 
@@ -564,7 +562,8 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @return string - HTML markup for gurading summary.
      */
     public function display_grading_summary($cm, $kalmediaobj, $coursecontext) {
-        global $DB, $COURSE;
+        global $DB;
+
         $html = '';
 
         if (!has_capability('mod/kalmediaassign:gradesubmission', $coursecontext)) {
@@ -730,7 +729,8 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @return string - HTML markup for submission status.
      */
     public function display_submission_status($cm, $kalmediaobj, $coursecontext) {
-        global $DB, $COURSE, $USER;
+        global $DB, $USER;
+
         $html = '';
 
         if (!has_capability('mod/kalmediaassign:submit', $coursecontext)) {
@@ -755,7 +755,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         if (!empty($submission) and !empty($submission->entry_id)) {
             $submissionstatus = get_string('status_submitted', 'kalmediaassign');
-            $entryobject = local_yukaltura_get_ready_entry_object($submission->entry_id, false);
         }
 
         if (!empty($submission) and !empty($submission->timecreated) and
@@ -877,7 +876,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param bool $disablesubmit - User can submit media to this assignment.
      * @return string - HTML markup for submit button for student.
      */
-    public function display_student_submit_buttons($cm, $userid, $disablesubmit = false) {
+    public function display_student_submit_buttons($cm, $disablesubmit = false) {
 
         $html = '';
 
@@ -902,8 +901,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                      'name' => 'sesskey',
                      'value' => sesskey());
         $html .= html_writer::empty_tag('input', $attr);
-
-        $context = context_module::instance($cm->id);
 
         $selectorurl = new moodle_url('/local/yukaltura/simple_selector.php');
 
@@ -1014,7 +1011,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param int $userid - id of user (student).
      * @return string - HTML markup to display buttons for instructor.
      */
-    public function display_instructor_buttons($cm,  $userid) {
+    public function display_instructor_buttons($cm) {
 
         $html = '';
 
@@ -1337,14 +1334,12 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         echo html_writer::start_tag('center');
 
-        $strplural = get_string('modulenameplural', 'kalmediaassign');
-
         if (!$cms = get_coursemodules_in_course('kalmediaassign', $course->id, 'm.timedue')) {
             echo get_string('noassignments', 'kalmediaassign');
             echo $OUTPUT->continue_button($CFG->wwwroot.'/course/view.php?id='.$course->id);
         }
 
-        $strsectionname  = get_string('sectionname', 'format_'.$course->format);
+        $strsectionname = get_string('sectionname', 'format_'.$course->format);
         $usesections = course_format_uses_sections($course->format);
         $modinfo = get_fast_modinfo($course);
 
@@ -1353,8 +1348,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
         $courseindexsummary = new kalmediaassign_course_index_summary($usesections, $strsectionname);
 
-        $timenow = time();
-        $currentsection = '';
         $assignmentcount = 0;
 
         if (!empty($modinfo) && !empty($modinfo->instances['kalmeidaassign'])) {
@@ -1386,7 +1379,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 }
 
                 $gradinginfo = grade_get_grades($course->id, 'mod', 'kalmediaassign', $cm->instance, $USER->id);
-                if (isset($gradinginfo->items[0]->grades[$USER->id]) && !$gradinginfo->items[0]->grades[$USER->id]->hidden ) {
+                if (isset($gradinginfo->items[0]->grades[$USER->id]) && !$gradinginfo->items[0]->grades[$USER->id]->hidden) {
                     $grade = $gradinginfo->items[0]->grades[$USER->id]->str_grade;
                 } else {
                     $grade = '-';
@@ -1530,6 +1523,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $table->data = array();
 
         $currentsection = '';
+
         foreach ($indexsummary->assignments as $info) {
             $params = array('id' => $info['cmid']);
             $link = html_writer::link(new moodle_url('/mod/kalmediaassign/view.php', $params), $info['cmname']);

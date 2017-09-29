@@ -47,7 +47,7 @@ class kalmediaassign_gradepreferences_form extends moodleform {
      * @return nothing.
      */
     public function definition() {
-        global $CFG, $COURSE, $USER;
+        global $COURSE, $USER;
 
         $mform =& $this->_form;
 

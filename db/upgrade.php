@@ -39,8 +39,14 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+/**
+ * Upgrade Kaltura Media assign object.
+ *
+ * @param int $oldversion - version number of old version plugin.
+ * @return bool - this function always return "true".
+ */
 function xmldb_kalmediaassign_upgrade($oldversion) {
-    global $CFG, $DB;
+    global $DB;
 
     $dbman = $DB->get_manager();
 
