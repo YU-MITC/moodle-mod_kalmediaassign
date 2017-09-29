@@ -638,7 +638,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             $query = $query . " and {user}.id in (" . implode(',', $users). ")";
         }
 
-        $result = $DB->get_recordset_sql( $query );
+        $result = $DB->get_recordset_sql($query);
 
         foreach ($result as $row) {
             $numrequire = $row->num;
@@ -764,28 +764,29 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('submissionstatus', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell($submissionstatus);
-        $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $col1 = new html_table_cell(get_string('submissionstatus', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
+        $col2 = new html_table_cell($submissionstatus);
+        $col2->attributes['style'] = '';
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('gradingstatus', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell($gradingstatus);
-        $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $col1 = new html_table_cell(get_string('gradingstatus', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
+        $col2 = new html_table_cell($gradingstatus);
+        $col2->attributes['style'] = '';
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('availabledate', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell('-');
+        $col1 = new html_table_cell(get_string('availabledate', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
+
+        $col2 = new html_table_cell('');
 
         if (!empty($kalmediaobj->timeavailable)) {
             $str = userdate($kalmediaobj->timeavailable);
@@ -795,18 +796,19 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $str .= html_writer::end_tag('font');
             }
 
-            $cell2 = new html_table_cell($str);
+            $col2 = new html_table_cell($str);
+        } else {
+            $col2 = new html_table_cell('-');
         }
 
-        $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $col2->attributes['style'] = '';
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('duedate', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell('-');
+        $col1 = new html_table_cell(get_string('duedate', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
 
         if (!empty($kalmediaobj->timedue)) {
             $str = userdate($kalmediaobj->timedue);
@@ -816,33 +818,35 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $str .= html_writer::end_tag('font');
             }
 
-            $cell2 = new html_table_cell($str);
+            $col2 = new html_table_cell($str);
+        }
+        else {
+            $col2 = new html_table_cell('-');
         }
 
-        $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $col2->attributes['style'] = '';
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('remainingtime', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell('-');
+        $col1 = new html_table_cell(get_string('remainingtime', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
+        $col2 = new html_table_cell('-');
 
         if (!empty($kalmediaobj->timedue)) {
             $remain = kalmediaassign_get_remainingdate($kalmediaobj->timedue);
-            $cell2 = new html_table_cell($remain);
+            $col2 = new html_table_cell($remain);
         }
 
-        $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $col2->attributes['style'] = '';
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $row = new html_table_row();
-        $cell1 = new html_table_cell(get_string('status_timemodified', 'kalmediaassign'));
-        $cell1->attributes['style'] = '';
-        $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell('-');
+        $col1 = new html_table_cell(get_string('status_timemodified', 'kalmediaassign'));
+        $col1->attributes['style'] = '';
+        $col1->attributes['width'] = '25%';
 
         if (!empty($submission->timemodified)) {
             $str = userdate($submission->timemodified);
@@ -852,11 +856,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $str .= html_writer::end_tag('font');
             }
 
-            $cell2 = new html_table_cell($str);
+            $col2 = new html_table_cell($str);
+        }
+        else {
+            $col2 = new html_table_cell('-');
         }
 
         $cell2->attributes['style'] = '';
-        $row->cells = array($cell1, $cell2);
+        $row->cells = array($col1, $col2);
         $table->data[] = $row;
 
         $html .= html_writer::table($table);
