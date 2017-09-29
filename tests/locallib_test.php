@@ -31,8 +31,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-global $CFG;
-
 /**
  * Class of Moodle course unit test.
  *
