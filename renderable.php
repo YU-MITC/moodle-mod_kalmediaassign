@@ -41,7 +41,7 @@ class kalmediaassign_course_index_summary implements renderable {
 
     /**
      * This function is cunstructor of renderable class.
-     *
+     * @access public
      * @param boolean $usesections - True if this course format uses sections.
      * @param string $courseformatname - The id of this course format.
      * @return nothing.
@@ -53,7 +53,7 @@ class kalmediaassign_course_index_summary implements renderable {
 
     /**
      * Add a row of data to display on the course index page
-     *
+     * @access public
      * @param int $cmid - The course module id for generating a link
      * @param string $cmname - The course module name for generating a link
      * @param string $sectionname - The name of the course section (only if $usesections is true)

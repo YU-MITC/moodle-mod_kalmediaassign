@@ -21,7 +21,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/*global $:false */
+/*global $:false unsed:false undef:false jQuery:true */
+/* global $ */
 
 var modalX = 0;
 var modalY = 0;

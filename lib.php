@@ -297,7 +297,6 @@ function kalmediaassign_supports($feature) {
 /**
  * Create/update grade item for given kaltura media assignment
  *
- * @global object.
  * @param object - kalmediaassign object with extra cmidnumber
  * @param mixed - optional array/object of grade(s); 'reset' means reset grades in gradebook
  * @return int - 0 if ok, error code otherwise
@@ -335,7 +334,6 @@ function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
 /**
  * Removes all grades from gradebook
  *
- * @global object
  * @param int $courseid - id of course.
  * @param string  $type - optional type.
  * @return nothing.
@@ -363,8 +361,6 @@ function kalmediaassign_reset_gradebook($courseid, $type='') {
  * Actual implementation of the reset course functionality, delete all the
  * kaltura media submissions attempts for course $data->courseid.
  *
- * @global stdClass
- * @global object
  * @param object $data - the data submitted from the reset course.
  * @return array - status array.
  *
@@ -410,8 +406,6 @@ function kalmediaassign_reset_userdata($data) {
 /**
  * This function deeltes a grade item.
  *
- * @global stdClass
- * @global object
  * @param object $data - the data submitted from the reset course.
  * @return array - status array.
  *

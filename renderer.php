@@ -432,7 +432,6 @@ class submissions_table extends table_sql {
     /**
      *  Return a grade in user-friendly form, whether it's a scale or not
      *
-     * @global object
      * @param mixed $grade - grading point (int) or message (ex. "non", "yet", etc.)
      * @return string - User-friendly representation of grade.
      *
@@ -1406,9 +1405,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * This default method prints the teacher picture and name, date when marked,
      * grade and teacher submissioncomment.
      *
-     * @global object
-     * @global object
-     * @global object
      * @param object $kalmediaassign - The submission object or NULL in which case it will be loaded.
      * @param object $context - context object.
      * @return string - HTML markup for feedback.

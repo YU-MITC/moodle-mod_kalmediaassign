@@ -327,8 +327,6 @@ function kalmediaassign_get_media_properties() {
  * Sends an email to ALL teachers in the course (or in the group if using separate groups).
  * Uses the methods kalmediaassign_email_teachers_text() and kalmediaassign_email_teachers_html() to construct the content.
  *
- * @global object
- * @global object
  * @param object $cm - kaltura media assignment course module object
  * @param string $name - name of the media assignment instance
  * @param object $submission - object The submission that has changed
