@@ -74,13 +74,13 @@ $renderer = $PAGE->get_renderer('mod_kalmediaassign');
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
-    $url = new moodle_url(local_yukaltura_htm5_javascript_url($uiconfid));
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
 }
 
 $PAGE->requires->css('/mod/kalmediaassign/css/kalmediaassign.css', true);
 $PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
-$PAGE->requires->js('/mod/kalmediassign/js/grade_submission', true);
+$PAGE->requires->js('/mod/kalmediaassign/js/grade_submission.js', true);
 
 $courseid    = $course->id;
 $uiconfid    = local_yukaltura_get_player_uiconf('player_resource');

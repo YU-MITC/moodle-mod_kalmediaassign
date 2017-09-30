@@ -67,7 +67,7 @@ if ($connection) {
 
     $PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
     $PAGE->requires->js('/local/yukaltura/js/simple_selector.js', true);
-    $PAGE->requires->js_call_amd('local_yukaltura/simple_selector');
+    $PAGE->requires->js('/local/yukaltura/js/simple_selector.js');
     $PAGE->requires->css('/local/yukaltura/css/simple_selector.css');
 }
 
@@ -84,7 +84,7 @@ $completion->set_module_viewed($cm);
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player');
-    $url = new moodle_url(local_yukaltura_htm5_javascript_url($uiconfid));
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
     $url = new moodle_url('/local/yukaltura/js/frameapi.js');
     $PAGE->requires->js($url, true);
