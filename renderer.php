@@ -36,37 +36,48 @@ if (!defined('MOODLE_INTERNAL')) {
 
 /**
  * Table class for displaying media submissions for grading.
- * @package   mod_kalmediaasign
+ * @package   mod_kalmediaassign
  * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submissions_table extends table_sql {
 
+    /** @var quicgrade is enable. */
     protected $_quickgrade;
+    /** @var gradeinfo */
     protected $_gradinginfo;
+    /** @var instance of cntext module. */
     protected $_cminstance;
+    /** @var maximum grade set by teacher. */
     protected $_grademax;
+    /** @var maximum columns */
     protected $_cols = 20;
+    /** @var maximum rows */
     protected $_rows = 4;
+    /** @var time of first submission */
     protected $_tifirst;
+    /** @var time of last submission */
     protected $_tilast;
+    /** @var page number */
     protected $_page;
+    /** @var array of entries. */
     protected $_entries;
+    /** @var teacher can acecss all groups */
     protected $_access_all_groups = false;
+    /** @var Does client connect to kaltura server ? */
     protected $_connection = false;
 
     /**
      * This function is a cunstructor of renderer class.
-     * @param int $uniqueid - id of this submission.
-     * @param int $cm - id of Kaltura Media assignment module.
-     * @param object $gradeinfo - gradeing information object.
+     * @param int $uniqueid - id of target submission.
+     * @param object $cm - object of Kaltura Media assignment module.
+     * @param object $gradinginfo - grading information object.
      * @param bool $quickgrade - true/false of quick grade is on.
      * @param string $tifirst - time of first submission.
      * @param string $tilast - time of last submission.
      * @param int $page - number of view page.
-     * @param array $entries - arrat of submissions.
+     * @param array $entries - array of submissions.
      * @param object $connection - connection object between client and Kaltura server.
-     * @return nithing.
      */
     public function __construct($uniqueid, $cm, $gradinginfo, $quickgrade = false,
                          $tifirst = '', $tilast = '', $page = 0, $entries = array(),
@@ -98,7 +109,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup of picture of student.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup of picture of user.
      */
@@ -129,7 +139,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for grade selecting.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup for grade selecting.
      */
@@ -197,7 +206,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for submission comment.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup for submission comment.
      */
@@ -234,7 +242,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for marked grade.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup for marked grade.
      */
@@ -251,7 +258,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for modified time of submission.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup for modified time of submission.
      */
@@ -348,7 +354,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for grade.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup forgrade.
      */
@@ -367,6 +372,11 @@ class submissions_table extends table_sql {
         return $output;
     }
 
+    /**
+     * This function return HTML markup about submission modified timestamp.
+     * @param object $data - object of submission.
+     * @return string - HTML markup.
+     */
     public function col_timemarked($data) {
 
         $output = '-';
@@ -386,7 +396,6 @@ class submissions_table extends table_sql {
 
     /**
      * This function return HTML markup for status.
-     * @access public
      * @param object $data - user data.
      * @return string - HTML markup for status of submission.
      */
@@ -473,7 +482,7 @@ class submissions_table extends table_sql {
 
 /**
  * Renderer class of YU Kaltura media submissions.
- * @package   mod_kalmediaasign
+ * @package   mod_kalmediaassign
  * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -481,9 +490,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display media submission.
-     * @access public
-     * @param object $kalmediaobj - kalmediaassign object.
-     * @param int $userid - id of user.
      * @param object $entryobj - object of media entry.
      * @return string - HTML markup to display submission.
      */
@@ -531,9 +537,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display header of form.
-     * @access public
      * @param object $kalmediaobj - kalmediaassign object.
-     * @param object $coursecontext - course context object which kalmediaassign module is placed.
      * @return string - HTML markup for header part of form.
      */
     public function display_mod_header($kalmediaobj) {
@@ -554,7 +558,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display summary of grading.
-     * @access public
      * @param object $cm - module context object.
      * @param object $kalmediaobj - kalmediaassign object.
      * @param object $coursecontext - course context object which kalmediaassign module is placed.
@@ -721,7 +724,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display submission status.
-     * @access public
      * @param object $cm - module context object.
      * @param object $kalmediaobj - kalmediaassign object.
      * @param object $coursecontext - course context object which kalmediaassign module is placed.
@@ -873,9 +875,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function return HTML markup for submit button for student.
-     * @access public
      * @param object $cm - module context object.
-     * @param int $userid - id of user (student).
      * @param bool $disablesubmit - User can submit media to this assignment.
      * @return string - HTML markup for submit button for student.
      */
@@ -936,7 +936,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display resubmit button.
-     * @access public
      * @param object $cm - module context object.
      * @param int $userid - id of user (student).
      * @param bool $disablesubmit - User can submit media to this assignment.
@@ -1009,9 +1008,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display buttons for instructor.
-     * @access public
      * @param object $cm - module context object.
-     * @param int $userid - id of user (student).
      * @return string - HTML markup to display buttons for instructor.
      */
     public function display_instructor_buttons($cm) {
@@ -1051,16 +1048,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function display submissions table.
-     * @access public
      * @param object $cm - module context object.
-     * @param int $groupfileter - group filter option.
+     * @param int $groupfilter - group filter option.
      * @param string $filter - view filer option.
      * @param int $perpage - submissions per page.
      * @param bool $quickgrade - if quick grade is elable, return "true". Otherwise return "false".
      * @param string $tifirst - first time of submissions.
      * @param string $tilast - lasttime of submissions.
      * @param int $page - number of page.
-     * @return nothing.
      */
     public function display_submissions_table($cm, $groupfilter = 0, $filter = 'all', $perpage, $quickgrade = false,
                                        $tifirst = '', $tilast = '', $page = 0) {
@@ -1501,7 +1496,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     /**
      * This function return course index summary.
      *
-     * @access public
      * @param kalmediaassign_course_index_summary $indexsummary - Structure for index summary.
      * @return string - HTML markup for course index summary.
      */

@@ -27,11 +27,7 @@
 var modalX = 0;
 var modalY = 0;
 
-/**
- * callback when window loaed.
- * @param none.
- * @return nithing.
- */
+// Callback when window loaed.
 window.onload = function() {
     var images = document.getElementsByClassName('media_thumbnail_cl');
     var n = images.length;
@@ -44,22 +40,14 @@ window.onload = function() {
     }
 };
 
-/**
- * Entry a uload event callback
- * @param none.
- * @return nothing.
- */
+// Entry a uload event callback.
 window.unload = function() {
-    /*
-     * if window is resize, call modal window centerize function.
-     */
+    // If window is resize, call modal window centerize function.
     window.onresize = centeringModalSyncer;
 };
 
 /**
  * This function centerize modal window.
- * @param none.
- * @return nothing.
  */
 function centeringModalSyncer(){
 
@@ -85,8 +73,6 @@ function centeringModalSyncer(){
 
 /**
  * This function print modal window.
- * @param none.
- * @return nothing.
  */
 function fadeInModalWindow() {
     // All contents in web page release focus.
@@ -119,8 +105,6 @@ function fadeInModalWindow() {
 
 /**
  * This function delete content area and modal window.
- * @param none.
- * @return nothing.
  */
 function fadeOutModalWindow() {
     // Rescore scroll position to web brawser.
@@ -138,7 +122,6 @@ function fadeOutModalWindow() {
  * @param {object} - target element object
  * @param {object} - target event object
  * @param {bool} - use of capture.
- * @return nothing.
  */
 function ev(elem, event, func, useCapture){
     if (elem.addEventListener) {
@@ -152,7 +135,6 @@ function ev(elem, event, func, useCapture){
 /**
  * This function create preview panel
  * @param {object} - Event object
- * @return nothing.
  */
 function createPreviewPanel(event) {
     // View modal window.
@@ -189,7 +171,6 @@ function createPreviewPanel(event) {
 /**
  * This function add back buttion to modal window.
  * @param {string} - url of target page.
- * @return nothing.
  */
 function addBackButton(url) {
     var content_html = "<input type=button id=\"backToMymedia\" name=\"backToMymedia\" ";
@@ -200,7 +181,6 @@ function addBackButton(url) {
 /**
  * This is callback function when calcel buttion is clicked.
  * @param {string} - url of target page.
- * @return nothing
  */
 function handleCancelClick(url) {
 }

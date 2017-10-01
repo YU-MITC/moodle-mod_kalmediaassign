@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * YU Kaltura Media Assignment verison file.
  * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,12 +27,12 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2017093000;
+$plugin->version = 2017100100;
 $plugin->release = 'YU Kaltura Media Assignment 1.0.2';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2017093000,
-    'local_yumymedia' => 2017093000
+    'local_yukaltura' => 2017100100,
+    'local_yumymedia' => 2017100100
 );

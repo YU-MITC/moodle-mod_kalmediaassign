@@ -41,7 +41,7 @@ if (!defined('MOODLE_INTERNAL')) {
  * Check if the assignment submission end date has passed or if late submissions
  * are prohibited.
  *
- * @param object $kalmediassign - Kaltura media assignment instance object.
+ * @param object $kalmediaassign - Kaltura media assignment instance object.
  * @return bool - true if expired, otherwise false.
  */
 function kalmediaassign_assignment_submission_expired($kalmediaassign) {
@@ -60,7 +60,7 @@ function kalmediaassign_assignment_submission_expired($kalmediaassign) {
  * Check if the assignment submission is opened.
  * are prohibited
  *
- * @param object - Kaltura instance media assignment object.
+ * @param object $kalmediaassign - Kaltura instance media assignment object.
  * @return bool - true if opened, otherwise false.
  */
 function kalmediaassign_assignment_submission_opened($kalmediaassign) {
@@ -79,7 +79,7 @@ function kalmediaassign_assignment_submission_opened($kalmediaassign) {
  * Check if the assignment resubmission is allowed.
  * are prohibited
  *
- * @param object $kalmediassign - Kaltura instance media assignment object.
+ * @param object $kalmediaassign - Kaltura instance media assignment object.
  * @param object $entryobj - Kaltura media entry object.
  * @return bool - true if resubmission is allowed, otherwise false.
  */
@@ -173,8 +173,8 @@ function kalmediaassign_submissions($mode) {
 /**
  * Retrieve a list of users who have submitted assignments
  *
- * @param int - assignment instance id
- * @param string - filter results by assignments that have been submitted or
+ * @param int $kalmediaassignid - assignment instance id
+ * @param string $filter - filter results by assignments that have been submitted or
  * assignment that need to be graded or no filter at all
  *
  * @return mixed - collection of users or false
@@ -211,8 +211,8 @@ function kalmediaassign_get_submissions($kalmediaassignid, $filter = '') {
 /**
  * Retrieve a database record of kalmediaassign submission
  *
- * @param int - assignment instance id
- * @param int - user id in moodle
+ * @param int $kalmediaassignid - assignment instance id
+ * @param int $userid - user id in moodle
  *
  * @return mixed - collection of users or false
  */
@@ -288,7 +288,7 @@ function kalmediaassign_validate_cmid ($cmid) {
 
 }
 
-/*
+/**
  * This function returns string about lateness of submission.
  * @param int $timesubmitted - timestamp which student submitted a media.
  * @param int $timedue - end time of media submission.
@@ -310,7 +310,6 @@ function kalmediaassign_display_lateness($timesubmitted, $timedue) {
 
 /**
  * This function return media properties.
- * @param none.
  * @return array - list of media properties.
  */
 function kalmediaassign_get_media_properties() {
@@ -476,7 +475,7 @@ function kalmediaassign_email_teachers_html($info) {
 
 /**
  * This function returns list of student about a Kaltura Media assignment.
- * @param int $cmid - module id of submission.
+ * @param int $cm - module instance of submission.
  * @return array - list of student.
  */
 function kalmediaassign_get_assignment_students($cm) {
@@ -489,7 +488,6 @@ function kalmediaassign_get_assignment_students($cm) {
 
 /**
  * This functions returns an array with the height and width used in the configiruation for displaying a media.
- * @param none.
  * @return array - An array whose first value is the width and second value is the height.
  */
 function kalmediaassign_get_player_dimensions() {
@@ -507,7 +505,6 @@ function kalmediaassign_get_player_dimensions() {
 
 /**
  * This functions returns an array with the height and width used in the configiruation for displaying a media.
- * @param none.
  * @return array - An array whose first value is the width and second value is the height.
  */
 function kalmediaassign_get_popup_player_dimensions() {

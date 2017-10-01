@@ -33,7 +33,7 @@ if (!defined('MOODLE_INTERNAL')) {
 
 /**
  * Class for display single submission form.
- * @package   mod_kalmediaasign
+ * @package   mod_kalmediaassign
  * @copyright (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -41,9 +41,6 @@ class kalmediaassign_singlesubmission_form extends moodleform {
 
     /**
      * This function defines the forums elements that are to be displayed.
-     * @access public
-     * @param none.
-     * @return nithing.
      */
     public function definition() {
         global $CFG;
@@ -247,9 +244,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
 
     /**
      * This function defines the forums elements that are to be displayed.
-     * @access public
      * @param object $data - submission object.
-     * @return nithing.
      */
     public function set_data($data) {
 
@@ -267,8 +262,6 @@ class kalmediaassign_singlesubmission_form extends moodleform {
 
     /**
      * This function defines the forums elements that are to be displayed.
-     * @access protected
-     * @param none.
      * @return array - list of setting data of assignment.
      */
     protected function get_editor_options() {

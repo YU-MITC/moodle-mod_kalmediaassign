@@ -17,8 +17,7 @@
 /**
  * Kaltura media assignment library of hooks
  *
- * @package    mod
- * @subpackage kalmediaassign
+ * @package    mod_kalmediaassign
  * @copyright  (C) 2016-2017 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -189,8 +188,8 @@ function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
  * @param object $course - Moodle course object.
  * @param object $user - Moodle user object.
  * @param object $mod - Moodle module obuject.
- * @param object $kalmediassign - An object from the form in mod_form.php.
- * @return boolean
+ * @param object $kalmediaassign - An object from the form in mod_form.php.
+ * @return bool - this function always return true.
  * @todo Finish documenting this function
  */
 function kalmediaassign_user_complete($course, $user, $mod, $kalmediaassign) {
@@ -219,7 +218,7 @@ function kalmediaassign_print_recent_activity($course, $viewfullnames, $timestar
  * independient of his role (student, teacher, admin...). The returned objects
  * must contain at least id property. See other modules as example.
  *
- * @param int $kalmediaassign - ID of an instance of this module
+ * @param int $kalmediaassignid - ID of an instance of this module
  * @return boolean|array - false if no participants, array of objects otherwise
  */
 function kalmediaassign_get_participants($kalmediaassignid) {
@@ -234,7 +233,7 @@ function kalmediaassign_get_participants($kalmediaassignid) {
  * modified if necessary. See forum, glossary or journal modules
  * as reference.
  *
- * @param int $kalmediaassign - id of an instance of this module
+ * @param int $kalmediaassignid - id of an instance of this module
  * @param int $scaleid - id of scale.
  * @return mixed - now, this function anywhere returns "false".
  * @todo Finish documenting this function
@@ -251,8 +250,8 @@ function kalmediaassign_scale_used($kalmediaassignid, $scaleid) {
  * This function was added in 1.9
  *
  * This is used to find out if scale used anywhere
- * @param $scaleid int - id of scale.
- * @return boolean - True if the scale is used by any kalmediaassign
+ * @param int $scaleid - id of scale.
+ * @return bool - True if the scale is used by any kalmediaassign
  */
 function kalmediaassign_scale_used_anywhere($scaleid) {
     global $DB;
@@ -297,8 +296,8 @@ function kalmediaassign_supports($feature) {
 /**
  * Create/update grade item for given kaltura media assignment
  *
- * @param object - kalmediaassign object with extra cmidnumber
- * @param mixed - optional array/object of grade(s); 'reset' means reset grades in gradebook
+ * @param object $kalmediaassign - kalmediaassign object with extra cmidnumber
+ * @param mixed $grades - optional array/object of grade(s); 'reset' means reset grades in gradebook
  * @return int - 0 if ok, error code otherwise
  */
 function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
@@ -406,7 +405,7 @@ function kalmediaassign_reset_userdata($data) {
 /**
  * This function deeltes a grade item.
  *
- * @param object $data - the data submitted from the reset course.
+ * @param object $kalmediaassign - kaltura media assignment object.
  * @return array - status array.
  *
  * TODO: test user data reset feature
@@ -423,8 +422,6 @@ function kalmediaassign_grade_item_delete($kalmediaassign) {
 /**
  * Function to be run periodically according to the moodle cron.
  * Finds all assignment notifications that have yet to be mailed out, and mails them.
- * @param none.
- * @return nothing.
  */
 function kalmediaassign_cron () {
     return false;

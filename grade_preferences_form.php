@@ -42,9 +42,6 @@ class kalmediaassign_gradepreferences_form extends moodleform {
 
     /**
      * This function outputs a grade submission form.
-     * @access public
-     * @param none.
-     * @return nothing.
      */
     public function definition() {
         global $COURSE, $USER;
@@ -120,10 +117,9 @@ class kalmediaassign_gradepreferences_form extends moodleform {
 
     /**
      * This function validates submissons.
-     * @access public
      * @param array $data - form data.
-     * @@aram array $files - form data.
-     * @return $string error messages (if no error occurs, return null).
+     * @param array $files - form data.
+     * @return $string - error messages (if no error occurs, return null).
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);

@@ -16,6 +16,7 @@
 
 /**
  * This file keeps track of upgrades to the chat module.
+ *
  * Sometimes, changes between versions involve alterations to database structures
  * and other major things that may break installations.
  * The upgrade function in this file will attempt to perform all the necessary actions
