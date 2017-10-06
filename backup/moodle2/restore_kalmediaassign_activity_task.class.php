@@ -26,10 +26,12 @@ require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.ph
 // Because it exists (must).
 require_once(dirname(__FILE__) . '/restore_kalmediaassign_stepslib.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/backup/moodle2/restore_kalmediaassign_activity_task.class.php');
+$PAGE->set_course($COURSE);
+
+require_login();
 
 /**
  * kalmediaassign restore task.

@@ -31,6 +31,13 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/single_submission_form.php');
+$PAGE->set_course($COURSE);
+
+require_login();
+
 /**
  * Class for display single submission form.
  * @package   mod_kalmediaassign

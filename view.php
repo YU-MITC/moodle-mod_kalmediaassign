@@ -65,9 +65,11 @@ if ($connection) {
     $partnerid = local_yukaltura_get_partner_id();
     $host = local_yukaltura_get_host();
 
-    $PAGE->requires->js('/local/yukaltura/js/jquery-3.0.0.js', true);
-    $PAGE->requires->js('/local/yukaltura/js/simple_selector.js', true);
-    $PAGE->requires->js('/local/yukaltura/js/simple_selector.js');
+    $PAGE->requires->js_call_amd('local_yukaltura/simpleselector', 'init',
+                                 array($CFG->wwwroot . "/local/yukaltura/simple_selector.php",
+                                       get_string('replace_media', 'mod_kalmediares')));
+    $PAGE->requires->js_call_amd('local_yukaltura/properties', 'init',
+                                 array($CFG->wwwroot . "/local/yukaltura/media_properties.php"));
     $PAGE->requires->css('/local/yukaltura/css/simple_selector.css');
 }
 
@@ -75,6 +77,8 @@ if ($connection) {
 $PAGE->set_url('/mod/kalmediaassign/view.php', array('id' => $id));
 $PAGE->set_title(format_string($kalmediaassign->name));
 $PAGE->set_heading($course->fullname);
+
+require_login();
 
 $modulecontext = context_module::instance(CONTEXT_MODULE, $cm->id);
 
@@ -87,8 +91,6 @@ if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_ht
     $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
     $url = new moodle_url('/local/yukaltura/js/frameapi.js');
-    $PAGE->requires->js($url, true);
-    $url = new moodle_url('/local/yukaltura/js/simple_selector.js');
     $PAGE->requires->js($url, true);
 }
 

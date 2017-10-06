@@ -46,6 +46,8 @@ $PAGE->navbar->add($strplural);
 $PAGE->set_title($strplural);
 $PAGE->set_heading($course->fullname);
 
+require_login();
+
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_kalmediaassign');

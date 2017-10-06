@@ -24,10 +24,14 @@
 
 require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+defined('MOODLE_INTERNAL') || die;
+
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/backup/moodle2/backup_kalmediaassign_stepslib.php');
+$PAGE->set_course($COURSE);
+
+require_login();
 
 /**
  * Define all the backup steps that will be used by the backup_kalmediaassign_activity_task.

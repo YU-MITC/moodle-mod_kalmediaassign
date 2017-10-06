@@ -24,12 +24,12 @@
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+global $PAGE, $COURSE, $DB;
 
-global $DB;
+$PAGE->set_url('/mod/kalmediaassign/db/log.php');
+$PAGE->set_course($COURSE);
+
+require_login();
 
 $logs = array(
     array('module' => 'kalmediaassign', 'action' => 'add', 'mtable' => 'kalmediaassign', 'field' => 'name'),

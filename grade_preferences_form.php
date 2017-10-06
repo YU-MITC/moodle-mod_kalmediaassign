@@ -32,6 +32,13 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/grade_preferences_form.php');
+$PAGE->set_course($COURSE);
+
+require_login();
+
 /**
  * Grade preferencees class of mod_kalmediassign
  * @package mod_kalmediaassign

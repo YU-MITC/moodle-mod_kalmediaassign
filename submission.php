@@ -57,6 +57,7 @@ $PAGE->set_url('/mod/kalmediaassign/view.php', array('id' => $course->id));
 $PAGE->set_title(format_string($kalmediaassignobj->name));
 $PAGE->set_heading($course->fullname);
 
+require_login();
 
 if (kalmediaassign_assignment_submission_expired($kalmediaassignobj) && $kalmediaassignobj->preventlate) {
     print_error('assignmentexpired', 'kalmediaassign', 'course/view.php?id='. $course->id);

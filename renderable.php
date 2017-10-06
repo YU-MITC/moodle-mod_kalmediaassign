@@ -22,7 +22,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+if (!defined('MOODLE_INTERNAL')) {
+    // It must be included from a Moodle page.
+    die('Direct access to this script is forbidden.');
+}
+
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/renderable.php');
+$PAGE->set_course($COURSE);
+
+require_login();
 
 /**
  * Renderable class of YU Kaltura Media assignment.

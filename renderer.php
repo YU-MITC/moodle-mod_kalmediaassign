@@ -34,6 +34,12 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/renderer.php');
+
+require_login();
+
 /**
  * Table class for displaying media submissions for grading.
  * @package   mod_kalmediaassign
@@ -905,13 +911,10 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                      'value' => sesskey());
         $html .= html_writer::empty_tag('input', $attr);
 
-        $selectorurl = new moodle_url('/local/yukaltura/simple_selector.php');
-
         $attr = array('type' => 'button',
-                     'id' => 'add_media',
+                     'id' => 'id_add_media',
                      'name' => 'add_media',
-                     'value' => get_string('addmedia', 'kalmediaassign'),
-                     'onclick' => "fadeInSelectorWindow('" . $selectorurl . "')");
+                     'value' => get_string('addmedia', 'kalmediaassign'));
 
         if ($disablesubmit) {
             $attr['disabled'] = 'disabled';
@@ -971,14 +974,11 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                      'value' => sesskey());
         $html .= html_writer::empty_tag('input', $attr);
 
-        $selectorurl = new moodle_url('/local/yukaltura/simple_selector.php');
-
         // Add submit and review buttons.
         $attr = array('type' => 'button',
-                     'name' => 'replace_media',
-                     'id' => 'replace_media',
-                     'value' => get_string('replacemedia', 'kalmediaassign'),
-                     'onclick' => "fadeInSelectorWindow('" . $selectorurl . "')");
+                     'name' => 'add_media',
+                     'id' => 'id_add_media',
+                     'value' => get_string('replacemedia', 'kalmediaassign'));
 
         if ($disablesubmit) {
             $attr['disabled'] = 'disabled';

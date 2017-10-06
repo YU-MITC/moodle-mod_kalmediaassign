@@ -37,6 +37,13 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
+global $PAGE, $COURSE;
+
+$PAGE->set_url('/mod/kalmediaassign/locallib.php');
+$PAGE->set_course($COURSE);
+
+require_login();
+
 /**
  * Check if the assignment submission end date has passed or if late submissions
  * are prohibited.
