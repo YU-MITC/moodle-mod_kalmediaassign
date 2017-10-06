@@ -24,10 +24,9 @@
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 
-global $PAGE, $COURSE, $DB;
+global $PAGE, $DB;
 
 $PAGE->set_url('/mod/kalmediaassign/db/log.php');
-$PAGE->set_course($COURSE);
 
 require_login();
 

@@ -30,7 +30,9 @@ define(['jquery'], function($) {
     return {
         /**
          * Initial function.
-         * @access
+         * @access public
+         * @param {string} argWidth - width of modal content.
+         * @param {string} argHeight - height of modal content.
          */
         init: function(argWidth, argHeight) {
 
@@ -42,7 +44,7 @@ define(['jquery'], function($) {
             /**
              * This function centerize modal window.
              */
-            function centeringModalSyncer(){
+            function centeringModalSyncer() {
 
                 // Get width and height of window.
                 var w = $(window).width();
@@ -103,7 +105,7 @@ define(['jquery'], function($) {
                 window.scrollTo(modalX, modalY);
 
                 // Fade-put content area and modal window.
-                $("#modal_content,#modal_window").fadeOut("normal",function(){
+                $("#modal_content,#modal_window").fadeOut("normal", function() {
                     $("#modal_window").remove();
                     $("#modal_content").html("");
                 });
