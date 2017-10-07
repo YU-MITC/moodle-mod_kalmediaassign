@@ -27,12 +27,12 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2017100701;
+$plugin->version = 2017100702;
 $plugin->release = 'YU Kaltura Media Assignment 1.0.6';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2017100701,
-    'local_yumymedia' => 2017100701
+    'local_yukaltura' => 2017100702,
+    'local_yumymedia' => 2017100702
 );
