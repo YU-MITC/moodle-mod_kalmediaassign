@@ -26,10 +26,9 @@ require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.ph
 // Because it exists (must).
 require_once(dirname(__FILE__) . '/restore_kalmediaassign_stepslib.php');
 
-global $PAGE, $COURSE;
+global $PAGE;
 
 $PAGE->set_url('/mod/kalmediaassign/backup/moodle2/restore_kalmediaassign_activity_task.class.php');
-$PAGE->set_course($COURSE);
 
 require_login();
 

@@ -32,9 +32,8 @@ require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.ph
 
 defined("MOODLE_INTERNAL") || die;
 
-global $PAGE, $COURSE;
+global $PAGE;
 
 $PAGE->set_url('/mod/kalmediaassign/backup/moodle2/backup_kalmediaassign_settingslib.php');
-$PAGE->set_course($COURSE);
 
 require_login();

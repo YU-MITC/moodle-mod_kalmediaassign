@@ -24,10 +24,9 @@
 
 require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.php');
 
-global $PAGE, $COURSE;
+global $PAGE;
 
 $PAGE->set_url('/mod/kalmediaassign/backup/moodle2/restore_kalmediaassign_stepslib.class.php');
-$PAGE->set_course($COURSE);
 
 require_login();
 

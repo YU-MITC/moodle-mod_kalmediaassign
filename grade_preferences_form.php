@@ -35,7 +35,6 @@ if (!defined('MOODLE_INTERNAL')) {
 global $PAGE, $COURSE;
 
 $PAGE->set_url('/mod/kalmediaassign/grade_preferences_form.php');
-$PAGE->set_course($COURSE);
 
 require_login();
 

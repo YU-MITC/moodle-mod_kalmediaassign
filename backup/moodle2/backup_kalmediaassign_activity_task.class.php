@@ -30,10 +30,9 @@ require_once(dirname(__FILE__) . '/backup_kalmediaassign_settingslib.php');
 
 defined('MOODLE_INTERNAL') || die;
 
-global $PAGE, $COURSE;
+global $PAGE;
 
 $PAGE->set_url('/mod/kalmediaassign/backup/moodle2/backup_kalmediaassign_activity_task.class.php');
-$PAGE->set_course($COURSE);
 
 require_login();
 
