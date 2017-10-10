@@ -34,10 +34,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-global $PAGE, $COURSE;
-
-$PAGE->set_url('/mod/kalmediaassign/renderer.php');
-
 require_login();
 
 /**

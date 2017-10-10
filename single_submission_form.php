@@ -31,10 +31,6 @@ if (!defined('MOODLE_INTERNAL')) {
     die('Direct access to this script is forbidden.');
 }
 
-global $PAGE;
-
-$PAGE->set_url('/mod/kalmediaassign/single_submission_form.php');
-
 require_login();
 
 /**
