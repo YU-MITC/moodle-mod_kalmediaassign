@@ -53,11 +53,11 @@ require_course_login($course->id, true, $cm);
 global $SESSION, $CFG, $USER, $COURSE;
 
 // Connect to Kaltura.
-$kaltura     = new yukaltura_connection();
-$connection  = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
-$partnerid   = '';
-$srunconfid  = '';
-$host        = '';
+$kaltura = new yukaltura_connection();
+$connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
+$partnerid = '';
+$srunconfid = '';
+$host = '';
 
 if ($connection) {
 
