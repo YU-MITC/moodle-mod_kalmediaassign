@@ -21,18 +21,17 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+
+defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2017103100;
-$plugin->release = 'YU Kaltura Media Assignment 1.0.8';
+$plugin->version = 2017111300;
+$plugin->release = 'YU Kaltura Media Assignment 1.0.9';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2017103100,
-    'local_yumymedia' => 2017103100
+    'local_yukaltura' => 2017111300,
+    'local_yumymedia' => 2017111300
 );
