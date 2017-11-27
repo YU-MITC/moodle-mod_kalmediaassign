@@ -302,7 +302,6 @@ function kalmediaassign_supports($feature) {
  * @return int - 0 if ok, error code otherwise
  */
 function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
-    global $CFG;
 
     require_once(dirname(dirname(dirname(__FILE__))) . '/lib/gradelib.php');
 
@@ -367,7 +366,7 @@ function kalmediaassign_reset_gradebook($courseid, $type='') {
  * TODO: test user data reset feature
  */
 function kalmediaassign_reset_userdata($data) {
-    global $CFG, $DB;
+    global $DB;
 
     $componentstr = get_string('modulenameplural', 'kalmediaassign');
     $status = array();
@@ -437,7 +436,7 @@ function kalmediaassign_cron () {
  */
 function kalmediaassign_get_unmailed_submissions($starttime, $endtime) {
 
-    global $CFG, $DB;
+    global $DB;
 
     return $DB->get_records_sql("SELECT ks.*, k.course, k.name
                                      FROM {kalmediaassign_submission} ks,
