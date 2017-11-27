@@ -87,7 +87,7 @@ $modalheight = 0;
 $mediawidth  = 0;
 $mediaheight = 0;
 
-list($modalwidth, $modalheight) = kalmediaassign_get_player_dimensions();
+list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
 $mediawidth = $modalwidth - KALTURA_POPUP_WIDTH_ADJUSTMENT;
 $mediaheight = $modalheight - KALTURA_POPUP_HEIGHT_ADJUSTMENT;
 

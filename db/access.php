@@ -23,8 +23,6 @@
  *
  */
 
-require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
-
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
