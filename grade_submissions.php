@@ -75,13 +75,13 @@ require_login();
 $renderer = $PAGE->get_renderer('mod_kalmediaassign');
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
-    $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+    $uiconfid = local_yukaltura_get_player_uiconf('player');
     $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
     $PAGE->requires->js($url, true);
 }
 
 $courseid    = $course->id;
-$uiconfid    = local_yukaltura_get_player_uiconf('player_resource');
+$uiconfid    = local_yukaltura_get_player_uiconf('player');
 $modalwidth  = 0;
 $modalheight = 0;
 $mediawidth  = 0;

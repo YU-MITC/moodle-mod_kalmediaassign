@@ -102,7 +102,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
             $theme = core_useragent::get_device_type_theme();
 
             // Get uiconfid for presentation.
-            $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+            $uiconfid = local_yukaltura_get_player_uiconf('player');
 
             $markup = '';
 
@@ -113,7 +113,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
                 if (0 == strcmp($theme, 'mymobile')) {
                         $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $session);
                 } else {
-                    $markup = local_yukaltura_get_kdp_code($entryobject, $uiconfid, $session);
+                    $markup = local_yukaltura_get_dynamicembed_code($entryobject, $uiconfid, $session);
                 }
             }
 

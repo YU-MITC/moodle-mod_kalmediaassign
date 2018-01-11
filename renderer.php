@@ -331,7 +331,7 @@ class submissions_table extends table_sql {
                 } else {
                     $kalturahost = local_yukaltura_get_host();
                     $partnerid = local_yukaltura_get_partner_id();
-                    $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+                    $uiconfid = local_yukaltura_get_player_uiconf('player');
                     $now = time();
                     $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
                     $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
@@ -1060,7 +1060,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
-        $uiconfid = local_yukaltura_get_player_uiconf('player_resource');
+        $uiconfid = local_yukaltura_get_player_uiconf('player');
 
         $mediawidth = 0;
         $mediaheight = 0;

@@ -11,3 +11,8 @@ Version 1.1.0
 Version 1.1.1
 
 * fixed statements in README.md.
+
+Version 1.1.2
+
+* added statements in README.md.
+* separate player setting from Media Resource.
