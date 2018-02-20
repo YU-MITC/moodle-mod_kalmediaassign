@@ -851,7 +851,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         if (!empty($submission->timemodified)) {
             $str = userdate($submission->timemodified);
-            if ($submission->timemodified > $kalmediaobj->timedue) {
+            if ($kalmediaobj->timedue > 0 && $submission->timemodified > $kalmediaobj->timedue) {
                 $str = html_writer::start_tag('font', array('color' => 'red')) . $str;
                 $str .= ' (' . get_string('latesubmission', 'kalmediaassign'). ')';
                 $str .= html_writer::end_tag('font');

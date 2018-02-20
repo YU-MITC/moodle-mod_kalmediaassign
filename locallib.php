@@ -47,7 +47,7 @@ require_login();
  * @return bool - true if expired, otherwise false.
  */
 function kalmediaassign_assignment_submission_expired($kalmediaassign) {
-    if (empty($kalmediaassign->timedue)) {
+    if (empty($kalmediaassign->timedue) || $kalmediaassign->timedue <= 0) {
         return false;
     }
 

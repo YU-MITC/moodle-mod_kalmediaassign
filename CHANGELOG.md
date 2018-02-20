@@ -16,3 +16,8 @@ Version 1.1.2
 
 * added statements in README.md.
 * separate player setting from Media Resource.
+
+Version 1.1.3
+
+* fixed issue that the plugin presents "lated submission" for submissions when duetime is not set.
+
