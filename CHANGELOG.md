@@ -21,3 +21,7 @@ Version 1.1.3
 
 * fixed issue that the plugin presents "lated submission" for submissions when duetime is not set.
 
+Version 1.1.4
+
+* fixed statements in README.md.
+

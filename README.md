@@ -11,7 +11,7 @@ Please note that there is a chance this module will not work on some Moodle envi
 
 Original plugin package ("Kaltura Video Package") has better functions than ours and is easy to use. So that, for customers of the "Kaltura SaaS Edition", use the original plugin package is the better.
 
-YU Kaltura Media Assign for Moodle
+YU Kaltura Media Assignment for Moodle
 ------
 This is an activity module. Each student can submit a media from their "My Media", and teachers can play submitted medias, and grade each media.
 This plugin is updated with stable releases. To follow active development on GitHub, click [here](https://github.com/YU-MITC/moodle-mod_kalmediaassign/).
