@@ -294,9 +294,11 @@ class submissions_table extends table_sql {
                      * from the Kaltura server so that the thumbnail can be displayed.
                      */
                     $entryobject = local_yukaltura_get_ready_entry_object($data->entry_id, false);
-                    $attr['src'] = $entryobject->thumbnailUrl;
-                    $attr['alt'] = $entryobject->name;
-                    $attr['title'] = $entryobject->name;
+                    if(!empty($entryobject)) {
+                        $attr['src'] = $entryobject->thumbnailUrl;
+                        $attr['alt'] = $entryobject->name;
+                        $attr['title'] = $entryobject->name;
+                    }
                 } else {
                     // Retrieve object from cache.
                     $attr['src'] = $this->_entries[$data->entry_id]->thumbnailUrl;
@@ -322,7 +324,7 @@ class submissions_table extends table_sql {
                 list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
                 $markup = '';
 
-                if (KalturaMediaType::IMAGE == $entryobject->mediaType) {
+                if (!empty($entryobject->mediaType) && KalturaMediaType::IMAGE == $entryobject->mediaType) {
                     // Determine if the mobile theme is being used.
                     $theme = core_useragent::get_device_type_theme();
                     $markup .= local_yukaltura_create_image_markup($entryobject, $entryobject->name,

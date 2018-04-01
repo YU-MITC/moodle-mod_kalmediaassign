@@ -137,7 +137,7 @@ $data->group_filter = get_user_preferences('kalmediaassign_group_filter', 0);
 $gradedata = data_submitted();
 
 // Check if fast grading was passed to the form and process the data.
-if (!empty($gradedata->mode)) {
+if (!empty($gradedata->mode) && !empty($gradedata->users)) {
 
     $usersubmission = array();
     $time = time();

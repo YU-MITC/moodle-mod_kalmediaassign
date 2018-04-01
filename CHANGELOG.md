@@ -25,3 +25,7 @@ Version 1.1.4
 
 * fixed statements in README.md.
 
+Version 1.1.5
+
+* add precedures for submitted and deleted entry in grade_submissions.php and renderer.php.
+
