@@ -294,7 +294,7 @@ class submissions_table extends table_sql {
                      * from the Kaltura server so that the thumbnail can be displayed.
                      */
                     $entryobject = local_yukaltura_get_ready_entry_object($data->entry_id, false);
-                    if(!empty($entryobject)) {
+                    if (!empty($entryobject)) {
                         $attr['src'] = $entryobject->thumbnailUrl;
                         $attr['alt'] = $entryobject->name;
                         $attr['title'] = $entryobject->name;
