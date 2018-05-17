@@ -132,3 +132,5 @@ $string['event_submission_page_viewed'] = 'Media submission page viewed';
 $string['event_submission_detail_viewed'] = 'Media submission detail viewed';
 $string['event_grades_updated'] = 'Grades of Media submission updated';
 $string['event_media_submitted'] = 'Media submitted';
+$string['reset_userdata'] = 'All data';
+

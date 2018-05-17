@@ -27,5 +27,9 @@ Version 1.1.4
 
 Version 1.1.5
 
-* add precedures for submitted and deleted entry in grade_submissions.php and renderer.php.
+* added precedures for submitted and deleted entry in grade_submissions.php and renderer.php.
 
+Version 1.1.6
+
+* added procedures for course reset in lib.php.
+* fixed statements about "How to use" in README.md.

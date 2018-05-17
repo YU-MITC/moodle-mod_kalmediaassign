@@ -73,6 +73,27 @@ function kalmediaassign_add_instance($kalmediaassign) {
 }
 
 /**
+ * Returns info object about the course module
+ *
+ * @param stdClass $coursemodule The coursemodule object (record).
+ * @return cached_cm_info An object on information that the courses
+ *                        will know about (most noticeably, an icon).
+ */
+function kalmediaassign_get_coursemodule_info($coursemodule) {
+    global $CFG, $DB;
+
+    $dbparams = array('id' => $coursemodule->instance);
+    $fields = 'id, name, intro, introformat';
+    if (! $kalmediaassign = $DB->get_record('kalmediaassign', $dbparams, $fields)) {
+        return false;
+    }
+
+    $result = new cached_cm_info();
+    $result->name = $kalmediaassign->name;
+    return $result;
+}
+
+/**
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
@@ -371,12 +392,12 @@ function kalmediaassign_reset_userdata($data) {
     $componentstr = get_string('modulenameplural', 'kalmediaassign');
     $status = array();
 
-    if (!empty($data->reset_kalmediaassign)) {
+    if (!empty($data->reset_kalmediaassign_userdata)) {
         $kalmediaassignsql = "SELECT l.id
                            FROM {kalmediaassign} l
                            WHERE l.course=:course";
 
-        $params = array ("course" => $data->courseid);
+        $params = array("course" => $data->courseid);
         $DB->delete_records_select('kalmediaassign_submission', "mediaassignid IN ($kalmediaassignsql)", $params);
 
         // Remove all grades from gradebook.
@@ -400,6 +421,26 @@ function kalmediaassign_reset_userdata($data) {
     }
 
     return $status;
+}
+
+/**
+ * Defines which elements mod_kalmediaassign needs to add to reset form
+ *
+ * @param moodleform $mform The reset course form to extend
+ */
+function kalmediaassign_reset_course_form_definition(&$mform) {
+    $mform->addElement('header', 'kalmediaassignheader', get_string('modulenameplural', 'kalmediaassign'));
+    $mform->addElement('checkbox', 'reset_kalmediaassign_userdata', get_string('reset_userdata', 'kalmediaassign'));
+}
+
+/**
+ * Defines default setting when reset course objects
+ *
+ * @param object $course - course object
+ * @return array - setting parameter(s) for moodleform
+ */
+function kalmediaassign_reset_course_form_defaults($course) {
+    return array('reset_kalmediaassign_userdata'=>1);
 }
 
 /**
@@ -446,3 +487,4 @@ function kalmediaassign_get_unmailed_submissions($starttime, $endtime) {
                                      AND ks.timemarked >= ?
                                      AND ks.assignment = k.id", array($endtime, $starttime));
 }
+
