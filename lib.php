@@ -440,7 +440,7 @@ function kalmediaassign_reset_course_form_definition(&$mform) {
  * @return array - setting parameter(s) for moodleform
  */
 function kalmediaassign_reset_course_form_defaults($course) {
-    return array('reset_kalmediaassign_userdata'=>1);
+    return array('reset_kalmediaassign_userdata' => 1);
 }
 
 /**
