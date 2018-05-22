@@ -33,3 +33,8 @@ Version 1.1.6
 
 * added procedures for course reset in lib.php.
 * fixed statements about "How to use" in README.md.
+
+Version 1.1.7
+
+* added statements about "Supported themes" in README.md.
+
