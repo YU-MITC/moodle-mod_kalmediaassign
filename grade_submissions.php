@@ -18,7 +18,7 @@
  * Kaltura media assignment grade submission page
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -84,12 +84,12 @@ $courseid    = $course->id;
 $uiconfid    = local_yukaltura_get_player_uiconf('player');
 $modalwidth  = 0;
 $modalheight = 0;
-$mediawidth  = 0;
-$mediaheight = 0;
 
 list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
-$mediawidth = $modalwidth - KALTURA_POPUP_WIDTH_ADJUSTMENT;
-$mediaheight = $modalheight - KALTURA_POPUP_HEIGHT_ADJUSTMENT;
+
+if (strcmp($CFG->theme, 'boost') == 0) {
+    $modalheight = ((int)$modalheight + 20);
+}
 
 $PAGE->requires->css('/mod/kalmediaassign/css/kalmediaassign.css', true);
 $PAGE->requires->js_call_amd('mod_kalmediaassign/grading', 'init', array($modalwidth, $modalheight));
