@@ -40,5 +40,6 @@ Version 1.1.7
 
 Version 1.1.8
 
+* added statements about "Requirements" in README.md.
 * fixed some statements for support "Boost" theme in grade_submission.php, and kalmediaassign.css.
-
+* fixed copyright statements in all scripts.
