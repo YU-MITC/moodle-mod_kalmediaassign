@@ -151,7 +151,7 @@ if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
 
     $disabled = true;
 
-    if (kalmediaassign_assignment_submission_opened($kalmediaassign, $submission) && 
+    if (kalmediaassign_assignment_submission_opened($kalmediaassign, $submission) &&
         (!kalmediaassign_assignment_submission_expired($kalmediaassign) || $kalmediaassign->preventlate == 0)) {
            $disabled = false;
     }

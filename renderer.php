@@ -963,10 +963,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
                 $html .= html_writer::empty_tag('br', null);
 
+                $str = get_string('simple_upload', 'local_yumymedia');
+                $str .= ' (' . get_string('pc_recommended', 'local_yumymedia') . ')';
+
                 $attr = array('type' => 'button',
                               'name' => 'upload_media',
                               'id' => 'id_upload_media',
-                              'value' => get_string('simple_upload', 'local_yumymedia'));
+                              'value' => $str);
                 $html .= html_writer::empty_tag('input', $attr);
 
                 $html .= '&nbsp;&nbsp;';
@@ -1056,10 +1059,12 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
                 $html .= html_writer::empty_tag('br', null);
 
+                $str = get_string('simple_upload', 'local_yumymedia');
+                $str .= ' (' . get_string('pc_recommended', 'local_yumymedia') . ')';
                 $attr = array('type' => 'button',
                               'name' => 'upload_media',
                               'id' => 'id_upload_media',
-                              'value' => get_string('simple_upload', 'local_yumymedia'));
+                              'value' => $str);
                 $html .= html_writer::empty_tag('input', $attr);
 
                 $html .= '&nbsp;&nbsp;';
