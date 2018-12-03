@@ -35,9 +35,9 @@ require_login();
 
 /**
  * Class for display single submission form.
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kalmediaassign_singlesubmission_form extends moodleform {
 

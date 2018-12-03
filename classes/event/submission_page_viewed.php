@@ -28,9 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Event class of YU Kaltura Media assign.
  *
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submission_page_viewed extends \core\event\base {
     /**
@@ -56,8 +56,8 @@ class submission_page_viewed extends \core\event\base {
      * @return string - description of event.
      */
     public function get_description() {
-        return "The user with id '{$this->userid}' viewed the submission page of Kaltura media assign with "
-        . "the course module id '{$this->contextinstanceid}'.";
+        return "The user with id $this->userid viewed the submission page of Kaltura media assign with "
+        . "the course module id $this->contextinstanceid.";
     }
 
     /**
@@ -75,5 +75,14 @@ class submission_page_viewed extends \core\event\base {
     public function get_legacy_logdata() {
         return array($this->courseid, 'kalmediaassign', 'view media submission page',
             $this->get_url(), $this->objectid, $this->contextinstanceid);
+    }
+
+    /**
+     * Return objectid mapping.
+     *
+     * @return array - object mapping.
+     */
+    public static function get_objectid_mapping() {
+        return array('db' => 'kalmediaassign', 'restore' => 'kalmediaassign');
     }
 }

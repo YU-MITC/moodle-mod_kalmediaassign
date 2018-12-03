@@ -38,9 +38,9 @@ require_login();
 
 /**
  * Table class for displaying media submissions for grading.
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submissions_table extends table_sql {
 
@@ -486,9 +486,9 @@ class submissions_table extends table_sql {
 
 /**
  * Renderer class of YU Kaltura media submissions.
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2017 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
@@ -526,12 +526,42 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         $attr = array('id' => 'media_thumbnail',
+                      'class' => 'media_thumbnail_cl',
                       'src' => $imgsource,
                       'alt' => $imgname,
                       'title' => $imgname,
-                      'style' => 'z-index: -2');
+                      'style' => 'z-index: -2; cursor: pointer;');
 
         $html .= html_writer::empty_tag('img', $attr);
+
+        if (!empty($entryobj)) {
+            list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
+            $markup = '';
+
+            if (!empty($entryobj->mediaType) && KalturaMediaType::IMAGE == $entryobj->mediaType) {
+                // Determine if the mobile theme is being used.
+                $theme = core_useragent::get_device_type_theme();
+                $markup .= local_yukaltura_create_image_markup($entryobj, $entryobj->name,
+                                                                   $theme, $modalwidth, $modalheight);
+                    $html .= '<br><br>';
+            } else {
+                $kalturahost = local_yukaltura_get_host();
+                $partnerid = local_yukaltura_get_partner_id();
+                $uiconfid = local_yukaltura_get_player_uiconf('player');
+                $now = time();
+                $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
+                $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
+                $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
+                $markup .= "&entry_id=" . $entryobj->id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
+                $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+            }
+
+            $attr = array('id' => 'hidden_markup',
+                          'style' => 'display: none;');
+            $html .= html_writer::start_tag('div', $attr);
+            $html .= $markup;
+            $html .= html_writer::end_tag('div');
+        }
 
         $html .= html_writer::end_tag('p');
 
@@ -884,53 +914,77 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @return string - HTML markup for submit button for student.
      */
     public function display_student_submit_buttons($cm, $disablesubmit = false) {
-
         $html = '';
 
-        $target = new moodle_url('/mod/kalmediaassign/submission.php');
+        if ($disablesubmit == false && local_yukaltura_get_mymedia_permission()) {
+            $target = new moodle_url('/mod/kalmediaassign/submission.php');
 
-        $attr = array('method' => 'POST', 'action' => $target);
+            $attr = array('method' => 'POST', 'action' => $target);
 
-        $html .= html_writer::start_tag('form', $attr);
+            $html .= html_writer::start_tag('form', $attr);
 
-        $attr = array('type' => 'hidden',
-                     'name' => 'entry_id',
-                     'id' => 'entry_id',
-                     'value' => '');
-        $html .= html_writer::empty_tag('input', $attr);
+            $attr = array('type' => 'hidden',
+                         'name' => 'entry_id',
+                         'id' => 'entry_id',
+                         'value' => '');
+            $html .= html_writer::empty_tag('input', $attr);
 
-        $attr = array('type' => 'hidden',
-                     'name' => 'cmid',
-                     'value' => $cm->id);
-        $html .= html_writer::empty_tag('input', $attr);
+            $attr = array('type' => 'hidden',
+                         'name' => 'cmid',
+                         'value' => $cm->id);
+            $html .= html_writer::empty_tag('input', $attr);
 
-        $attr = array('type' => 'hidden',
+            $attr = array('type' => 'hidden',
                      'name' => 'sesskey',
                      'value' => sesskey());
-        $html .= html_writer::empty_tag('input', $attr);
+            $html .= html_writer::empty_tag('input', $attr);
 
-        $attr = array('type' => 'button',
-                     'id' => 'id_add_media',
-                     'name' => 'add_media',
-                     'value' => get_string('addmedia', 'kalmediaassign'));
+            $attr = array('type' => 'button',
+                          'id' => 'id_add_media',
+                          'name' => 'add_media',
+                          'value' => get_string('add_media', 'kalmediaassign'));
 
-        if ($disablesubmit) {
-            $attr['disabled'] = 'disabled';
+            if ($disablesubmit) {
+                $attr['disabled'] = 'disabled';
+            }
+
+            $html .= html_writer::empty_tag('input', $attr);
+
+            $html .= '&nbsp;&nbsp;';
+
+            $attr = array('type' => 'submit',
+                          'name' => 'submit_media',
+                          'id' => 'submit_media',
+                          'disabled' => 'disabled',
+                          'value' => get_string('submit_media', 'kalmediaassign'));
+
+            $html .= html_writer::empty_tag('input', $attr);
+
+            if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
+                $html .= html_writer::empty_tag('br', null);
+
+                $attr = array('type' => 'button',
+                              'name' => 'upload_media',
+                              'id' => 'id_upload_media',
+                              'value' => get_string('simple_upload', 'local_yumymedia'));
+                $html .= html_writer::empty_tag('input', $attr);
+
+                $html .= '&nbsp;&nbsp;';
+
+                $str = get_string('webcam_upload', 'local_yumymedia');
+                $str .= ' (' . get_string('pc_only', 'local_yumymedia') . ')';
+
+                if (get_config(KALTURA_PLUGIN_NAME, 'enable_webcam') == 1) {
+                    $attr = array('type' => 'button',
+                                  'name' => 'record_media',
+                                  'id' => 'id_record_media',
+                                  'value' => $str);
+                    $html .= html_writer::empty_tag('input', $attr);
+                }
+            }
+
+            $html .= html_writer::end_tag('form');
         }
-
-        $html .= html_writer::empty_tag('input', $attr);
-
-        $html .= '&nbsp;&nbsp;';
-
-        $attr = array('type' => 'submit',
-                     'name' => 'submit_media',
-                     'id' => 'submit_media',
-                     'disabled' => 'disabled',
-                     'value' => get_string('submitmedia', 'kalmediaassign'));
-
-        $html .= html_writer::empty_tag('input', $attr);
-
-        $html .= html_writer::end_tag('form');
 
         return $html;
     }
@@ -945,60 +999,85 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     public function display_student_resubmit_buttons($cm, $userid, $disablesubmit = false) {
         global $DB;
 
-        $param = array('mediaassignid' => $cm->instance, 'userid' => $userid);
-        $submissionrec = $DB->get_record('kalmediaassign_submission', $param);
-
         $html = '';
 
-        $target = new moodle_url('/mod/kalmediaassign/submission.php');
+        if ($disablesubmit == false && local_yukaltura_get_mymedia_permission()) {
+            $param = array('mediaassignid' => $cm->instance, 'userid' => $userid);
+            $submissionrec = $DB->get_record('kalmediaassign_submission', $param);
 
-        $attr = array('method' => 'POST', 'action' => $target);
+            $target = new moodle_url('/mod/kalmediaassign/submission.php');
 
-        $html .= html_writer::start_tag('form', $attr);
+            $attr = array('method' => 'POST', 'action' => $target);
 
-        $attr = array('type' => 'hidden',
-                     'name'  => 'cmid',
-                     'value' => $cm->id);
-        $html .= html_writer::empty_tag('input', $attr);
+            $html .= html_writer::start_tag('form', $attr);
 
-        $attr = array('type' => 'hidden',
-                     'name'  => 'entry_id',
-                     'id'    => 'entry_id',
-                     'value' => $submissionrec->entry_id);
-        $html .= html_writer::empty_tag('input', $attr);
+            $attr = array('type' => 'hidden',
+                         'name'  => 'cmid',
+                         'value' => $cm->id);
+            $html .= html_writer::empty_tag('input', $attr);
 
-        $attr = array('type' => 'hidden',
-                     'name'  => 'sesskey',
-                     'value' => sesskey());
-        $html .= html_writer::empty_tag('input', $attr);
+            $attr = array('type' => 'hidden',
+                         'name'  => 'entry_id',
+                         'id'    => 'entry_id',
+                         'value' => $submissionrec->entry_id);
+            $html .= html_writer::empty_tag('input', $attr);
 
-        // Add submit and review buttons.
-        $attr = array('type' => 'button',
-                     'name' => 'add_media',
-                     'id' => 'id_add_media',
-                     'value' => get_string('replacemedia', 'kalmediaassign'));
+            $attr = array('type' => 'hidden',
+                         'name'  => 'sesskey',
+                         'value' => sesskey());
+            $html .= html_writer::empty_tag('input', $attr);
 
-        if ($disablesubmit) {
-            $attr['disabled'] = 'disabled';
+            // Add submit and review buttons.
+            $attr = array('type' => 'button',
+                         'name' => 'add_media',
+                         'id' => 'id_add_media',
+                         'value' => get_string('replace_media', 'kalmediaassign'));
+
+            if ($disablesubmit) {
+                $attr['disabled'] = 'disabled';
+            }
+
+            $html .= html_writer::empty_tag('input', $attr);
+
+            $html .= '&nbsp;&nbsp;';
+
+            $attr = array('type' => 'submit',
+                         'id'   => 'submit_media',
+                         'name' => 'submit_media',
+                         'disabled' => 'disabled',
+                         'value' => get_string('submit_media', 'kalmediaassign'));
+
+            if ($disablesubmit) {
+                $attr['disabled'] = 'disabled';
+            }
+
+            $html .= html_writer::empty_tag('input', $attr);
+
+            if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
+                $html .= html_writer::empty_tag('br', null);
+
+                $attr = array('type' => 'button',
+                              'name' => 'upload_media',
+                              'id' => 'id_upload_media',
+                              'value' => get_string('simple_upload', 'local_yumymedia'));
+                $html .= html_writer::empty_tag('input', $attr);
+
+                $html .= '&nbsp;&nbsp;';
+
+                $str = get_string('webcam_upload', 'local_yumymedia');
+                $str .= ' (' . get_string('pc_only', 'local_yumymedia') . ')';
+
+                if (get_config(KALTURA_PLUGIN_NAME, 'enable_webcam') == 1) {
+                    $attr = array('type' => 'button',
+                                  'name' => 'record_media',
+                                  'id' => 'id_record_media',
+                                  'value' => $str);
+                    $html .= html_writer::empty_tag('input', $attr);
+                }
+            }
+
+            $html .= html_writer::end_tag('form');
         }
-
-        $html .= html_writer::empty_tag('input', $attr);
-
-        $html .= '&nbsp;&nbsp;';
-
-        $attr = array('type' => 'submit',
-                     'id'   => 'submit_media',
-                     'name' => 'submit_media',
-                     'disabled' => 'disabled',
-                     'value' => get_string('submitmedia', 'kalmediaassign'));
-
-        if ($disablesubmit) {
-            $attr['disabled'] = 'disabled';
-        }
-
-        $html .= html_writer::empty_tag('input', $attr);
-
-        $html .= html_writer::end_tag('form');
 
         return $html;
 
@@ -1543,5 +1622,51 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         return html_writer::table($table);
+    }
+
+    /**
+     * This function create markup elements about kaltura server.
+     *
+     * @return string - HTML markup about kaltura server.
+     */
+    public function create_kaltura_hidden_markup() {
+        $output = '';
+
+        list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
+        $kalturahost = local_yukaltura_get_host();
+        $partnerid = local_yukaltura_get_partner_id();
+        $uiconfid = local_yukaltura_get_player_uiconf('player');
+
+        $attr = array('type' => 'hidden',
+                     'name' => 'kalturahost',
+                     'id' => 'kalturahost',
+                     'value' => $kalturahost);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                     'name' => 'partner_id',
+                     'id' => 'partner_id',
+                     'value' => $partnerid);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                     'name' => 'uiconfid',
+                     'id' => 'uiconfid',
+                     'value' => $uiconfid);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                     'name' => 'modalwidth',
+                     'id' => 'modalwidth',
+                     'value' => $modalwidth);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden',
+                     'name' => 'modalheight',
+                     'id' => 'modalheight',
+                     'value' => $modalheight);
+        $output .= html_writer::empty_tag('input', $attr);
+
+        return $output;
     }
 }

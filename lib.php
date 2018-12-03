@@ -24,9 +24,9 @@
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 // Include eventslib.php.
-require_once($CFG->libdir.'/eventslib.php');
+#require_once($CFG->libdir.'/eventslib.php');
 // Include calendar/lib.php.
-require_once($CFG->dirroot.'/calendar/lib.php');
+#require_once($CFG->dirroot.'/calendar/lib.php');
 
 if (!defined('MOODLE_INTERNAL')) {
     // It must be included from a Moodle page.

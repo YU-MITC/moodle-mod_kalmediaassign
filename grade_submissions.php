@@ -199,12 +199,12 @@ if (!empty($gradedata->mode) && !empty($gradedata->users)) {
 
         } else {
             // No user submission however the instructor has submitted grade data.
-            $usersubmissions                = new stdClass();
-            $usersubmissions->mediaassignid   = $cm->instance;
-            $usersubmissions->userid        = $userid;
-            $usersubmissions->entry_id      = '';
-            $usersubmissions->teacher       = $USER->id;
-            $usersubmissions->timemarked    = $time;
+            $usersubmissions = new stdClass();
+            $usersubmissions->mediaassignid = $cm->instance;
+            $usersubmissions->userid = $userid;
+            $usersubmissions->entry_id = '';
+            $usersubmissions->teacher = $USER->id;
+            $usersubmissions->timemarked = $time;
 
             /*
              * Need to prevent completely empty submissions from getting entered

@@ -63,9 +63,10 @@ function kalmediaassign_assignment_submission_expired($kalmediaassign) {
  * are prohibited
  *
  * @param object $kalmediaassign - Kaltura instance media assignment object.
+ * @param object $submission - submission object.
  * @return bool - true if opened, otherwise false.
  */
-function kalmediaassign_assignment_submission_opened($kalmediaassign) {
+function kalmediaassign_assignment_submission_opened($kalmediaassign, $submission = null) {
     if (empty($kalmediaassign->timeavailable)) {
         return true;
     }
@@ -83,10 +84,15 @@ function kalmediaassign_assignment_submission_opened($kalmediaassign) {
  *
  * @param object $kalmediaassign - Kaltura instance media assignment object.
  * @param object $entryobj - Kaltura media entry object.
+ * @param object $submission - submission object.
  * @return bool - true if resubmission is allowed, otherwise false.
  */
-function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobj) {
+function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobj, $submission = null) {
     global $USER;
+
+    if ($submission !== null && $submission->timemodified < $submission->timemarked && $kalmediaassign->resubmit == 0) {
+        return false;
+    }
 
     if (kalmediaassign_assignment_submission_expired($kalmediaassign) && $kalmediaassign->preventlate ||
         !kalmediaassign_assignment_submission_opened($kalmediaassign)) {
@@ -109,7 +115,6 @@ function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryob
     if ($kalmediaassign->resubmit) {
         return true;
     }
-
     return false;
 }
 

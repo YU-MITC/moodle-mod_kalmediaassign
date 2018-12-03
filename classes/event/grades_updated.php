@@ -17,9 +17,9 @@
 /**
  * The grades_updated event.
  *
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_kalmediaassign\event;
@@ -28,9 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Event class of YU Kaltura Media assign.
  *
- * @package   mod_kalmediaassign
- * @copyright (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_kalmediaassign
+ * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grades_updated extends \core\event\base {
 
@@ -78,5 +78,14 @@ class grades_updated extends \core\event\base {
     public function get_legacy_logdata() {
         return array($this->courseid, 'kalmediaassign', 'updated grades of submissions',
             $this->get_url(), $this->objectid, $this->contextinstanceid);
+    }
+
+    /**
+     * Return objectid mapping.
+     *
+     * @return array - object mapping.
+     */
+    public static function get_objectid_mapping() {
+        return array('db' => 'kalmediaassign', 'restore' => 'kalmediaassign');
     }
 }

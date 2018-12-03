@@ -65,12 +65,28 @@ if ($connection) {
     $partnerid = local_yukaltura_get_partner_id();
     $host = local_yukaltura_get_host();
 
+    $modalwidth  = 0;
+    $modalheight = 0;
+
+    list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
+
+    if (strcmp($CFG->theme, 'boost') == 0) {
+        $modalheight = ((int)$modalheight + 20);
+    }
+
+    $PAGE->requires->js_call_amd('mod_kalmediaassign/preview', 'init', array($modalwidth, $modalheight));
     $PAGE->requires->js_call_amd('local_yukaltura/simpleselector', 'init',
                                  array($CFG->wwwroot . "/local/yukaltura/simple_selector.php",
-                                       get_string('replace_media', 'mod_kalmediares')));
+                                       get_string('replace_media', 'mod_kalmediaassign')));
     $PAGE->requires->js_call_amd('local_yukaltura/properties', 'init',
                                  array($CFG->wwwroot . "/local/yukaltura/media_properties.php"));
+    $PAGE->requires->js_call_amd('local_yumymedia/loaduploader', 'init',
+                                 array($CFG->wwwroot . "/local/yumymedia/module_uploader.php"));
+    $PAGE->requires->js_call_amd('local_yumymedia/loadrecorder', 'init',
+                                 array($CFG->wwwroot . "/local/yumymedia/module_recorder.php"));
     $PAGE->requires->css('/local/yukaltura/css/simple_selector.css');
+    $PAGE->requires->css('/local/yumymedia/css/module_uploader.css');
+    $PAGE->requires->css('/mod/kalmediaassign/css/kalmediaassign.css', true);
 }
 
 
@@ -109,10 +125,10 @@ $entryobject   = null;
 $disabled       = false;
 
 if (empty($connection)) {
-
     echo $OUTPUT->notification(get_string('conn_failed_alt', 'local_yukaltura'));
     $disabled = true;
-
+} else {
+    echo $renderer->create_kaltura_hidden_markup();
 }
 
 echo $renderer->display_mod_header($kalmediaassign);
@@ -133,19 +149,22 @@ if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
         $entryobject = local_yukaltura_get_ready_entry_object($submission->entry_id, false);
     }
 
-    $disabled = !kalmediaassign_assignment_submission_opened($kalmediaassign) ||
-                kalmediaassign_assignment_submission_expired($kalmediaassign) &&
-                $kalmediaassign->preventlate;
+    $disabled = true;
+
+    if (kalmediaassign_assignment_submission_opened($kalmediaassign, $submission) && 
+        (!kalmediaassign_assignment_submission_expired($kalmediaassign) || $kalmediaassign->preventlate == 0)) {
+           $disabled = false;
+    }
 
     echo $renderer->display_submission($entryobject);
 
-    if (empty($submission->entry_id) and empty($submission->timecreated)) {
+    if (empty($submission->entry_id) && empty($submission->timecreated)) {
 
         echo $renderer->display_student_submit_buttons($cm, $disabled);
 
     } else {
         if ($disabled ||
-            !kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobject)) {
+            !kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobject, $submission)) {
 
             $disabled = true;
         }
