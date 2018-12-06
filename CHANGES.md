@@ -1,6 +1,4 @@
-# YU Kaltura Media Assignment
-
-Change log
+Change log of YU Kaltura Media Assignment
 ------
 
 Version 1.1.0
@@ -48,3 +46,7 @@ Version 1.2.0
 
 * fixed some statements in view.php, in order to permit students to upload/record new movie in editing page of activity module (In order to permit upload/record, administrators must set some items in configuration page of local_yukaltura).
 * fixed some statements in grades_updated.php, media_submitted.php, submission_detail_viewed.php, and submission_page_viewed.php, in order to respond to backup and restore mechanisms in recently versions of Moodle.
+
+Version 1.2.1
+
+* fixed some statements in preview.php, based on JSDoc warnings.
