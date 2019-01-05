@@ -17,19 +17,19 @@
 /**
  * YU Kaltura Media Assignment verison file.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2018120300;
-$plugin->release = 'YU Kaltura Media Assignment 1.2.0';
+$plugin->version = 2019010700;
+$plugin->release = 'YU Kaltura Media Assignment 1.2.1';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2018120300,
-    'local_yumymedia' => 2018120300
+    'local_yukaltura' => 2019010700,
+    'local_yumymedia' => 2019010700
 );

@@ -17,7 +17,7 @@
  * Scripts for mod_kalmediaassign
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2018 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2019 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,6 +31,8 @@ define(['jquery'], function($) {
         /**
          * Initial function.
          * @access public
+         * @param {int} argWidth - width of modal content for preview.
+         * @param {int} argHeight - height of modal content for preview.
          */
         init: function(argWidth, argHeight) {
 

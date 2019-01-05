@@ -18,7 +18,7 @@
  * Kaltura media assignment single submission form
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,6 +30,9 @@ if (!defined('MOODLE_INTERNAL')) {
     // It must be included from a Moodle page.
     die('Direct access to this script is forbidden.');
 }
+
+header('Access-Control-Allow-Origin: *');
+header('Cache-Control: no-cache');
 
 require_login();
 
@@ -96,7 +99,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         if (!empty($entryobject)) {
 
             // Set the session.
-            $session = local_yukaltura_generate_kaltura_session(array($entryobject->id));
+            $session = local_yukaltura_generate_kaltura_session(true, array($entryobject->id));
 
             // Determine if the mobile theme is being used.
             $theme = core_useragent::get_device_type_theme();
