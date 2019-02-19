@@ -63,6 +63,7 @@ class mod_kalmediaassign_mod_form extends moodleform_mod {
             $mform->setType('name', PARAM_CLEANHTML);
         }
         $mform->addRule('name', null, 'required', null, 'client');
+        $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         $this->standard_intro_elements(get_string('description', 'kalmediaassign'));
 
@@ -74,6 +75,13 @@ class mod_kalmediaassign_mod_form extends moodleform_mod {
                            get_string('duedate', 'kalmediaassign'),
                            array('optional' => true));
         $mform->setDefault('timedue', time() + 7 * 24 * 3600);
+
+        $name = get_string('alwaysshowdescription', 'kalmediaassign');
+        $mform->addElement('checkbox', 'alwaysshowdescription', $name);
+        $mform->addHelpButton('alwaysshowdescription', 'alwaysshowdescription', 'kalmediaassign');
+        $mform->disabledIf('alwaysshowdescription', 'timeavailable[enabled]', 'notchecked');
+
+        $mform->addElement('header', 'submissionsettings', get_string('submissionsettings_hdr', 'kalmediaassign'));
 
         $ynoptions = array( 0 => get_string('no'), 1 => get_string('yes'));
 

@@ -32,6 +32,9 @@ $string['name'] = 'Name';
 $string['description'] = 'Description';
 $string['availabledate'] = 'Available from';
 $string['duedate'] = 'Due Date';
+$string['alwaysshowdescription'] = 'Always show description';
+$string['alwaysshowdescription_help'] = 'If disabled, the Assignment Description above will only become visible to students at the "Allow submissions from" date.';
+$string['submissionsettings_hdr'] = 'Submission settings';
 $string['preventlate'] = 'Prevent late submissions';
 $string['allowdeleting'] = 'Allow resubmitting';
 $string['allowdeleting_help'] = 'If enabled, students may replace submitted media. Whether it is possible to submit after the due date is controlled by the \'Prevent late submissions\' setting';
@@ -133,4 +136,4 @@ $string['event_submission_detail_viewed'] = 'Media submission detail viewed';
 $string['event_grades_updated'] = 'Grades of Media submission updated';
 $string['event_media_submitted'] = 'Media submitted';
 $string['reset_userdata'] = 'All data';
-
+$string['outlinegrade'] = 'Grade: {$a}';

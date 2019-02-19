@@ -31,6 +31,10 @@ if (!defined('MOODLE_INTERNAL')) {
 
 require_login();
 
+if (file_exists($CFG->dirroot.'/calendar/lib.php')) {
+    require_once($CFG->dirroot.'/calendar/lib.php');
+}
+
 /**
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
@@ -49,16 +53,24 @@ function kalmediaassign_add_instance($kalmediaassign) {
 
     if ($kalmediaassign->timedue) {
         $event = new stdClass();
-        $event->name        = $kalmediaassign->name;
+        $event->name = $kalmediaassign->name;
         $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
-        $event->courseid    = $kalmediaassign->course;
-        $event->groupid     = 0;
-        $event->userid      = 0;
-        $event->modulename  = 'kalmediaassign';
-        $event->instance    = $kalmediaassign->id;
-        $event->eventtype   = 'due';
-        $event->timestart   = $kalmediaassign->timedue;
+        $event->courseid = $kalmediaassign->course;
+        $event->groupid = 0;
+        $event->userid = 0;
+        $event->modulename = 'kalmediaassign';
+        $event->instance = $kalmediaassign->id;
+        $event->eventtype = 'due';
+        $event->timestart = $kalmediaassign->timedue;
         $event->timeduration = 0;
+
+        if (property_exists('calendar_event', 'type')) {
+            $event->type = CALENDAR_EVENT_TYPE_ACTION;
+        }
+
+        if (property_exists('calendar_event', 'priority')) {
+            $event->priority = null;
+        }
 
         calendar_event::create($event);
     }
@@ -86,6 +98,12 @@ function kalmediaassign_get_coursemodule_info($coursemodule) {
 
     $result = new cached_cm_info();
     $result->name = $kalmediaassign->name;
+    if ($coursemodule->showdescription) {
+        if ($kalmediaassign->alwaysshowdescription || time() > $kalmediaassign->timeavailable) {
+            // Convert intro to html. Do not filter cached version, filters run at display time.
+            $result->content = format_module_intro('kalmediaassign', $kalmediaassign, $coursemodule->id, false);
+        }
+    }
     return $result;
 }
 
@@ -111,24 +129,32 @@ function kalmediaassign_update_instance($kalmediaassign) {
         if ($event->id = $DB->get_field('event', 'id',
                                         array('modulename' => 'kalmediaassign', 'instance' => $kalmediaassign->id))) {
 
-            $event->name        = $kalmediaassign->name;
+            $event->name = $kalmediaassign->name;
             $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
-            $event->timestart   = $kalmediaassign->timedue;
+            $event->timestart = $kalmediaassign->timedue;
 
             $calendarevent = calendar_event::load($event->id);
             $calendarevent->update($event);
         } else {
             $event = new stdClass();
-            $event->name        = $kalmediaassign->name;
+            $event->name = $kalmediaassign->name;
             $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
-            $event->courseid    = $kalmediaassign->course;
-            $event->groupid     = 0;
-            $event->userid      = 0;
-            $event->modulename  = 'kalmediaassign';
-            $event->instance    = $kalmediaassign->id;
-            $event->eventtype   = 'due';
-            $event->timestart   = $kalmediaassign->timedue;
+            $event->courseid = $kalmediaassign->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'kalmediaassign';
+            $event->instance = $kalmediaassign->id;
+            $event->eventtype = 'due';
+            $event->timestart = $kalmediaassign->timedue;
             $event->timeduration = 0;
+
+            if (property_exists('calendar_event', 'type')) {
+                $event->type = CALENDAR_EVENT_TYPE_ACTION;
+            }
+
+            if (property_exists('calendar_event', 'priority')) {
+                $event->priority = null;
+            }
 
             calendar_event::create($event);
         }
@@ -193,10 +219,27 @@ function kalmediaassign_delete_instance($id) {
  * @todo Finish documenting this function
  */
 function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
-    $return = new stdClass;
-    $return->time = 0;
-    $return->info = ''; // TODO finish this function.
-    return $return;
+    //$return = new stdClass;
+    //$return->time = 0;
+    //$return->info = ''; // TODO finish this function.
+    //return $return;
+    global $CFG;
+
+    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->dirroot.'/grade/grading/lib.php');
+
+    $gradinginfo = grade_get_grades($course->id, 'mod', 'kalmediaassign', $kalmediaassign->id, $user->id);
+    $gradingitem = $gradinginfo->items[0];
+    $gradebookgrade = $gradingitem->grades[$user->id];
+
+    if (empty($gradebookgrade->str_long_grade)) {
+        return null;
+    }
+    $result = new stdClass();
+    $result->info = get_string('outlinegrade', 'kalmediaassign', $gradebookgrade->str_long_grade);
+    $result->time = $gradebookgrade->dategraded;
+
+    return $result;
 }
 
 
@@ -299,13 +342,20 @@ function kalmediaassign_supports($feature) {
             return true;
         case FEATURE_COMPLETION_TRACKS_VIEWS:
             return true;
+        case FEATURE_COMPLETION_HAS_RULES:
+            return true;
         case FEATURE_GRADE_HAS_GRADE:
             return true;
         case FEATURE_GRADE_OUTCOMES:
             return true;
         case FEATURE_BACKUP_MOODLE2:
             return true;
-
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        case FEATURE_PLAGIARISM:
+            return true;
+        case FEATURE_COMMENT:
+            return true;
         default:
             return null;
     }

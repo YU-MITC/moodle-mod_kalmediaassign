@@ -59,6 +59,19 @@ function xmldb_kalmediaassign_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2011091301, 'kalmediaassign');
     }
 
+    if ($oldversion < 2019021900) {
+        $table = new xmldb_table('kalmediaassign');
+        $field = new xmldb_field('alwaysshowdescription');
+        if (!$dbman->field_exists($table, $field)) {
+             $field->set_attributes(XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'timedue');
+             $field->setDefault('0');
+             $dbman->add_field($table, $field);
+        }
+        
+        // Plugin kalmediares savepoint reached.
+        upgrade_mod_savepoint(true, 2019021900, 'kalmediaassign');
+    }
+    
     return true;
 }
 

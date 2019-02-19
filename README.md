@@ -77,6 +77,10 @@ Warning
 Change log of YU Kaltura Media Assignment
 ------
 
+Version 1.2.2
+
+* fixed lib.php, mod_form.php, upgrade.php and install,xml, in order to display module's introduction on a moodle course page.
+
 Version 1.2.1
 
 * fixed some statements in single_submission_form.php, according to changes of local plugin (local_yukaltura).
