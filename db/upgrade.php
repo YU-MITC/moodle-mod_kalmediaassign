@@ -67,11 +67,11 @@ function xmldb_kalmediaassign_upgrade($oldversion) {
              $field->setDefault('0');
              $dbman->add_field($table, $field);
         }
-        
+
         // Plugin kalmediares savepoint reached.
         upgrade_mod_savepoint(true, 2019021900, 'kalmediaassign');
     }
-    
+
     return true;
 }
 

@@ -219,10 +219,6 @@ function kalmediaassign_delete_instance($id) {
  * @todo Finish documenting this function
  */
 function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
-    //$return = new stdClass;
-    //$return->time = 0;
-    //$return->info = ''; // TODO finish this function.
-    //return $return;
     global $CFG;
 
     require_once($CFG->libdir.'/gradelib.php');
