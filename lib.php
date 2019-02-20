@@ -91,7 +91,7 @@ function kalmediaassign_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
 
     $dbparams = array('id' => $coursemodule->instance);
-    $fields = 'id, name, intro, introformat';
+    $fields = 'id, name, intro, introformat, timeavailable, alwaysshowdescription';
     if (! $kalmediaassign = $DB->get_record('kalmediaassign', $dbparams, $fields)) {
         return false;
     }
