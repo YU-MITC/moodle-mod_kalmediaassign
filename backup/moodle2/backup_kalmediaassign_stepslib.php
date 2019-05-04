@@ -56,7 +56,7 @@ class backup_kalmediaassign_activity_structure_step extends backup_activity_stru
 
         // Define each element separated.
         $kalmediaassign = new backup_nested_element('kalmediaassign', array('id'), array(
-            'course', 'name', 'intro', 'introformat', 'timeavailable', 'timedue',
+            'course', 'name', 'intro', 'introformat', 'timeavailable', 'timedue', 'alwaysshowdescription',
             'preventlate', 'resubmit', 'emailteachers', 'grade', 'timecreated', 'timemodified'));
 
         $issues = new backup_nested_element('submissions');
