@@ -7,7 +7,7 @@ These plugins provide functions such as uploading, playing back and deleting med
 In addition, the administrators can install "[YU Kaltura Media Assignment](https://moodle.org/plugins/mod_kalmediaassign)" and "[YU Kaltura Media Resource](https://moodle.org/plugins/mod_kalmediares)".
 These plugins provide teachers ability of creating resource and activity modules which use kaltura media in their Moodle courses.
 
-Please note that there is a chance this module will not work on some Moodle environment. Also, this package is only available in English. Stay tuned to future versions for other language supports.
+Please note that there is a chance this module will not work on some Moodle environment. Also, this package is only available in English and Japanese. Stay tuned to future versions for other language supports.
 
 Original plugin package ("Kaltura Video Package") has better functions than ours and is easy to use. So that, for customers of the "Kaltura SaaS Edition", use the original plugin package is the better.
 
@@ -82,6 +82,8 @@ Change log of YU Kaltura Media Assignment
 Version 1.3.0
 
 * fixed some statements in backup_kalmediaassign_stepslib.php, in order to backup assignment's informations correctly.
+* fixed some statements in renderer.php and grade_submissions.php, in order to correctly display submissions that have been submitted or require grading.
+* fixed some statements in locallib.php, renderer.php, and view.php, in order to correctly judge whether the submission / resubmission is permitted.
 
 Version 1.2.2
 

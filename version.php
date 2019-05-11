@@ -24,12 +24,12 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2019050400;
+$plugin->version = 2019051100;
 $plugin->release = 'YU Kaltura Media Assignment 1.3.0';
 $plugin->requires = 2015051100;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
 $plugin->dependencies = array(
-    'local_yukaltura' => 2019050400,
-    'local_yumymedia' => 2019050400
+    'local_yukaltura' => 2019051100,
+    'local_yumymedia' => 2019051100
 );

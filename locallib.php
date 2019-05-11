@@ -67,6 +67,10 @@ function kalmediaassign_assignment_submission_expired($kalmediaassign) {
  * @return bool - true if opened, otherwise false.
  */
 function kalmediaassign_assignment_submission_opened($kalmediaassign, $submission = null) {
+    if ($submission !== null && $submission->timemodified < $submission->timemarked && $kalmediaassign->resubmit == 0) {
+        return false;
+    }
+
     if (empty($kalmediaassign->timeavailable)) {
         return true;
     }
@@ -94,7 +98,7 @@ function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryob
         return false;
     }
 
-    if (kalmediaassign_assignment_submission_expired($kalmediaassign) && $kalmediaassign->preventlate ||
+    if (kalmediaassign_assignment_submission_expired($kalmediaassign) && $kalmediaassign->preventlate == 0 ||
         !kalmediaassign_assignment_submission_opened($kalmediaassign)) {
         return false;
     }
@@ -115,6 +119,7 @@ function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryob
     if ($kalmediaassign->resubmit) {
         return true;
     }
+
     return false;
 }
 
@@ -308,7 +313,7 @@ function kalmediaassign_display_lateness($timesubmitted, $timedue) {
     $time = $timedue - $timesubmitted;
     if ($time < 0) {
         $timetext = get_string('late', 'kalmediaassign', format_time($time));
-        return ' (<span class="late">'.$timetext.'</span>)';
+        return ' (<span class="late"><font color="red">'.$timetext.'</font></span>)';
     } else {
         $timetext = get_string('early', 'kalmediaassign', format_time($time));
         return ' (<span class="early">'.$timetext.'</span>)';

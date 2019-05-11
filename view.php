@@ -152,19 +152,17 @@ if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
         $entryobject = local_yukaltura_get_ready_entry_object($submission->entry_id, false);
     }
 
+    echo $renderer->display_submission($entryobject);
+
     $disabled = true;
 
     if (kalmediaassign_assignment_submission_opened($kalmediaassign, $submission) &&
-        (!kalmediaassign_assignment_submission_expired($kalmediaassign) || $kalmediaassign->preventlate == 0)) {
+        (!kalmediaassign_assignment_submission_expired($kalmediaassign) || $kalmediaassign->preventlate == 1)) {
            $disabled = false;
     }
 
-    echo $renderer->display_submission($entryobject);
-
     if (empty($submission->entry_id) && empty($submission->timecreated)) {
-
         echo $renderer->display_student_submit_buttons($cm, $disabled);
-
     } else {
         if ($disabled ||
             !kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryobject, $submission)) {

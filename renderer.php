@@ -195,7 +195,7 @@ class submissions_table extends table_sql {
 
         } else {
 
-            $output = get_string('nograde');
+            $output = '-';
 
             if (!empty($data->timemarked)) {
                 $output = $this->display_grade($data->grade);
@@ -792,8 +792,8 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             $submissionstatus = get_string('status_submitted', 'kalmediaassign');
         }
 
-        if (!empty($submission) and !empty($submission->timecreated) and
-            $submission->timemarked > 0 and $submission->timemarked > $submission->timecreated and
+        // if (!empty($submission) and !empty($submission->timecreated) and
+        if ($submission->timemarked > 0 && $submission->timemarked > $submission->timecreated &&
             $submission->timemarked > $submission->timemodified) {
             $gradingstatus = get_string('status_marked', 'kalmediaassign');
         }
@@ -1201,20 +1201,20 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $where = '';
         switch ($filter) {
             case KALASSIGN_SUBMITTED:
-                $where = ' kms.timemodified > 0 AND ';
+                $where = ' {kalmediaassign_submission}.timemodified > 0 AND ';
                 break;
             case KALASSIGN_REQ_GRADING:
-                $where = ' kms.timemarked < kms.timemodified AND ';
+                $where = ' {kalmediaassign_submission}.timemarked < {kalmediaassign_submission}.timemodified AND ';
                 break;
         }
 
         // Determine logic needed for groups mode.
-        $param        = array();
-        $groupswhere  = '';
+        $param = array();
+        $groupswhere = '';
         $groupscolumn = '';
-        $groupsjoin   = '';
-        $groups       = array();
-        $groupids     = '';
+        $groupsjoin = '';
+        $groups = array();
+        $groupids = '';
         $coursecontext = context_course::instance($COURSE->id);
 
         // Get all groups that the user belongs to, check if the user has capability to access all groups.
@@ -1368,7 +1368,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         echo html_writer::empty_tag('input', $attributes);
 
-        $table->out($perpage, true);
+        try {
+            $table->out($perpage, true);
+        } catch (Exception $ex) {
+            echo get_string('table_failed', 'kalmediaassign');
+            echo html_writer::empty_tag('br');
+            echo $ex->getMessage();
+            echo html_writer::empty_tag('br');
+        }
 
         if ($quickgrade) {
             $attributes = array('type' => 'submit',
