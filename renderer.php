@@ -792,7 +792,6 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             $submissionstatus = get_string('status_submitted', 'kalmediaassign');
         }
 
-        // if (!empty($submission) and !empty($submission->timecreated) and
         if ($submission->timemarked > 0 && $submission->timemarked > $submission->timecreated &&
             $submission->timemarked > $submission->timemodified) {
             $gradingstatus = get_string('status_marked', 'kalmediaassign');

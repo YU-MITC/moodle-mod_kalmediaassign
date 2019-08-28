@@ -92,7 +92,6 @@ if ($connection) {
     $PAGE->requires->css('/mod/kalmediaassign/css/kalmediaassign.css', true);
 }
 
-
 $PAGE->set_url('/mod/kalmediaassign/view.php', array('id' => $id));
 $PAGE->set_title(format_string($kalmediaassign->name));
 $PAGE->set_heading($course->fullname);
