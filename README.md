@@ -82,6 +82,7 @@ Change log of YU Kaltura Media Assignment
 
 Version 1.3.1
 
+* fixed locallib.php, in order to resolve a problem about submission remaining datetime.
 * removed unused comments from renderer.php.
 
 Version 1.3.0

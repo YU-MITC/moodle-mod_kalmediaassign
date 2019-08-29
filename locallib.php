@@ -128,7 +128,7 @@ function kalmediaassign_assignment_submission_resubmit($kalmediaassign, $entryob
  *
  * @param int $duetime - due time in seconds.
  *
- * @return bool - true if assignment submission period is over else false.
+ * @return string - remaining date time.
  */
 function kalmediaassign_get_remainingdate($duetime) {
     $now = time();
@@ -146,7 +146,24 @@ function kalmediaassign_get_remainingdate($duetime) {
         $remain = $days . ' day(s) ';
     }
 
-    $remain .= gmdate('h:i', $diff);
+    $hours = (int)($diff / 3600);
+
+    $diff = $diff - $hours * 3600;
+
+    $minutes = (int)($diff / 60);
+
+    if ($hours < 10) {
+        $remain .= '0';
+     }
+     $remain .= $hours;
+
+     $remain .= ':';
+
+     if ($minutes < 10) {
+         $remain .= '0';
+     }
+
+     $remain .= $minutes;
 
     return $remain;
 }
