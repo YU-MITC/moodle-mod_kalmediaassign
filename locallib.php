@@ -154,16 +154,16 @@ function kalmediaassign_get_remainingdate($duetime) {
 
     if ($hours < 10) {
         $remain .= '0';
-     }
-     $remain .= $hours;
+    }
+    $remain .= $hours;
 
-     $remain .= ':';
+    $remain .= ':';
 
-     if ($minutes < 10) {
-         $remain .= '0';
-     }
+    if ($minutes < 10) {
+        $remain .= '0';
+    }
 
-     $remain .= $minutes;
+    $remain .= $minutes;
 
     return $remain;
 }
