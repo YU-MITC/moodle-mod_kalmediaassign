@@ -16,19 +16,14 @@
 
 /**
  * Restore step script.
- * @package   mod_kalmediaassign
+ * @package    moodlecore
+ * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.php');
-
-global $PAGE;
-
-$PAGE->set_url('/mod/kalmediaassign/backup/moodle2/restore_kalmediaassign_stepslib.class.php');
-
-require_login();
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Define all the restore steps that will be used by the restore_kalmediaassign_activity_task
@@ -37,7 +32,8 @@ require_login();
 /**
  * Structure step to restore one kalmediaassign activity.
  *
- * @package    mod_kalmediaassign
+ * @package    moodlecore
+ * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -66,7 +62,6 @@ class restore_kalmediaassign_activity_structure_step extends restore_activity_st
     /**
      * Define (add) particular settings this activity can have.
      * @param object $data - array of data.
-     * @return object - kalmediaassign instance.
      */
     protected function process_kalmediaassign($data) {
         global $DB;
@@ -83,7 +78,7 @@ class restore_kalmediaassign_activity_structure_step extends restore_activity_st
     }
 
     /**
-     * Restore kalmediaassign.
+     * Restore kalmediaassigni_submission.
      * @param array $data - structure defines.
      */
     protected function process_kalmediaassign_submission($data) {
@@ -105,6 +100,6 @@ class restore_kalmediaassign_activity_structure_step extends restore_activity_st
      */
     protected function after_execute() {
         // Add kalmediaassign related files, no need to match by itemname (just internally handled context).
-        $this->add_related_files('mod_kalmediaassign', 'submission', 'kalmediaassign_submission');
+        $this->add_related_files('mod_kalmediaassign', 'intro', null);
     }
 }

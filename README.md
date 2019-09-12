@@ -80,6 +80,10 @@ Warning
 Change log of YU Kaltura Media Assignment
 ------
 
+Version 1.3.2
+
+* fixed  backup and restore scripts, in order to backup/restore process in Moodle 3.x.
+
 Version 1.3.1
 
 * fixed locallib.php, in order to resolve a problem about submission remaining datetime.

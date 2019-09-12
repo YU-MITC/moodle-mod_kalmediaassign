@@ -24,8 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_kalmediaassign';
-$plugin->version = 2019083000;
-$plugin->release = '1.3.1';
+$plugin->version = 2019091200;
+$plugin->release = '1.3.2';
 $plugin->maturity = MATURITY_STABLE;
 $plugin->requires = 2015051100;
 $plugin->cron = 0;

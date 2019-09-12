@@ -16,24 +16,17 @@
 
 /**
  * Backup setteing script.
- * @package    mod_kalmediaassign
+ * @package    moodlecore
+ * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- /*
-  * This activity has no particular settings but the inherited from the generic
-  * backup_activity_task so here there isn't any class definition, like the ones
-  * existing in /backup/moodle2/backup_settingslib.php (activities section).
-  */
+/*
+ * This activity has no particular settings but the inherited from the generic
+ * backup_activity_task so here there isn't any class definition, like the ones
+ * existing in /backup/moodle2/backup_settingslib.php (activities section).
+ */
 
-require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.php');
-
-defined("MOODLE_INTERNAL") || die;
-
-global $PAGE;
-
-$PAGE->set_url('/mod/kalmediaassign/backup/moodle2/backup_kalmediaassign_settingslib.php');
-
-require_login();
+defined('MOODLE_INTERNAL') || die();

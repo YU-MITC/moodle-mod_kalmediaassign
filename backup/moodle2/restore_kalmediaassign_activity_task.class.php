@@ -16,25 +16,22 @@
 
 /**
  * Restore activity script.
- * @package   mod_kalmediaassign
+ * @package    moodlecore
+ * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/config.php');
+defined('MOODLE_INTERNAL') || die();
+
 // Because it exists (must).
 require_once(dirname(__FILE__) . '/restore_kalmediaassign_stepslib.php');
 
-global $PAGE;
-
-$PAGE->set_url('/mod/kalmediaassign/backup/moodle2/restore_kalmediaassign_activity_task.class.php');
-
-require_login();
-
 /**
  * kalmediaassign restore task.
- * @package    mod_kalmediaassign
+ * @package    moodlecore
+ * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
