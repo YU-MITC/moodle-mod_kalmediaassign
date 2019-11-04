@@ -16,7 +16,7 @@
 
 /**
  * Restore activity script.
- * @package    moodlecore
+ * @package    mod_kalmediaassign
  * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
@@ -30,7 +30,7 @@ require_once(dirname(__FILE__) . '/restore_kalmediaassign_stepslib.php');
 
 /**
  * kalmediaassign restore task.
- * @package    moodlecore
+ * @package    mod_kalmediaassign
  * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>

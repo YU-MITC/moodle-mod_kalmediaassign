@@ -138,3 +138,14 @@ $string['event_grades_updated'] = 'Grades of Media submission updated';
 $string['event_media_submitted'] = 'Media submitted';
 $string['reset_userdata'] = 'All data';
 $string['outlinegrade'] = 'Grade: {$a}';
+
+// Privacy strings.
+$string['privacy:metadata:kalmediaassign_submission'] = 'Information about submission and grading to media assignment.';
+$string['privacy:metadata:kalmediaassign_submission:mediaassignid'] = 'Media assignment ID which is linked to Media assignment module.';
+$string['privacy:metadata:kalmediaassign_submission:userid'] = 'The ID of the user who submit a media';
+$string['privacy:metadata:kalmediaassign_submission:grade'] = 'Score to the media submission.';
+$string['privacy:metadata:kalmediaassign_submission:submissioncomment'] = 'Comment from teacher to student.';
+$string['privacy:metadata:kalmediaassign_submission:teacher'] = 'Teacher who grade the submitted media.';
+$string['privacy:metadata:kalmediaassign_submission:timemarked'] = 'Time when the media was graded by teacher.';
+$string['privacy:metadata:kalmediaassign_submission:timecreated'] = 'Time when the media was submitted.';
+$string['privacy:metadata:kalmediaassign_submission:timemodified'] = 'Time when the media was modified.';
