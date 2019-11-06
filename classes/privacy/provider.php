@@ -221,7 +221,7 @@ class provider implements my_interface
      * This function calls _delete_data_for_users().
      * @param approved_userlist $userlist - The approved context and user information to delete information for.
      */
-    static function delete_data_for_users($userlist) {
+    public static function delete_data_for_users($userlist) {
         _delete_data_for_users($userlist);
     }
 
@@ -231,15 +231,15 @@ class provider implements my_interface
      */
     public static function _delete_data_for_users($userlist) {
         global $DB;
- 
+
         $context = $userlist->get_context();
         $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
         $assign = $DB->get_record('kalmediaassign', ['id' => $cm->instance]);
- 
+
         list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
         $params = array_merge(['assignid' => $assign->id], $userinparams);
         $sql = "mediaassignid = :assignid and userid {$userinsql}";
- 
+
         $DB->delete_records_select('kalmediaassign_submission', $sql, $params);
     }
 }
