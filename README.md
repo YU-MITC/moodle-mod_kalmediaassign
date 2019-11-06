@@ -86,6 +86,7 @@ Version 1.3.3
 * fixed comments in backup and restore scripts.
 * fixed javascript files based on JSDoc warnings.
 * added privacy functions ans strings to comply with GDPR.
+* fixed some statements in graede_submission.php, in order to adjust player size for "classic" theme.
 
 Version 1.3.2
 

@@ -90,7 +90,7 @@ $modalheight = 0;
 
 list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
 
-if (strcmp($CFG->theme, 'boost') == 0) {
+if (strcmp($CFG->theme, 'boost') == 0 || strcmp($CFG->theme, 'classic') == 0) {
     $modalheight = ((int)$modalheight + 20);
 }
 

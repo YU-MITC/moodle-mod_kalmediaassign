@@ -27,9 +27,15 @@ namespace mod_kalmediaassign\privacy;
 defined('MOODLE_INTERNAL') || die();
 
 if (interface_exists('\core_privacy\local\request\userlist')) {
-    interface my_inserface extends
-        \core_privacy\local\request\userlist,
+    interface my_interface extends
         \core_privacy\local\metadata\provider,
+        \core_privacy\local\request\userlist,
+        \core_privacy\local\request\plugin\provider {
+    }
+} else if (interface_exists('\core_privacy\local\request\core_userlist_provider')) {
+    interface my_interface extends
+        \core_privacy\local\metadata\provider,
+        \core_privacy\local\request\core_userlist_provider,
         \core_privacy\local\request\plugin\provider {
     };
 } else {
@@ -39,12 +45,18 @@ if (interface_exists('\core_privacy\local\request\userlist')) {
     };
 }
 
-use \core_privacy\local\request\approved_contextlist;
-use \core_privacy\local\request\deletion_criteria;
-use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper;
-use \core_privacy\local\metadata\collection;
-use \core_privacy\local\request\transform;
+use context;
+use context_hepler;
+use comtext_module;
+use stdClass;
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\helper;
+use core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\writer;
 
 /**
  * Privacy Subsystem for mod_kalmediaassign implementing provider.
@@ -61,7 +73,7 @@ class provider implements my_interface
 
     /**
      * This function returns meta data about this system.
-     * @param collection $collection - collection object for metadata.
+     * @param collection $items - collection object for metadata.
      * @return collection - modified collection object.
      */
     public static function _get_metadata($items) {
@@ -82,7 +94,6 @@ class provider implements my_interface
 
     /**
      * This function gets the list of contexts that contain user information for the specified user.
-     *
      * @param int $userid - The user to search.
      * @return contextlist $contextlist - The list of contexts used in this plugin.
      */
@@ -105,6 +116,14 @@ class provider implements my_interface
     }
 
     /**
+     * This function calls get_users_in_context().
+     * @param userlist $userlist - The user list containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context($userlist) {
+        _get_users_in_context($userlist);
+    }
+
+    /**
      * Get the list of users within a specific context.
      * @param userlist $userlist - The user list containing the list of users who have data in this context/plugin combination.
      */
@@ -118,11 +137,44 @@ class provider implements my_interface
         $params = ['instanceid' => $context->instanceid,
                    'moudlename' => 'kalmediaassign'];
 
-        $sql = "select l.userid from {course_modules} cm
+        $sql = "select s.userid from {course_modules} cm
 		join {modules} m on m.id = cm.module and m.name = :modulename
                 join {kalmediaassign_submission} s on s.mediaassignid = cm.instance
                 where cm.id = :instanceid";
         $userlist->add_from_sql('userid', $sql, $params);
+    }
+
+    /**
+     * Export all user data for the specified user, in the specified contexts.
+     * @param approved_contextlist $contextlist - The approved contexts to export information for.
+     */
+    public static function _export_user_data($contextlist) {
+        global $DB;
+
+        $user = $contextlist->get_user();
+        foreach ($contextlist->get_contexts() as $context) {
+            $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+            $instance = $DB->get_record('kalmediaassign', ['id' => $cm->instance]);
+            $data = array();
+            $params = array('mediaassignid' => $context->instanceid,
+                            'userid' => $user->id);
+            $submissions = $DB->get_records('kalmediaassign_submission', $params);
+
+            $params = array('id' => $context->instanceid);
+            $assign = $DB->get_record('kalmediaassign', $params);
+
+            if (!empty($submission) && !empty($assign)) {
+                $submissiondata = (object) [
+                    'name' => format_string($assign->name, true),
+                    'grade' => $submission->grade,
+                    'submssioncomment' => format_string($submission->submissioncomment, true),
+                    'timecreated' => transform::datetime($submission->timecreated),
+                    'timemodified' => transform::datetime($submission->timemodified),
+                    'timemarked' => transform::datetime($submission->timemarked)];
+                $data[$submission->id] = $submissiondata;
+                $instance->export_data(null, $data);
+            }
+        }
     }
 
     /**
@@ -149,7 +201,6 @@ class provider implements my_interface
 
     /**
      * Delete all user data for the specified user, in the specified contexts.
-     *
      * @param approved_contextlist $contextlist -The approved contexts and user information to delete information for.
      */
     public static function _delete_data_for_user($contextlist) {
@@ -167,37 +218,28 @@ class provider implements my_interface
     }
 
     /**
-     * Export all user data for the specified user, in the specified contexts.
-     *
-     * @param approved_contextlist $contextlist - The approved contexts to export information for.
+     * This function calls _delete_data_for_users().
+     * @param approved_userlist $userlist - The approved context and user information to delete information for.
      */
-    public static function _export_user_data($contextlist) {
+    static function delete_data_for_users($userlist) {
+        _delete_data_for_users($userlist);
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     * @param approved_userlist $userlist - The approved context and user information to delete information for.
+     */
+    public static function _delete_data_for_users($userlist) {
         global $DB;
-
-        $user = $contextlist->get_user();
-        foreach ($contextlist->get_contexts() as $context) {
-            $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
-            $instance = $DB->get_record('kalmediaassign', ['id' => $cm->instance]);
-            $data = array();
-            $params = array('mediaassignid' => $context->instanceid,
-                            'userid' => $user->id);
-            $submission = $DB->get_record('kalmediaassign_submission', $params);
-
-            $params = array('id' => $context->instanceid);
-            $assign = $DB->get_record('kalmediaassign', $params);
-
-            if (!empty($submission) && !empty($assign)) {
-                $submissiondata = (object) [
-                    'name' => format_string($assign->name, true),
-                    'grade' => $submission->grade,
-                    'submssioncomment' => format_string($submission->submissioncomment, true),
-                    'timecreated' => transform::datetime($submission->timecreated),
-                    'timemodified' => transform::datetime($submission->timemodified),
-                    'timemarked' => transform::datetime($submission->timemarked)];
-                $data[$submission->id] = $submissiondata;
-
-                $instance->export_data(null, $data);
-            }
-        }
+ 
+        $context = $userlist->get_context();
+        $cm = $DB->get_record('course_modules', ['id' => $context->instanceid]);
+        $assign = $DB->get_record('kalmediaassign', ['id' => $cm->instance]);
+ 
+        list($userinsql, $userinparams) = $DB->get_in_or_equal($userlist->get_userids(), SQL_PARAMS_NAMED);
+        $params = array_merge(['assignid' => $assign->id], $userinparams);
+        $sql = "mediaassignid = :assignid and userid {$userinsql}";
+ 
+        $DB->delete_records_select('kalmediaassign_submission', $sql, $params);
     }
 }
