@@ -158,7 +158,7 @@ class provider implements my_interface
             $data = array();
             $params = array('mediaassignid' => $context->instanceid,
                             'userid' => $user->id);
-            $submissions = $DB->get_records('kalmediaassign_submission', $params);
+            $submission = $DB->get_records('kalmediaassign_submission', $params);
 
             $params = array('id' => $context->instanceid);
             $assign = $DB->get_record('kalmediaassign', $params);
