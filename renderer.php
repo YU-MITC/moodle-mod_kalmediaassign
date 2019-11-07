@@ -959,7 +959,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
             $html .= html_writer::empty_tag('input', $attr);
 
-            $html .= display_upload_buttons();
+            $html .= $this->display_upload_buttons();
 
             $html .= html_writer::end_tag('form');
         }
@@ -1031,7 +1031,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
             $html .= html_writer::empty_tag('input', $attr);
 
-            $html .= display_upload_buttons();
+            $html .= $this->display_upload_buttons();
 
             $html .= html_writer::end_tag('form');
         }
