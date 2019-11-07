@@ -35,6 +35,36 @@ if (file_exists($CFG->dirroot.'/calendar/lib.php')) {
     require_once($CFG->dirroot.'/calendar/lib.php');
 }
 
+
+/**
+ * Create and return event object.
+ * @param object $kalmediaassign - Kaltura Media Assignment object.
+ * return object - event object.
+ */
+function kalmediaassign_create_event($kalmediaassign) {
+    $event = new stdClass();
+    $event->name = $kalmediaassign->name;
+    $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
+    $event->courseid = $kalmediaassign->course;
+    $event->groupid = 0;
+    $event->userid = 0;
+    $event->modulename = 'kalmediaassign';
+    $event->instance = $kalmediaassign->id;
+    $event->eventtype = 'due';
+    $event->timestart = $kalmediaassign->timedue;
+    $event->timeduration = 0;
+
+    if (property_exists('calendar_event', 'type')) {
+        $event->type = CALENDAR_EVENT_TYPE_ACTION;
+    }
+
+    if (property_exists('calendar_event', 'priority')) {
+        $event->priority = null;
+    }
+
+    return $event;
+}
+
 /**
  * Given an object containing all the necessary data,
  * (defined by the form in mod_form.php) this function
@@ -52,26 +82,7 @@ function kalmediaassign_add_instance($kalmediaassign) {
     $kalmediaassign->id = $DB->insert_record('kalmediaassign', $kalmediaassign);
 
     if ($kalmediaassign->timedue) {
-        $event = new stdClass();
-        $event->name = $kalmediaassign->name;
-        $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
-        $event->courseid = $kalmediaassign->course;
-        $event->groupid = 0;
-        $event->userid = 0;
-        $event->modulename = 'kalmediaassign';
-        $event->instance = $kalmediaassign->id;
-        $event->eventtype = 'due';
-        $event->timestart = $kalmediaassign->timedue;
-        $event->timeduration = 0;
-
-        if (property_exists('calendar_event', 'type')) {
-            $event->type = CALENDAR_EVENT_TYPE_ACTION;
-        }
-
-        if (property_exists('calendar_event', 'priority')) {
-            $event->priority = null;
-        }
-
+        $event = kalmediaassign_create_event($kalmediaassign);
         calendar_event::create($event);
     }
 
@@ -136,26 +147,7 @@ function kalmediaassign_update_instance($kalmediaassign) {
             $calendarevent = calendar_event::load($event->id);
             $calendarevent->update($event);
         } else {
-            $event = new stdClass();
-            $event->name = $kalmediaassign->name;
-            $event->description = format_module_intro('kalmediaassign', $kalmediaassign, $kalmediaassign->coursemodule);
-            $event->courseid = $kalmediaassign->course;
-            $event->groupid = 0;
-            $event->userid = 0;
-            $event->modulename = 'kalmediaassign';
-            $event->instance = $kalmediaassign->id;
-            $event->eventtype = 'due';
-            $event->timestart = $kalmediaassign->timedue;
-            $event->timeduration = 0;
-
-            if (property_exists('calendar_event', 'type')) {
-                $event->type = CALENDAR_EVENT_TYPE_ACTION;
-            }
-
-            if (property_exists('calendar_event', 'priority')) {
-                $event->priority = null;
-            }
-
+            $event = kalmediaassign_create_event($kalmediaassign);
             calendar_event::create($event);
         }
     } else {

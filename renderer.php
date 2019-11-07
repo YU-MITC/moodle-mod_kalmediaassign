@@ -959,31 +959,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
             $html .= html_writer::empty_tag('input', $attr);
 
-            if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
-                $html .= html_writer::empty_tag('br', null);
-
-                $str = get_string('simple_upload', 'local_yumymedia');
-                $str .= ' (' . get_string('pc_recommended', 'local_yumymedia') . ')';
-
-                $attr = array('type' => 'button',
-                              'name' => 'upload_media',
-                              'id' => 'id_upload_media',
-                              'value' => $str);
-                $html .= html_writer::empty_tag('input', $attr);
-
-                $html .= '&nbsp;&nbsp;';
-
-                $str = get_string('webcam_upload', 'local_yumymedia');
-                $str .= ' (' . get_string('pc_only', 'local_yumymedia') . ')';
-
-                if (get_config(KALTURA_PLUGIN_NAME, 'enable_webcam') == 1) {
-                    $attr = array('type' => 'button',
-                                  'name' => 'record_media',
-                                  'id' => 'id_record_media',
-                                  'value' => $str);
-                    $html .= html_writer::empty_tag('input', $attr);
-                }
-            }
+            $html .= display_upload_buttons();
 
             $html .= html_writer::end_tag('form');
         }
@@ -1055,36 +1031,50 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
             $html .= html_writer::empty_tag('input', $attr);
 
-            if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
-                $html .= html_writer::empty_tag('br', null);
-
-                $str = get_string('simple_upload', 'local_yumymedia');
-                $str .= ' (' . get_string('pc_recommended', 'local_yumymedia') . ')';
-                $attr = array('type' => 'button',
-                              'name' => 'upload_media',
-                              'id' => 'id_upload_media',
-                              'value' => $str);
-                $html .= html_writer::empty_tag('input', $attr);
-
-                $html .= '&nbsp;&nbsp;';
-
-                $str = get_string('webcam_upload', 'local_yumymedia');
-                $str .= ' (' . get_string('pc_only', 'local_yumymedia') . ')';
-
-                if (get_config(KALTURA_PLUGIN_NAME, 'enable_webcam') == 1) {
-                    $attr = array('type' => 'button',
-                                  'name' => 'record_media',
-                                  'id' => 'id_record_media',
-                                  'value' => $str);
-                    $html .= html_writer::empty_tag('input', $attr);
-                }
-            }
+            $html .= display_upload_buttons();
 
             $html .= html_writer::end_tag('form');
         }
 
         return $html;
 
+    }
+
+
+    /**
+     * This function display uupload buttons.
+     * @return string - HTML markup to display upload buttons.
+     */
+    public function display_upload_buttons() {
+        $html = '';
+
+        if (get_config(KALTURA_PLUGIN_NAME, 'kalmediaassign_upload') == 1) {
+            $html .= html_writer::empty_tag('br', null);
+
+            $str = get_string('simple_upload', 'local_yumymedia');
+            $str .= ' (' . get_string('pc_recommended', 'local_yumymedia') . ')';
+
+            $attr = array('type' => 'button',
+                          'name' => 'upload_media',
+                          'id' => 'id_upload_media',
+                          'value' => $str);
+            $html .= html_writer::empty_tag('input', $attr);
+
+            $html .= '&nbsp;&nbsp;';
+
+            $str = get_string('webcam_upload', 'local_yumymedia');
+            $str .= ' (' . get_string('pc_only', 'local_yumymedia') . ')';
+
+            if (get_config(KALTURA_PLUGIN_NAME, 'enable_webcam') == 1) {
+                $attr = array('type' => 'button',
+                              'name' => 'record_media',
+                              'id' => 'id_record_media',
+                              'value' => $str);
+                $html .= html_writer::empty_tag('input', $attr);
+            }
+        }
+
+        return $html;
     }
 
     /**
