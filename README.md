@@ -85,6 +85,7 @@ Version 1.3.3
 
 * fixed comments in backup and restore scripts.
 * fixed javascript files based on JSDoc warnings.
+* fixed javascript files in order to support the Safari 12.x/13.x on macOS.
 * added privacy functions ans strings to comply with GDPR.
 * fixed some statements in grade_submission.php, in order to adjust player size for "classic" theme.
 
