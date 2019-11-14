@@ -24,12 +24,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
-
-require_login();
+defined('MOODLE_INTERNAL') || die();
 
 if (file_exists($CFG->dirroot.'/calendar/lib.php')) {
     require_once($CFG->dirroot.'/calendar/lib.php');
