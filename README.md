@@ -22,7 +22,7 @@ Requirements
 
 * PHP5.3 or greater.
 * Web browsers must support the JavaScript and HTML5.
-* System administrators must use the same communication protocol for all routes (between the web browser and the Moodle, between the Moodle and the Kaltura, and between the web browser and the Kaltura). It is better to use HTTPS as the communication protocol.
+* System administrators must use the HTTPS protocol for their Moodle site and Kaltura server.
 * Administrators must not delete "Default" access control profile from their Kaltura server. If they delete the "Default" profile, they must create new profile named "Default" before install our plugins.
 * These plugins do not support Flash players. Therefore, please use HTML5 players.
 * "local_yukaltura" and "local_yumymedia" plugins.
@@ -45,7 +45,7 @@ Installation will be completed after you log in as an administrator and access t
 How to use
 ------
 
-* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.3.pdf).
+* User's guide, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/userguide_version1.4.pdf).
 * Demonstration web page, click [here](http://www.cc.yamaguchi-u.ac.jp/guides/cas/plugins/demo/).
 
 Targeted Moodle versions
@@ -81,13 +81,14 @@ Warning
 Change log of YU Kaltura Media Assignment
 ------
 
-Version 1.3.3
+Version 1.4.0
 
 * fixed comments in backup and restore scripts.
 * fixed javascript files based on JSDoc warnings.
 * fixed javascript files in order to support the Safari 12.x/13.x on macOS.
 * added privacy functions ans strings to comply with GDPR.
 * fixed some statements in grade_submission.php, in order to adjust player size for "classic" theme.
+* fixed "Requirements" in README.md.
 
 Version 1.3.2
 
