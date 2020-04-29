@@ -18,7 +18,7 @@
  * Kaltura media assignment single submission form
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ require_login();
 /**
  * Class for display single submission form.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kalmediaassign_singlesubmission_form extends moodleform {
@@ -83,7 +83,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
         if (!empty($submission->entry_id)) {
 
             $kaltura        = new yukaltura_connection();
-            $connection     = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
+            $connection     = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
 
             if ($connection) {
                 $entryobject = local_yukaltura_get_ready_entry_object($this->_customdata->submission->entry_id);

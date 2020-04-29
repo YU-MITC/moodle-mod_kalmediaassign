@@ -18,7 +18,7 @@
  * YU Kaltura media assignment logs file
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2019 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <info-cc@ml.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

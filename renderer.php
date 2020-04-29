@@ -19,7 +19,7 @@
  *
  * @package    mod_kalmediaassign
  * @copyright  (C) 2013 onwards Remote-Learner {@link http://www.remote-learner.ca/}
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ require_login();
 /**
  * Table class for displaying media submissions for grading.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2019 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submissions_table extends table_sql {
@@ -487,7 +487,7 @@ class submissions_table extends table_sql {
 /**
  * Renderer class of YU Kaltura media submissions.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2018 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kalmediaassign_renderer extends plugin_renderer_base {
@@ -1161,7 +1161,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         if (!empty($entryids)) {
-            $clientobj = local_yukaltura_login(true);
+            $clientobj = local_yukaltura_login(false, true);
 
             if ($clientobj) {
                 $entries = new KalturaStaticEntries();
@@ -1274,7 +1274,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         $kaltura    = new yukaltura_connection();
-        $connection = $kaltura->get_connection(true, KALTURA_SESSION_LENGTH);
+        $connection = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
         $table      = new submissions_table('kal_media_submit_table', $cm, $gradinginfo, $quickgrade,
                                             $tifirst, $tilast, $page, $entries, $connection);
 
