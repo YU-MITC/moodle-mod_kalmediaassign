@@ -498,14 +498,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @return string - HTML markup to display submission.
      */
     public function display_submission($entryobj = null) {
-        global $CFG, $OUTPUT;
+        global $CFG;
 
         $imgsource = '';
         $imgname   = '';
 
         $html = '';
 
-        $html .= $OUTPUT->heading(get_string('submission', 'kalmediaassign'), 3);
+        $html .= $this->output->heading(get_string('submission', 'kalmediaassign'), 3);
 
         $html .= html_writer::start_tag('p');
 
@@ -1131,7 +1131,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     public function display_submissions_table($cm, $groupfilter = 0, $filter = 'all', $perpage, $quickgrade = false,
                                        $tifirst = '', $tilast = '', $page = 0) {
 
-        global $DB, $OUTPUT, $COURSE, $USER;
+        global $DB, $COURSE, $USER;
 
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
@@ -1167,7 +1167,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $entries = new KalturaStaticEntries();
                 $entries = KalturaStaticEntries::list_entries($entryids, $clientobj->baseEntry);
             } else {
-                echo $OUTPUT->notification(get_string('conn_failed_alt', 'local_yukaltura'));
+                echo $this->output->notification(get_string('conn_failed_alt', 'local_yukaltura'));
             }
         }
 
@@ -1406,13 +1406,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @return nothing.
      */
     public function display_kalmediaassignments_table($course) {
-        global $CFG, $DB, $PAGE, $OUTPUT, $USER;
+        global $CFG, $DB, $USER;
 
         echo html_writer::start_tag('center');
 
         if (!$cms = get_coursemodules_in_course('kalmediaassign', $course->id, 'm.timedue')) {
             echo get_string('noassignments', 'kalmediaassign');
-            echo $OUTPUT->continue_button($CFG->wwwroot.'/course/view.php?id='.$course->id);
+            echo $this->output->continue_button($CFG->wwwroot.'/course/view.php?id='.$course->id);
         }
 
         $strsectionname = get_string('sectionname', 'format_'.$course->format);
@@ -1466,7 +1466,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         }
 
         if ($assignmentcount > 0) {
-            $pagerenderer = $PAGE->get_renderer('mod_kalmediaassign');
+            $pagerenderer = $this->page->get_renderer('mod_kalmediaassign');
             echo $pagerenderer->render($courseindexsummary);
         }
 
@@ -1485,7 +1485,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * TODO: correct documentation for this function
      */
     public function display_grade_feedback($kalmediaassign, $context) {
-        global $USER, $CFG, $DB, $OUTPUT;
+        global $USER, $CFG, $DB;
 
         require_once($CFG->libdir.'/gradelib.php');
 
@@ -1547,7 +1547,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $cell1 = new html_table_cell(get_string('gradedby', 'kalmediaassign'));
         $cell1->attributes['style'] = '';
         $cell1->attributes['width'] = '25%';
-        $cell2 = new html_table_cell($OUTPUT->user_picture($teacher) . '&nbsp;&nbsp;' . fullname($teacher));
+        $cell2 = new html_table_cell($this->output->user_picture($teacher) . '&nbsp;&nbsp;' . fullname($teacher));
         $cell2->attributes['style'] = '';
         $row->cells = array($cell1, $cell2);
         $table->data[] = $row;
