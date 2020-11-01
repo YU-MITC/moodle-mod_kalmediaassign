@@ -649,7 +649,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $row->cells = array($cell1, $cell2);
         $table->data[] = $row;
 
-        $users = kalmediaassign_get_submissions($cm->instance, KALASSIGN_REQ_GRADING);
+        $users = kalmediaassign_get_submissions($cm->instance, KALASSIGN_FILTER_REQ_GRADING);
 
         if (empty($users)) {
             $users = array();
@@ -761,15 +761,20 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param object $cm - module context object.
      * @param object $kalmediaobj - kalmediaassign object.
      * @param object $coursecontext - course context object which kalmediaassign module is placed.
+     * @param object $user - user object.
      * @return string - HTML markup for submission status.
      */
-    public function display_submission_status($cm, $kalmediaobj, $coursecontext) {
+    public function display_submission_status($cm, $kalmediaobj, $coursecontext, $user = null) {
         global $DB, $USER;
 
         $html = '';
 
         if (!has_capability('mod/kalmediaassign:submit', $coursecontext)) {
             return '';
+        }
+
+        if ($user == null) {
+            $user = $USER;
         }
 
         $html .= $this->output->container_start('submissionstatus');
@@ -785,7 +790,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
             print_error('invalidid', 'kalmediaassign');
         }
 
-        $param = array('mediaassignid' => $kalmediaassign->id, 'userid' => $USER->id);
+        $param = array('mediaassignid' => $kalmediaassign->id, 'userid' => $user->id);
         $submission = $DB->get_record('kalmediaassign_submission', $param);
 
         if (!empty($submission) and !empty($submission->entry_id)) {
@@ -1189,10 +1194,10 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
         $where = '';
         switch ($filter) {
-            case KALASSIGN_SUBMITTED:
+            case KALASSIGN_FILTER_SUBMITTED:
                 $where = ' {kalmediaassign_submission}.timemodified > 0 AND ';
                 break;
-            case KALASSIGN_REQ_GRADING:
+            case KALASSIGN_FILTER_REQ_GRADING:
                 $where = ' {kalmediaassign_submission}.timemarked < {kalmediaassign_submission}.timemodified AND ';
                 break;
         }
@@ -1300,10 +1305,10 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                    ' 1 as status, 1 as selectgrade' . $groupscolumn;
         $where .= ' {user}.deleted = 0 ';
 
-        if ($filter == KALASSIGN_NOTSUBMITTEDYET and $users !== array()) {
+        if ($filter == KALASSIGN_FILTER_NOTSUBMITTEDYET and $users !== array()) {
             $where .= ' and {user}.id not in (' . implode(',', $users) . ') ';
         } else {
-            if (($filter == KALASSIGN_REQ_GRADING or $filter == KALASSIGN_SUBMITTED) and $users !== array()) {
+            if (($filter == KALASSIGN_FILTER_REQ_GRADING or $filter == KALASSIGN_FILTER_SUBMITTED) and $users !== array()) {
                 $where          .= ' and {user}.id in (' . implode(',', $users) . ') ';
             }
         }
@@ -1480,25 +1485,30 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      *
      * @param object $kalmediaassign - The submission object or NULL in which case it will be loaded.
      * @param object $context - context object.
+     * @param object $user - user object.
      * @return string - HTML markup for feedback.
      *
      * TODO: correct documentation for this function
      */
-    public function display_grade_feedback($kalmediaassign, $context) {
+    public function display_grade_feedback($kalmediaassign, $context, $user = null) {
         global $USER, $CFG, $DB;
 
         require_once($CFG->libdir.'/gradelib.php');
 
+        if ($user == null) {
+            $user = $USER;
+        }
+
         // Check if the user is enrolled to the coruse and can submit to the assignment.
-        if (!is_enrolled($context, $USER, 'mod/kalmediaassign:submit')) {
+        if (!is_enrolled($context, $user, 'mod/kalmediaassign:submit')) {
             // Can not submit assignments -> no feedback.
             return;
         }
 
-        $gradinginfo = grade_get_grades($kalmediaassign->course, 'mod', 'kalmediaassign', $kalmediaassign->id, $USER->id);
+        $gradinginfo = grade_get_grades($kalmediaassign->course, 'mod', 'kalmediaassign', $kalmediaassign->id, $user->id);
 
         $item = $gradinginfo->items[0];
-        $grade = $item->grades[$USER->id];
+        $grade = $item->grades[$user->id];
 
         if ($grade->hidden || $grade->grade === false) { // Hidden or Error.
             return;

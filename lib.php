@@ -110,7 +110,18 @@ function kalmediaassign_get_coursemodule_info($coursemodule) {
             $result->content = format_module_intro('kalmediaassign', $kalmediaassign, $coursemodule->id, false);
         }
     }
+
     return $result;
+}
+
+/**
+ * Callback which returns human-readable strings describing the active completion custom rules for the module instance.
+ *
+ * @param cm_info|stdClass $cm object with fields ->completion and ->customdata['customcompletionrules']
+ * @return array $descriptions the array of descriptions for the custom rules.
+ */
+function mod_kalmediaassign_get_completion_active_rule_descriptions($cm) {
+    return [];
 }
 
 /**
@@ -168,27 +179,25 @@ function kalmediaassign_update_instance($kalmediaassign) {
 function kalmediaassign_delete_instance($id) {
     global $DB;
 
-    $result = true;
+    $cm = get_coursemodule_from_instance('kalmediaassign', $id, 0, false, MUST_EXIST);
 
-    if (! $kalmediaassign = $DB->get_record('kalmediaassign', array('id' => $id))) {
-        return false;
+    if (!empty($cm)) {
+        $DB->delete_records('course_modules_completion', array('coursemoduleid' => $cm->id));
     }
 
-    if (! $DB->delete_records('kalmediaassign_submission', array('mediaassignid' => $kalmediaassign->id))) {
-        $result = false;
+    $DB->delete_records('kalmediaassign_submission', array('mediaassignid' => $id));
+
+    $DB->delete_records('event', array('modulename' => 'kalmediaassign', 'instance' => $id));
+
+    $kalmediaassign = $DB->get_record('kalmediaassign', array('id' => $id));
+
+    if (empty($kalmediaassign)) {
+        kalmediaassign_grade_item_delete($kalmediaassign);
     }
 
-    if (! $DB->delete_records('event', array('modulename' => 'kalmediaassign', 'instance' => $kalmediaassign->id))) {
-        $result = false;
-    }
+    $DB->delete_records('kalmediaassign', array('id' => $id));
 
-    if (! $DB->delete_records('kalmediaassign', array('id' => $kalmediaassign->id))) {
-        $result = false;
-    }
-
-    kalmediaassign_grade_item_delete($kalmediaassign);
-
-    return $result;
+    return true;
 }
 
 
@@ -231,14 +240,16 @@ function kalmediaassign_user_outline($course, $user, $mod, $kalmediaassign) {
  * a given particular instance of this module, for user activity reports.
  * @param object $course - Moodle course object.
  * @param object $user - Moodle user object.
- * @param object $mod - Moodle module obuject.
+ * @param object $coursemodule - course module object.
  * @param object $kalmediaassign - An object from the form in mod_form.php.
- * @return bool - this function always return true.
- * @todo Finish documenting this function
  */
-function kalmediaassign_user_complete($course, $user, $mod, $kalmediaassign) {
-    return true;  // TODO: finish this function.
+function kalmediaassign_user_complete($course, $user, $coursemodule, $kalmediaassign) {
+    global $CFG;
+    require_once($CFG->dirroot . '/mod/kalmediaassign/locallib.php');
+
+    echo kalmediaassign_get_student_summary($course, $user, $coursemodule, $kalmediaassign);
 }
+
 
 /**
  * Given a course and a time, this module should find recent activity
@@ -253,6 +264,22 @@ function kalmediaassign_user_complete($course, $user, $mod, $kalmediaassign) {
 function kalmediaassign_print_recent_activity($course, $viewfullnames, $timestart) {
     // TODO: finish this function.
     return false;  // True if anything was printed, otherwise false.
+}
+
+
+/**
+ * Obtains the automatic completion state for this module based on any conditions
+ * in kamediaassign settings.
+ *
+ * @param object $course Course
+ * @param object $cm Course-module
+ * @param int $userid User ID
+ * @param bool $type Type of comparison (or/and; can be used as return value if no conditions)
+ * @return bool True if completed, false if not, $type if conditions not set.
+ */
+function kalmediaassign_get_completion_state($course, $cm, $userid, $type) {
+    // Completion option is not enabled so just return $type.
+    return $type;
 }
 
 
@@ -289,6 +316,7 @@ function kalmediaassign_scale_used($kalmediaassignid, $scaleid) {
     return $return;
 }
 
+
 /**
  * Checks if scale is being used by any instance of kalmediaassign.
  * This function was added in 1.9
@@ -307,6 +335,7 @@ function kalmediaassign_scale_used_anywhere($scaleid) {
         return false;
     }
 }
+
 
 /**
  * This function returns support status about a feature which is received as argument.
@@ -335,6 +364,8 @@ function kalmediaassign_supports($feature) {
             return true;
         case FEATURE_SHOW_DESCRIPTION:
             return true;
+        case FEATURE_ADVANCED_GRADING:
+            return false;
         case FEATURE_PLAGIARISM:
             return true;
         case FEATURE_COMMENT:
@@ -343,6 +374,7 @@ function kalmediaassign_supports($feature) {
             return null;
     }
 }
+
 
 /**
  * Create/update grade item for given kaltura media assignment
@@ -379,6 +411,7 @@ function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
                         $kalmediaassign->id, 0, $grades, $params);
 
 }
+
 
 /**
  * Removes all grades from gradebook
@@ -515,5 +548,21 @@ function kalmediaassign_get_unmailed_submissions($starttime, $endtime) {
                                      AND ks.timemarked <= ?
                                      AND ks.timemarked >= ?
                                      AND ks.assignment = k.id", array($endtime, $starttime));
+}
+
+
+/**
+ * Mark the activity completed (if required) and trigger the course_module_viewed event.
+ *
+ * @param stdClass $kalmediaassign - media assignment object.
+ * @param stdClass $course - course object.
+ * @param stdClass $cm - course module object.
+ * @param stdClass $context - context object.
+ * @since Moodle 3.0
+ */
+function kalmediaassign_view($kalmediaassign, $course, $cm, $context) {
+    // Completion.
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
 }
 

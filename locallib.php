@@ -22,10 +22,16 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('KALASSIGN_ALL', 0);
-define('KALASSIGN_REQ_GRADING', 1);
-define('KALASSIGN_SUBMITTED', 2);
-define('KALASSIGN_NOTSUBMITTEDYET', 3);
+define('KALASSIGN_FILTER_ALL', 0);
+define('KALASSIGN_FILTER_REQ_GRADING', 1);
+define('KALASSIGN_FILTER_SUBMITTED', 2);
+define('KALASSIGN_FILTER_NOTSUBMITTEDYET', 3);
+
+define('KALASSIGN_SUBMISSION_STATUS_NOTSUBMITTEDYET', 0);
+define('KALASSIGN_SUBMISSION_STATUS_REQ_GRADING', 1);
+define('KALASSIGN_SUBMISSION_STATUS_GRADED', 2);
+
+define('KALASSIGN_GRADING_NOTGRADED', -1);
 
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(dirname(dirname(__FILE__))) . '/lib/gradelib.php');
@@ -213,10 +219,10 @@ function kalmediaassign_get_submissions($kalmediaassignid, $filter = '') {
 
     $where = '';
     switch ($filter) {
-        case KALASSIGN_SUBMITTED:
+        case KALASSIGN_FILTER_SUBMITTED:
             $where = ' timemodified > 0 AND ';
             break;
-        case KALASSIGN_REQ_GRADING:
+        case KALASSIGN_FILTER_REQ_GRADING:
             $where = ' timemarked < timemodified AND ';
             break;
     }
@@ -291,6 +297,52 @@ function kalmediaassign_get_submission_grade_object($instanceid, $userid) {
     }
 
     return $data;
+}
+
+/**
+ * This function returns submission status of ceertain user.
+ * @param int $submission - Kaltura media assignment submission object.
+ * @return string - status of submission.
+ */
+function kalmediaassign_get_submission_status($submission) {
+    if (!$submission || empty($submission->entry_id) || $submission->timecreated == 0) {
+        return KALASSIGN_SUBMISSON_STATUS_NOTSUBMITTEDYET;
+    }
+
+    if ($submission->timemodified > $submission->timemarked || $submission->grade == KALASSIGN_GRADING_NOTGRADED) {
+        return KALASSIGN_SUBMISSION_STATUS_REQ_GRADING;
+    }
+
+    if (!empty($submission->teacher) && $submission->timemarked > 0 && $submission->grade != KALASSIGN_GRADING_NOTGRADED) {
+        return KALASSIGN_SUBMISSION_STATUS_GRADED;
+    }
+
+    return KALASSIGN_SUBMISSION_STATUS_NOTSUBMITTEDYET;
+}
+
+/**
+ * Print 2 tables of information with no action links -
+ * the submission summary and the grading summary.
+ *
+ * @param stdClass $course - course object.
+ * @param stdClass $user - user object to print the report for.
+ * @param stdClass $coursemodule - course module object.
+ * @param stdClass $kalmediaassign - Kaltura media assign object.
+ * @return string - HTML summary for user.
+ */
+function kalmediaassign_get_student_summary($course, $user, $coursemodule, $kalmediaassign) {
+    global $PAGE;
+    $coursecontext = context_course::instance($course->id);
+    $renderer = $PAGE->get_renderer('mod_kalmediaassign');
+    echo $renderer->display_submission_status($coursemodule, $kalmediaassign, $coursecontext, $user);
+
+    $submission = kalmediaassign_get_submission($kalmediaassign->id, $user->id);
+    if ($submission) {
+        $status = kalmediaassign_get_submission_status($submission);
+        if ($status == KALASSIGN_SUBMISSION_STATUS_REQ_GRADING || $status == KALASSIGN_SUBMISSION_STATUS_GRADED) {
+            echo $renderer->display_grade_feedback($kalmediaassign, $coursecontext, $user);
+        }
+    }
 }
 
 /**

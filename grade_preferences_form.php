@@ -99,10 +99,10 @@ class kalmediaassign_gradepreferences_form extends moodleform {
 
         $mform->addElement('select', 'group_filter', get_string('group_filter', 'mod_kalmediaassign'), $groupopt);
 
-        $filters = array(KALASSIGN_ALL => get_string('all', 'kalmediaassign'),
-                                KALASSIGN_REQ_GRADING => get_string('reqgrading', 'kalmediaassign'),
-                                KALASSIGN_SUBMITTED => get_string('submitted', 'kalmediaassign'),
-                                KALASSIGN_NOTSUBMITTEDYET => get_string('notsubmittedyet', 'kalmediaassign'));
+        $filters = array(KALASSIGN_FILTER_ALL => get_string('all', 'kalmediaassign'),
+                                KALASSIGN_FILTER_REQ_GRADING => get_string('reqgrading', 'kalmediaassign'),
+                                KALASSIGN_FILTER_SUBMITTED => get_string('submitted', 'kalmediaassign'),
+                                KALASSIGN_FILTER_NOTSUBMITTEDYET => get_string('notsubmittedyet', 'kalmediaassign'));
 
         $mform->addElement('select', 'filter', get_string('show'), $filters);
         $mform->addHelpButton('filter', 'show', 'kalmediaassign');
