@@ -104,9 +104,9 @@ $teacher = '';
 if (!empty($submission)) {
     $datestringlate     = kalmediaassign_display_lateness($submission->timemodified, $kalmediaassignobj->timedue);
     $submissionmodified = userdate($submission->timemodified);
-    $datestring         = userdate($submission->timemarked)."&nbsp; (".format_time(time() - $submission->timemarked).")";
+    $datestring         = userdate($submission->timemarked) . "&nbsp; (" . format_time(time() - $submission->timemarked) . ")";
 
-    $submissionuserinfo .= '<br />'.$submissionmodified . $datestringlate;
+    $submissionuserinfo .= '<br />'.$submissionmodified . " &nbsp; " . $datestringlate;
 
     $param   = array('id' => $submission->teacher);
     $teacher = $DB->get_record('user', $param);

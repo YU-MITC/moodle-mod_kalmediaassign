@@ -59,7 +59,7 @@ $PAGE->set_heading($course->fullname);
 
 require_login();
 
-if (kalmediaassign_assignment_submission_expired($kalmediaassignobj) && $kalmediaassignobj->preventlate) {
+if (kalmediaassign_assignment_submission_expired($kalmediaassignobj) && !$kalmediaassignobj->preventlate) {
     print_error('assignmentexpired', 'kalmediaassign', 'course/view.php?id='. $course->id);
 }
 

@@ -178,7 +178,6 @@ if (!empty($gradedata->mode) && !empty($gradedata->users)) {
                 }
             }
 
-
             // Trigger grade event.
             if ($DB->update_record('kalmediaassign_submission', $usersubmissions)) {
 

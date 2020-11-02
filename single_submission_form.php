@@ -113,11 +113,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
                 $markup = local_yukaltura_create_image_markup($entryobject, $entryobject->name, $theme);
             } else {
                 list($entryobject->width, $entryobject->height) = kalmediaassign_get_player_dimensions();
-                if (0 == strcmp($theme, 'mymobile')) {
-                        $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $session);
-                } else {
-                    $markup = local_yukaltura_get_dynamicembed_code($entryobject, $uiconfid, $session);
-                }
+                $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $session);
             }
 
             $mform->addElement('static', 'description', get_string('submission', 'kalmediaassign'), $markup);

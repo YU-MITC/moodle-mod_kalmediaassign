@@ -200,6 +200,52 @@ function kalmediaassign_delete_instance($id) {
     return true;
 }
 
+/**
+ * This standard function will check all instances of this module
+ * and make sure there are up-to-date events created for each of them.
+ * If courseid = 0, then every assignment event in the site is checked, else
+ * only assignment events belonging to the course specified are checked.
+ *
+ * @param int $courseid
+ * @return bool
+ */
+function kalmediaassign_refresh_events($courseid = 0) {
+    global $CFG, $DB;
+
+    if ($courseid) {
+        // Make sure that the course id is numeric.
+        if (!is_numeric($courseid)) {
+            return false;
+        }
+        if (!$kalmediaassigns = $DB->get_records('kalmediaassign', array('course' => $courseid))) {
+            return false;
+        }
+        // Get course from courseid parameter.
+        if (!$course = $DB->get_record('course', array('id' => $courseid), '*')) {
+            return false;
+        }
+    } else {
+        if (!$assigns = $DB->get_records('kalmediaassign')) {
+            return false;
+        }
+    }
+    foreach ($kalmediaassigns as $kalemdiaassign) {
+        // Use assignment's course column if courseid parameter is not given.
+        if (!$courseid) {
+            $courseid = $kalmediaassign->course;
+            if (!$course = $DB->get_record('course', array('id' => $courseid), '*')) {
+                continue;
+            }
+        }
+        if (!$cm = get_coursemodule_from_instance('kalmediaassign', $kalmediaassign->id, $courseid, false)) {
+            continue;
+        }
+        $context = context_module::instance($cm->id);
+        kalmediaassign_update_calendar($kalmediaassign, $cm->id);
+    }
+
+    return true;
+}
 
 /**
  * Return a small object with summary information about what a
@@ -391,12 +437,12 @@ function kalmediaassign_grade_item_update($kalmediaassign, $grades = null) {
 
     if ($kalmediaassign->grade > 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
-        $params['grademax']  = $kalmediaassign->grade;
-        $params['grademin']  = 0;
+        $params['grademax'] = $kalmediaassign->grade;
+        $params['grademin'] = 0;
 
     } else if ($kalmediaassign->grade < 0) {
         $params['gradetype'] = GRADE_TYPE_SCALE;
-        $params['scaleid']   = -$kalmediaassign->grade;
+        $params['scaleid'] = -$kalmediaassign->grade;
 
     } else {
         $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.

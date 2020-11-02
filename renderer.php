@@ -264,11 +264,16 @@ class submissions_table extends table_sql {
      * @return string - HTML markup for modified time of submission.
      */
     public function col_timemodified($data) {
-
         $attr = array('id' => 'ts'.$data->id);
-
+        echo "modified:" . $data->timemodified . "<br>" . PHP_EOL;
+        echo "due: " . $data->timedue . "<br>" . PHP_EOL;
         $datemodified = $data->timemodified;
-        $datemodified = is_null($datemodified) || empty($data->timemodified) ? '' : userdate($datemodified);
+        $datemodified = is_null($data->timemodified) || empty($data->timemodified) ? '' : userdate($datemodified);
+    
+	if ($data->timedue > 0 && $data->timemodified > $data->timedue) {
+            $datemodified = $datemodified . ' (' . get_string('latesubmission', 'kalmediaassign') . ')';
+            $attr['style'] = 'color: red;';
+        }
 
         $output = html_writer::tag('div', $datemodified, $attr);
 
@@ -1301,8 +1306,9 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                    '{user}.alternatename, {user}.imagealt, {user}.email, '.
                    '{kalmediaassign_submission}.grade, {kalmediaassign_submission}.submissioncomment, ' .
                    '{kalmediaassign_submission}.timemodified, {kalmediaassign_submission}.entry_id, ' .
-                   '{kalmediaassign_submission}.timemarked, ' .
+                   '{kalmediaassign_submission}.timemarked, {kalmediaassign}.timedue, ' .
                    ' 1 as status, 1 as selectgrade' . $groupscolumn;
+
         $where .= ' {user}.deleted = 0 ';
 
         if ($filter == KALASSIGN_FILTER_NOTSUBMITTEDYET and $users !== array()) {
@@ -1316,11 +1322,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         $where .= $groupswhere;
 
         $param['instanceid'] = $cm->instance;
+
         $from = "{role_assignments} " .
                 "join {user} on {user}.id={role_assignments}.userid and " .
                 "{role_assignments}.contextid='$coursecontext->id' and {role_assignments}.roleid='$roleid' " .
                 "left join {kalmediaassign_submission} on {kalmediaassign_submission}.userid = {user}.id and " .
                 "{kalmediaassign_submission}.mediaassignid = :instanceid " .
+                "left join {kalmediaassign} on {kalmediaassign}.id = {kalmediaassign_submission}.mediaassignid " .
                 $groupsjoin;
 
         $baseurl = new moodle_url('/mod/kalmediaassign/grade_submissions.php', array('cmid' => $cm->id));

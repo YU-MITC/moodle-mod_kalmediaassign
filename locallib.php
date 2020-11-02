@@ -45,6 +45,10 @@ if (!defined('MOODLE_INTERNAL')) {
 
 require_login();
 
+if (file_exists($CFG->dirroot.'/calendar/lib.php')) {
+    require_once($CFG->dirroot.'/calendar/lib.php');
+}
+
 /**
  * Check if the assignment submission end date has passed or if late submissions
  * are prohibited.
@@ -142,34 +146,7 @@ function kalmediaassign_get_remainingdate($duetime) {
         return get_string('submissionclosed', 'kalmediaassign');
     }
 
-    $diff = $duetime - $now;
-
-    $remain = '';
-
-    if ($diff > 86400) {
-        $days = (int)($diff / 86400);
-        $diff = $diff - $days * 86400;
-        $remain = $days . ' day(s) ';
-    }
-
-    $hours = (int)($diff / 3600);
-
-    $diff = $diff - $hours * 3600;
-
-    $minutes = (int)($diff / 60);
-
-    if ($hours < 10) {
-        $remain .= '0';
-    }
-    $remain .= $hours;
-
-    $remain .= ':';
-
-    if ($minutes < 10) {
-        $remain .= '0';
-    }
-
-    $remain .= $minutes;
+    $remain = format_time($duetime - $now);
 
     return $remain;
 }
@@ -269,7 +246,6 @@ function kalmediaassign_get_submission($kalmediaassignid, $userid) {
     }
 
     return $record;
-
 }
 
 /**
@@ -379,14 +355,19 @@ function kalmediaassign_display_lateness($timesubmitted, $timedue) {
     if (!$timedue) {
         return '';
     }
-    $time = $timedue - $timesubmitted;
-    if ($time < 0) {
-        $timetext = get_string('late', 'kalmediaassign', format_time($time));
-        return ' (<span class="late"><font color="red">'.$timetext.'</font></span>)';
+
+    $timeremain = $timedue - $timesubmitted;
+    if ($timeremain < 0) {
+        $timetext = get_string('late', 'kalmediaassign', format_time($timeremain));
+        $attr = array('class' => 'late', 'style' => 'color: red;');
+        //return ' (<span class="late"><font color="red">'.$timetext.'</font></span>)';
     } else {
-        $timetext = get_string('early', 'kalmediaassign', format_time($time));
-        return ' (<span class="early">'.$timetext.'</span>)';
+	$timetext = get_string('early', 'kalmediaassign', format_time($timeremain));
+        $attr = array('class' => 'early');
+        //return ' (<span class="early">'.$timetext.'</span>)';
     }
+
+    return html_writer::tag('span', '(' . $timetext . ')', $attr);
 }
 
 /**
@@ -420,7 +401,7 @@ function kalmediaassign_email_teachers($cm, $name, $submission, $context) {
 
     if ($teachers = kalmediaassign_get_graders($cm, $user, $context)) {
 
-        $strsubmitted   = get_string('submitted', 'kalmediaassign');
+        $strsubmitted = get_string('submitted', 'kalmediaassign');
 
         foreach ($teachers as $teacher) {
             $info = new stdClass();
@@ -429,27 +410,27 @@ function kalmediaassign_email_teachers($cm, $name, $submission, $context) {
             $info->url = $CFG->wwwroot.'/mod/kalmediaassign/grade_submissions.php?cmid='.$cm->id;
             $info->timeupdated = strftime('%c', $submission->timemodified);
             $info->courseid = $cm->course;
-            $info->cmid     = $cm->id;
+            $info->cmid = $cm->id;
 
             $postsubject = $strsubmitted.': '.$user->username .' -> '. $name;
             $posttext = kalmediaassign_email_teachers_text($info);
             $posthtml = ($teacher->mailformat == 1) ? kalmediaassign_email_teachers_html($info) : '';
 
             $eventdata = new stdClass();
-            $eventdata->modulename       = 'kalmediaassign';
-            $eventdata->userfrom         = $user;
-            $eventdata->userto           = $teacher;
-            $eventdata->subject          = $postsubject;
-            $eventdata->fullmessage      = $posttext;
+            $eventdata->modulename = 'kalmediaassign';
+            $eventdata->userfrom = $user;
+            $eventdata->userto = $teacher;
+            $eventdata->subject = $postsubject;
+            $eventdata->fullmessage = $posttext;
             $eventdata->fullmessageformat = FORMAT_PLAIN;
-            $eventdata->fullmessagehtml  = $posthtml;
-            $eventdata->smallmessage     = $postsubject;
+            $eventdata->fullmessagehtml = $posthtml;
+            $eventdata->smallmessage = $postsubject;
 
-            $eventdata->name            = 'kalmediaassign_updates';
-            $eventdata->component       = 'mod_kalmediaassign';
-            $eventdata->notification    = 1;
-            $eventdata->contexturl      = $info->url;
-            $eventdata->contexturlname  = $info->assignment;
+            $eventdata->name = 'kalmediaassign_updates';
+            $eventdata->component = 'mod_kalmediaassign';
+            $eventdata->notification = 1;
+            $eventdata->contexturl = $info->url;
+            $eventdata->contexturlname = $info->assignment;
 
             message_send($eventdata);
         }
@@ -602,4 +583,87 @@ function kalmediaassign_get_popup_player_dimensions() {
               ) ? $kalturaconfig->kalmediaassign_popup_player_height : KALTURA_ASSIGN_POPUP_MEDIA_HEIGHT;
 
     return array($width, $height);
+}
+
+
+/**
+ * Update the calendar entries for this assignment.
+ *
+ * @param object $kalmediaassign - Kaltura media assignment object.
+ * @param int $coursemoduleid - Required to pass this in because it might not exist in the database yet.
+ * @return bool
+ */
+function kalmediaassign_update_calendar($kalmediaassign, $coursemoduleid) {
+    global $DB, $CFG;
+
+    if ($kalmediaassign->timedue) {
+        $event = new stdClass();
+
+        $params = array('modulename' => 'kalmediaassign', 'instance' => $kalmediaassign->id);
+        $event->id = $DB->get_field('event', 'id', $params);
+        $event->name = $kalmediaassign->name;
+        $event->timestart = $kalmediaassign->timedue;
+
+        // Convert the links to pluginfile. It is a bit hacky but at this stage the files
+        // might not have been saved in the module area yet.
+        $intro = $kalmediaassign->intro;
+        if ($draftid = file_get_submitted_draft_itemid('introeditor')) {
+            $intro = file_rewrite_urls_to_pluginfile($intro, $draftid);
+        }
+
+        // We need to remove the links to files as the calendar is not ready
+        // to support module events with file areas.
+        $intro = strip_pluginfile_content($intro);
+        if (kalmediaassign_show_intro($kalmediaassign)) {
+            $event->description = array(
+                'text' => $intro,
+                'format' => $kalmediaassign->introformat
+            );
+        } else {
+            $event->description = array(
+                'text' => '',
+                'format' => $kalmediaassign->introformat
+            );
+        }
+
+        if ($event->id) {
+            $calendarevent = calendar_event::load($event->id);
+            $calendarevent->update($event);
+        } else {
+            unset($event->id);
+            $event->courseid = $kalmediaassign->course;
+            $event->groupid = 0;
+            $event->userid = 0;
+            $event->modulename = 'kalmediaassign';
+            $event->instance = $kalmediaassign->id;
+            $event->eventtype = 'due';
+            $event->timeduration = 0;
+
+            if (property_exists('calendar_event', 'type')) {
+                $event->type = CALENDAR_EVENT_TYPE_ACTION;
+            }
+
+            if (property_exists('calendar_event', 'priority')) {
+                $event->priority = null;
+            }
+
+            calendar_event::create($event);
+        }
+    } else {
+        $DB->delete_records('event', array('modulename' => 'kalmediaassign', 'instance' => $kalmediaassign->id));
+    }
+}
+
+
+/**
+ * Based on the current assignment settings should we display the intro.
+ * @param object $kalmediaassign - Kaltura media assignment object.
+ * @return bool - if intro is visible, returns true. otherwise, returns false.
+ */
+function kalmediaassign_show_intro($kalmediaassign) {
+    if ($kalmediaassign->alwaysshowdescription ||
+            time() > $kalmediaassign->timeavailable) {
+        return true;
+    }
+    return false;
 }
