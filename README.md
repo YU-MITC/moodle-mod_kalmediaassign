@@ -82,7 +82,7 @@ Warning
 
 Known issues
 ------
-* In some browsers, previw window (modal window) cannot receive MPEG-DASH/HLS/HDS streaming data. So that, we recommend Kaltura players which receive video using progressive download.
+* In some browsers, preview window (modal window) cannot receive MPEG-DASH/HLS/HDS streaming data. So that, we recommend Kaltura players which receive video using progressive download.
 
 Change log of YU Kaltura Media Assignment
 ------
