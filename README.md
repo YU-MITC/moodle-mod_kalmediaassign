@@ -80,12 +80,18 @@ Warning
 * Web-camera recording function supports the Mozilla Firefox, Google Chrome, Opera and Safari. For smartphones and tablets, you can record movie through a normal media uploader.
 * Uploading and recording functions in resource and activity modules may not work well with smartphones. Because, low resolution screen cannot display these forms correctly.
 
+Known issues
+------
+* In some browsers, previw window (modal window) cannot receive MPEG-DASH/HLS/HDS streaming data. So that, we recommend Kaltura players which receive video using progressive download.
+
 Change log of YU Kaltura Media Assignment
 ------
 
 Version 1.5.0
 
-* fixed grade_preferences.php, lib.php, locallib.php, and renderer.php, in order to support completion trackings.
+* fixed grade_preferences.php, lib.php, locallib.php, and renderer.php, in order to support completion trackings and calendar event.
+* fixed submission.php, in order to resolve an issue about late submissions.
+* fixed single_submission_form.php, in order to resolve a playback issue of submitted media.
 * fixed README.md, in order to support the Moodle 3.10.
 
 Version 1.4.2
