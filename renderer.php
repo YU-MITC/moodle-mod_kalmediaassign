@@ -269,8 +269,8 @@ class submissions_table extends table_sql {
         echo "due: " . $data->timedue . "<br>" . PHP_EOL;
         $datemodified = $data->timemodified;
         $datemodified = is_null($data->timemodified) || empty($data->timemodified) ? '' : userdate($datemodified);
-    
-	if ($data->timedue > 0 && $data->timemodified > $data->timedue) {
+
+        if ($data->timedue > 0 && $data->timemodified > $data->timedue) {
             $datemodified = $datemodified . ' (' . get_string('latesubmission', 'kalmediaassign') . ')';
             $attr['style'] = 'color: red;';
         }

@@ -360,11 +360,9 @@ function kalmediaassign_display_lateness($timesubmitted, $timedue) {
     if ($timeremain < 0) {
         $timetext = get_string('late', 'kalmediaassign', format_time($timeremain));
         $attr = array('class' => 'late', 'style' => 'color: red;');
-        //return ' (<span class="late"><font color="red">'.$timetext.'</font></span>)';
     } else {
-	$timetext = get_string('early', 'kalmediaassign', format_time($timeremain));
+        $timetext = get_string('early', 'kalmediaassign', format_time($timeremain));
         $attr = array('class' => 'early');
-        //return ' (<span class="early">'.$timetext.'</span>)';
     }
 
     return html_writer::tag('span', '(' . $timetext . ')', $attr);
