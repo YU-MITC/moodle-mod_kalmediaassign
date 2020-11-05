@@ -191,11 +191,10 @@ function kalmediaassign_delete_instance($id) {
 
     $kalmediaassign = $DB->get_record('kalmediaassign', array('id' => $id));
 
-    if (empty($kalmediaassign)) {
+    if (!empty($kalmediaassign)) {
         kalmediaassign_grade_item_delete($kalmediaassign);
+        $DB->delete_records('kalmediaassign', array('id' => $id));
     }
-
-    $DB->delete_records('kalmediaassign', array('id' => $id));
 
     return true;
 }
