@@ -82,15 +82,15 @@ Warning
 
 Known issues
 ------
-* In some browsers, preview window (modal window) cannot receive MPEG-DASH/HLS/HDS streaming data. And, if Kaltura server employs HTTPS and users embed their media into web sites employs HTTP, Kaltura players cannot receive streaming data. For local_yummymedia and mod_kalmediaassign, we recommend Kaltura players which receive video using progressive download.
 
+* In some browsers, preview window (modal window) cannot receive MPEG-DASH/HLS/HDS streaming data. And, if Kaltura server employs HTTPS and users embed their media into web sites employs HTTP, Kaltura players cannot receive streaming data. For local_yumymedia and mod_kalmediaassign, we recommend Kaltura players which receive video using progressive download.
 
 Change log of YU Kaltura Media Assignment
 ------
 
 Version 1.5.0
 
-* fixed grade_preferences.php, lib.php, locallib.php, and renderer.php, in order to support completion trackings and calendar event.
+* fixed grade_preferences.php, lib.php, locallib.php, and renderer.php, in order to support completion tracking, calendar event, outline report, and complete report.
 * fixed submission.php, in order to resolve an issue about late submissions.
 * fixed single_submission_form.php, in order to resolve a playback issue of submitted media.
 * fixed README.md, in order to support the Moodle 3.10.
