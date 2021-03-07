@@ -18,7 +18,7 @@
  * Kaltura media assignment
  *
  * @package   mod_kalmediaassign
- * @copyright (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -130,7 +130,7 @@ if (empty($connection)) {
     echo $OUTPUT->notification(get_string('conn_failed_alt', 'local_yukaltura'));
     $disabled = true;
 } else {
-    echo $renderer->create_kaltura_hidden_markup();
+    echo $renderer->create_kaltura_hidden_markup($connection);
 }
 
 echo $renderer->display_mod_header($kalmediaassign);
@@ -151,7 +151,7 @@ if (has_capability('mod/kalmediaassign:submit', $coursecontext)) {
         $entryobject = local_yukaltura_get_ready_entry_object($submission->entry_id, false);
     }
 
-    echo $renderer->display_submission($entryobject);
+    echo $renderer->display_submission($entryobject, $connection);
 
     $disabled = true;
 

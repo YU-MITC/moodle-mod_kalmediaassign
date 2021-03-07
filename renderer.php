@@ -19,7 +19,7 @@
  *
  * @package    mod_kalmediaassign
  * @copyright  (C) 2013 onwards Remote-Learner {@link http://www.remote-learner.ca/}
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -39,7 +39,7 @@ require_login();
 /**
  * Table class for displaying media submissions for grading.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submissions_table extends table_sql {
@@ -339,12 +339,22 @@ class submissions_table extends table_sql {
                     $kalturahost = local_yukaltura_get_host();
                     $partnerid = local_yukaltura_get_partner_id();
                     $uiconfid = local_yukaltura_get_player_uiconf('player');
-                    $now = time();
-                    $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
-                    $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
-                    $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
-                    $markup .= "&entry_id=" . $data->entry_id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
-                    $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+		    $now = time();
+                    $playertype = local_yukaltura_get_player_type($uiconfid, $this->_connection);
+                    if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+                        $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/embedPlaykitJs/uiconf_id/{$uiconfid}?";
+                        $markup .= "iframeembed=true&entry_id={$data->entry_id}\" style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
+                        $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                        $markup .= "allow=\"encrypted-media\">";
+                        $markup .= "</iframe>";
+                    } else {
+                        $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
+                        $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
+                        $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
+                        $markup .= "&entry_id=" . $data->entry_id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
+                        $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                        $markup .= "allow=\"encrypted-media\"></iframe>";
+                    }
                 }
 
                 $attr = array('id' => 'hidden_markup_' . $data->entry_id,
@@ -492,7 +502,7 @@ class submissions_table extends table_sql {
 /**
  * Renderer class of YU Kaltura media submissions.
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kalmediaassign_renderer extends plugin_renderer_base {
@@ -500,9 +510,10 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
     /**
      * This function display media submission.
      * @param object $entryobj - object of media entry.
+     * @param object $clientobj - Kaltura client object.
      * @return string - HTML markup to display submission.
      */
-    public function display_submission($entryobj = null) {
+    public function display_submission($entryobj = null, $clientobj) {
         global $CFG;
 
         $imgsource = '';
@@ -553,20 +564,29 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $kalturahost = local_yukaltura_get_host();
                 $partnerid = local_yukaltura_get_partner_id();
                 $uiconfid = local_yukaltura_get_player_uiconf('player');
-                $now = time();
-                $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
-                $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
-                $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
-                $markup .= "&entry_id=" . $entryobj->id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
-                $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
-            }
+		$now = time();
+                $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);
+                if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+                    $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/embedPlaykitJs/uiconf_id/{$uiconfid}?";
+                    $markup .= "iframeembed=true&entry_id={$entryobj->id}\" style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
+                    $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                    $markup .= "allow=\"encrypted-media\">";
+                    $markup .= "</iframe>";
+                } else {
+                    $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
+                    $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
+                    $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
+                    $markup .= "&entry_id=" . $entryobj->id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
+		    $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+                }
+	    }
+	}
 
-            $attr = array('id' => 'hidden_markup',
+        $attr = array('id' => 'hidden_markup',
                           'style' => 'display: none;');
-            $html .= html_writer::start_tag('div', $attr);
-            $html .= $markup;
-            $html .= html_writer::end_tag('div');
-        }
+        $html .= html_writer::start_tag('div', $attr);
+        $html .= $markup;
+        $html .= html_writer::end_tag('div');
 
         $html .= html_writer::end_tag('p');
 
@@ -1385,6 +1405,12 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                                 'value' => get_string('savefeedback', 'kalmediaassign'));
 
             echo html_writer::empty_tag('input', $attributes);
+	}
+
+        $playerstudio = "html5";
+	$playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+        if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+            $playerstudio = "ovp";
         }
 
         echo html_writer::end_tag('form');
@@ -1404,6 +1430,9 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         echo html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'modalheight', 'id' => 'modalheight', 'value' => $modalheight);
+	echo html_writer::empty_tag('input', $attr);
+
+        $attr = array('type' => 'hidden', 'name' => 'playerstudio', 'id' => 'playerstudio', 'value' => $playerstudio);
         echo html_writer::empty_tag('input', $attr);
 
         $attr = array('id' => 'modal_content', 'style' => '');
@@ -1648,13 +1677,19 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      *
      * @return string - HTML markup about kaltura server.
      */
-    public function create_kaltura_hidden_markup() {
+    public function create_kaltura_hidden_markup($clientobj) {
         $output = '';
 
         list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
-        $uiconfid = local_yukaltura_get_player_uiconf('player');
+	$uiconfid = local_yukaltura_get_player_uiconf('player');
+
+        $playerstudio = "html5";
+        $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);
+        if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+            $playerstudio = "ovp";
+        }
 
         $attr = array('type' => 'hidden',
                      'name' => 'kalturahost',
@@ -1684,8 +1719,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                      'name' => 'modalheight',
                      'id' => 'modalheight',
                      'value' => $modalheight);
-        $output .= html_writer::empty_tag('input', $attr);
+	$output .= html_writer::empty_tag('input', $attr);
 
+        $attr = array('type' => 'hidden',
+                     'name' => 'playerstudio',
+                     'id' => 'playerstudio',
+                     'value' => $playerstudio);
+        $output .= html_writer::empty_tag('input', $attr);
         return $output;
     }
 }
