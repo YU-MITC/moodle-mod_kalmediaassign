@@ -339,11 +339,13 @@ class submissions_table extends table_sql {
                     $kalturahost = local_yukaltura_get_host();
                     $partnerid = local_yukaltura_get_partner_id();
                     $uiconfid = local_yukaltura_get_player_uiconf('player');
-		    $now = time();
+                    $now = time();
                     $playertype = local_yukaltura_get_player_type($uiconfid, $this->_connection);
                     if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
-                        $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/embedPlaykitJs/uiconf_id/{$uiconfid}?";
-                        $markup .= "iframeembed=true&entry_id={$data->entry_id}\" style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
+                        $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/";
+                        $markup .= "embedPlaykitJs/uiconf_id/{$uiconfid}?";
+                        $markup .= "iframeembed=true&entry_id={$data->entry_id}\" ";
+                        $markup .= "style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
                         $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
                         $markup .= "allow=\"encrypted-media\">";
                         $markup .= "</iframe>";
@@ -351,7 +353,8 @@ class submissions_table extends table_sql {
                         $markup .= "<iframe src=\"" . $kalturahost . "/p/" . $partnerid . "/sp/" . $partnerid . "00";
                         $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
                         $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
-                        $markup .= "&entry_id=" . $data->entry_id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
+                        $markup .= "&entry_id=" . $data->entry_id . "\" ";
+                        $markup .= "width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
                         $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
                         $markup .= "allow=\"encrypted-media\"></iframe>";
                     }
@@ -564,11 +567,13 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                 $kalturahost = local_yukaltura_get_host();
                 $partnerid = local_yukaltura_get_partner_id();
                 $uiconfid = local_yukaltura_get_player_uiconf('player');
-		$now = time();
+                $now = time();
                 $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);
                 if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
-                    $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/embedPlaykitJs/uiconf_id/{$uiconfid}?";
-                    $markup .= "iframeembed=true&entry_id={$entryobj->id}\" style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
+                    $markup .= "<iframe type=\"text/javascript\" src=\"{$kalturahost}/p/{$partnerid}/";
+                    $markup .= "embedPlaykitJs/uiconf_id/{$uiconfid}?";
+                    $markup .= "iframeembed=true&entry_id={$entryobj->id}\" ";
+                    $markup .= "style=\"width: {$modalwidth}px; height: {$modalheight}px\" ";
                     $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
                     $markup .= "allow=\"encrypted-media\">";
                     $markup .= "</iframe>";
@@ -577,10 +582,10 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                     $markup .= "/embedIframeJs/uiconf_id/" . $uiconfid . "/partnerid/" . $partnerid;
                     $markup .= "?iframeembed=true&playerId=kaltura_player_" . $now;
                     $markup .= "&entry_id=" . $entryobj->id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
-		    $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+                    $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
                 }
 	    }
-	}
+        }
 
         $attr = array('id' => 'hidden_markup',
                           'style' => 'display: none;');
@@ -1408,7 +1413,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 	}
 
         $playerstudio = "html5";
-	$playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+        $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
         if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
             $playerstudio = "ovp";
         }
@@ -1430,7 +1435,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         echo html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'modalheight', 'id' => 'modalheight', 'value' => $modalheight);
-	echo html_writer::empty_tag('input', $attr);
+        echo html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden', 'name' => 'playerstudio', 'id' => 'playerstudio', 'value' => $playerstudio);
         echo html_writer::empty_tag('input', $attr);
@@ -1683,7 +1688,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
         list($modalwidth, $modalheight) = kalmediaassign_get_popup_player_dimensions();
         $kalturahost = local_yukaltura_get_host();
         $partnerid = local_yukaltura_get_partner_id();
-	$uiconfid = local_yukaltura_get_player_uiconf('player');
+        $uiconfid = local_yukaltura_get_player_uiconf('player');
 
         $playerstudio = "html5";
         $playertype = local_yukaltura_get_player_type($uiconfid, $clientobj);
@@ -1719,13 +1724,14 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                      'name' => 'modalheight',
                      'id' => 'modalheight',
                      'value' => $modalheight);
-	$output .= html_writer::empty_tag('input', $attr);
+        $output .= html_writer::empty_tag('input', $attr);
 
         $attr = array('type' => 'hidden',
                      'name' => 'playerstudio',
                      'id' => 'playerstudio',
                      'value' => $playerstudio);
         $output .= html_writer::empty_tag('input', $attr);
+
         return $output;
     }
 }
