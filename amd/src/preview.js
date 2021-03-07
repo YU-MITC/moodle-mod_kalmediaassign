@@ -17,7 +17,7 @@
  * Scripts for mod_kalmediaassign
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
+ * @copyright  (C) 2016-2021 Yamaguchi University (gh-cc@mlex.cc.yamaguchi-u.ac.jp)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -152,6 +152,7 @@ define(['jquery'], function($) {
                 var uiconfid = "";
                 var modalwidth = "";
                 var modalheight = "";
+                var playerstudio = "";
 
                 var date = new Date();
                 var datetime = date.getTime();
@@ -186,17 +187,39 @@ define(['jquery'], function($) {
                     modalheight = element.val();
                 }
 
+                element = $("#playerstudio");
+                if (element !== null) {
+                    playerstudio = element.val();
+                }
+
                 element = $("#hidden_markup");
 
+                window.console.dir(element);
+
                 if (element !== null && entryid !== "" && kalturahost !== "" && partnerid !== "" &&
-                    uiconfid !== "" && modalwidth !== "" && modalheight !== "") {
-                    var str = "<iframe src=\"" + kalturahost + "/p/" + partnerid + "/sp/" + partnerid + "00";
-                    str = str + "/embedIframeJs/uiconf_id/" + uiconfid + "/partnerid" + partnerid;
-                    str = str + "?iframeembed=true&playerId=kaltura_player_" + datetime;
-                    str = str + "&entry_id=" + entryid + "\" width=\"" + modalwidth + "\" height=\"" + modalheight + "\" ";
-                    str = str + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
-                    element.html("");
-                    element.html(str);
+                    uiconfid !== "" && modalwidth !== "" && modalheight !== "" && playerstudio !== "") {
+                    if (playerstudio == "ovp") {
+                        var str = "<iframe type=\"text/javascript\" src=\"" + kalturahost + "/p/" + partnerid;
+                        str = str + "/embedPlaykitJs/uiconfid/" + uiconfid;
+                        str = str + "?iframeembed=true&entry_id=" + entryid + "\" ";
+                        str = str + "style=\"width: " + modalwidth + "px; height:" + modalheight + "px\" ";
+                        str = str + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                        //str = str + "allow=\"encrypted-media\">";
+                        str = str + ">";
+                        str = str + "</iframe>";
+                        element.html("");
+                        element.html(str);
+                    } else {
+                        var str = "<iframe src=\"" + kalturahost + "/p/" + partnerid + "/sp/" + partnerid + "00";
+                        str = str + "/embedIframeJs/uiconf_id/" + uiconfid + "/partnerid" + partnerid;
+                        str = str + "?iframeembed=true&playerId=kaltura_player_" + datetime;
+                        str = str + "&entry_id=" + entryid + "\" width=\"" + modalwidth + "\" height=\"" + modalheight + "\" ";
+                        str = str + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+                        element.html("");
+                        element.html(str);
+                    }
+                } else {
+                    window.alert("Not found.");
                 }
             }
 
