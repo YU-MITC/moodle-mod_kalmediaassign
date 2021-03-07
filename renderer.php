@@ -584,7 +584,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                     $markup .= "&entry_id=" . $entryobj->id . "\" width=\"" . $modalwidth . "\" height=\"" . $modalheight . "\" ";
                     $markup .= "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
                 }
-	    }
+            }
         }
 
         $attr = array('id' => 'hidden_markup',
@@ -1410,7 +1410,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
                                 'value' => get_string('savefeedback', 'kalmediaassign'));
 
             echo html_writer::empty_tag('input', $attributes);
-	}
+        }
 
         $playerstudio = "html5";
         $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
@@ -1679,7 +1679,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
 
     /**
      * This function create markup elements about kaltura server.
-     *
+     * @param object $clientobj - Kaltura client object.
      * @return string - HTML markup about kaltura server.
      */
     public function create_kaltura_hidden_markup($clientobj) {
