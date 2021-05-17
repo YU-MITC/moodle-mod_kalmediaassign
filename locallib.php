@@ -18,7 +18,7 @@
  * YU Kaltura Media assignment locallib
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -330,15 +330,15 @@ function kalmediaassign_validate_cmid ($cmid) {
     global $DB;
 
     if (! $cm = get_coursemodule_from_id('kalmediaassign', $cmid)) {
-        print_error('invalidcoursemodule');
+        throw new moodle_exception('invalidcoursemodule');
     }
 
     if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
-        print_error('coursemisconf');
+        throw new moodle_exception('coursemisconf');
     }
 
     if (! $kalmediaassignobj = $DB->get_record('kalmediaassign', array('id' => $cm->instance))) {
-        print_error('invalidid', 'kalmediaassign');
+        throw new moodle_exception('invalidid', 'kalmediaassign');
     }
 
     return array($cm, $course, $kalmediaassignobj);

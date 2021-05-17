@@ -18,7 +18,7 @@
  * Kaltura media assignment single submission page
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -47,7 +47,7 @@ list($cm, $course, $kalmediaassignobj) = kalmediaassign_validate_cmid($id);
 require_login($course->id, false, $cm);
 
 if (!confirm_sesskey()) {
-    print_error('confirmsesskeybad', 'error');
+    throw new moodle_exception('confirmsesskeybad', 'error');
 }
 
 global $CFG, $PAGE, $OUTPUT, $USER;
@@ -247,25 +247,22 @@ if ($submissionform->is_cancelled()) {
 }
 
 // Try connection.
-$result = local_yukaltura_login(false, true, '');
+$kaltura = new yukaltura_connection();
+$connection = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
 
-if ($result) {
-
+if ($connection) {
     if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
         $uiconfid = local_yukaltura_get_player_uiconf('player');
-        $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
+        $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+        $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid, $playertype));
         $PAGE->requires->js($url, true);
-        $PAGE->requires->js('/local/yukaltura/js/frameapi.js', true);
+        if ($playertype == KALTURA_UNIVERSAL_STUDIO) {
+            $url = new moodle_url('/local/yukaltura/js/frameapi.js');
+            $PAGE->requires->js($url, true);
+        }
     }
 }
 
-if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
-    $uiconfid = local_yukaltura_get_player_uiconf('player');
-    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
-    $PAGE->requires->js($url, true);
-    $url = new moodle_url('/local/yukaltura/js/frameapi.js');
-    $PAGE->requires->js($url, true);
-}
 $pageheading = get_string('gradesubmission', 'kalmediaassign');
 
 echo $OUTPUT->header();

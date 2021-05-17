@@ -18,9 +18,11 @@
  * Language file of YU Kaltura media assignment.
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+$string['pluginname'] = 'Kaltura Media Assignment';
 
 $string['modulenameplural'] = 'Kaltura Media Assignments';
 $string['modulename'] = 'Kaltura Media Assignment';
@@ -92,7 +94,6 @@ $string['savedchanges'] = 'Changed Saved';
 $string['save'] = 'Save Changes';
 $string['cancel'] = 'Close';
 $string['checkconversionstatus'] = 'Check media conversion status';
-$string['pluginname'] = 'Kaltura Media Assignment';
 $string['media_converting'] = 'The media is still converting.  Please check the status of the media at a later time.';
 $string['emailteachermail'] = '{$a->username} has updated their assignment submission
 for \'{$a->assignment}\' at {$a->timeupdated}

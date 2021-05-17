@@ -18,7 +18,7 @@
  * Kaltura media assignment grade submission page
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -47,20 +47,20 @@ $url->param('cmid', $id);
 
 if (!empty($mode)) {
     if (!confirm_sesskey()) {
-        print_error('confirmsesskeybad', 'error');
+        throw new moodle_exception('confirmsesskeybad', 'error');
     }
 }
 
 if (! $cm = get_coursemodule_from_id('kalmediaassign', $id)) {
-    print_error('invalidcoursemodule');
+    throw new moodle_exception('invalidcoursemodule');
 }
 
 if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
-    print_error('coursemisconf');
+    throw new moodle_exception('coursemisconf');
 }
 
 if (! $kalmediaassignobj = $DB->get_record('kalmediaassign', array('id' => $cm->instance))) {
-    print_error('invalidid', 'kalmediaassign');
+    throw new moodle_exception('invalidid', 'kalmediaassign');
 }
 
 require_login($course->id, false, $cm);
@@ -77,10 +77,21 @@ require_login();
 
 $renderer = $PAGE->get_renderer('mod_kalmediaassign');
 
-if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
-    $uiconfid = local_yukaltura_get_player_uiconf('player');
-    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
-    $PAGE->requires->js($url, true);
+// Connect to Kaltura.
+$kaltura = new yukaltura_connection();
+$connection = $kaltura->get_connection(false, true, KALTURA_SESSION_LENGTH);
+
+if ($connection) {
+    if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
+        $uiconfid = local_yukaltura_get_player_uiconf('player');
+        $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+        $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid, $playertype));
+        $PAGE->requires->js($url, true);
+        if ($playertype == KALTURA_UNIVERSAL_STUDIO) {
+            $url = new moodle_url('/local/yukaltura/js/frameapi.js');
+            $PAGE->requires->js($url, true);
+        }
+    }
 }
 
 $courseid    = $course->id;
@@ -101,168 +112,166 @@ echo $OUTPUT->header();
 
 require_capability('mod/kalmediaassign:gradesubmission', context_course::instance($COURSE->id));
 
-// Write a log.
-$event = \mod_kalmediaassign\event\submission_page_viewed::create(array(
-    'objectid' => $kalmediaassignobj->id,
-    'context' => context_module::instance($cm->id)
-));
-$event->trigger();
+if (empty($connection)) {
+    echo $OUTPUT->notification(get_string('conn_failed_alt', 'local_yukaltura'));
+} else {
+    // Write a log.
+    $event = \mod_kalmediaassign\event\submission_page_viewed::create(array(
+        'objectid' => $kalmediaassignobj->id,
+        'context' => context_module::instance($cm->id)
+    ));
+    $event->trigger();
 
-$prefform = new kalmediaassign_gradepreferences_form(null, array('cmid' => $cm->id, 'groupmode' => $cm->groupmode));
-$data = null;
+    $prefform = new kalmediaassign_gradepreferences_form(null, array('cmid' => $cm->id, 'groupmode' => $cm->groupmode));
+    $data = null;
 
-if ($data = $prefform->get_data()) {
-    set_user_preference('kalmediaassign_group_filter', $data->group_filter);
+    if ($data = $prefform->get_data()) {
+        set_user_preference('kalmediaassign_group_filter', $data->group_filter);
 
-    set_user_preference('kalmediaassign_filter', $data->filter);
+        set_user_preference('kalmediaassign_filter', $data->filter);
 
-    if ($data->perpage > 0) {
-        set_user_preference('kalmediaassign_perpage', $data->perpage);
-    }
-
-    if (isset($data->quickgrade)) {
-        set_user_preference('kalmediaassign_quickgrade', $data->quickgrade);
-    } else {
-        set_user_preference('kalmediaassign_quickgrade', '0');
-    }
-
-}
-
-if (empty($data)) {
-    $data = new stdClass();
-}
-
-$data->filter       = get_user_preferences('kalmediaassign_filter', 0);
-$data->perpage      = get_user_preferences('kalmediaassign_perpage', 10);
-$data->quickgrade   = get_user_preferences('kalmediaassign_quickgrade', 0);
-$data->group_filter = get_user_preferences('kalmediaassign_group_filter', 0);
-
-$gradedata = data_submitted();
-
-// Check if fast grading was passed to the form and process the data.
-if (!empty($gradedata->mode) && !empty($gradedata->users)) {
-
-    $usersubmission = array();
-    $time = time();
-    $updated = false;
-
-    foreach ($gradedata->users as $userid => $val) {
-
-        $param = array('mediaassignid' => $kalmediaassignobj->id,
-                       'userid' => $userid);
-
-        $usersubmissions = $DB->get_record('kalmediaassign_submission', $param);
-
-        if ($usersubmissions) {
-
-            if (array_key_exists($userid, $gradedata->menu)) {
-
-                // Update grade.
-                if (($gradedata->menu[$userid] != $usersubmissions->grade)) {
-
-                    $usersubmissions->grade = $gradedata->menu[$userid];
-                    $usersubmissions->timemarked = $time;
-                    $usersubmissions->teacher = $USER->id;
-
-                    $updated = true;
-                }
-            }
-
-            if (array_key_exists($userid, $gradedata->submissioncomment)) {
-
-                if (0 != strcmp($usersubmissions->submissioncomment, $gradedata->submissioncomment[$userid])) {
-                    $usersubmissions->submissioncomment = $gradedata->submissioncomment[$userid];
-
-                    $updated = true;
-
-                }
-            }
-
-            // Trigger grade event.
-            if ($DB->update_record('kalmediaassign_submission', $usersubmissions)) {
-
-                $grade = new stdClass();
-                $grade->userid = $userid;
-                $grade = kalmediaassign_get_submission_grade_object($kalmediaassignobj->id, $userid);
-
-                $kalmediaassignobj->cmidnumber = $cm->idnumber;
-
-                kalmediaassign_grade_item_update($kalmediaassignobj, $grade);
-
-                // Write a log only if updating.
-                $event = \mod_kalmediaassign\event\grades_updated::create(array(
-                    'objectid' => $kalmediaassignobj->id,
-                    'context' => context_module::instance($cm->id),
-                    'relateduserid' => $userid
-                ));
-                $event->trigger();
-
-            }
-
-        } else {
-            // No user submission however the instructor has submitted grade data.
-            $usersubmissions = new stdClass();
-            $usersubmissions->mediaassignid = $cm->instance;
-            $usersubmissions->userid = $userid;
-            $usersubmissions->entry_id = '';
-            $usersubmissions->teacher = $USER->id;
-            $usersubmissions->timemarked = $time;
-
-            /*
-             * Need to prevent completely empty submissions from getting entered
-             * into the media submissions' table.
-             * Check for unchanged grade value and an empty feedback value.
-             */
-            $emptygrade = array_key_exists($userid, $gradedata->menu) &&
-                          '-1' == $gradedata->menu[$userid];
-
-            $emptycomment = array_key_exists($userid, $gradedata->submissioncomment) &&
-                            empty($gradedata->submissioncomment[$userid]);
-
-            if ( $emptygrade && $emptycomment ) {
-                continue;
-            }
-
-            if (array_key_exists($userid, $gradedata->menu)) {
-                $usersubmissions->grade = $gradedata->menu[$userid];
-            }
-
-            if (array_key_exists($userid, $gradedata->submissioncomment)) {
-                $usersubmissions->submissioncomment = $gradedata->submissioncomment[$userid];
-            }
-
-
-            // Trigger grade event.
-            if ($DB->insert_record('kalmediaassign_submission', $usersubmissions)) {
-
-                $grade = new stdClass();
-                $grade->userid = $userid;
-                $grade = kalmediaassign_get_submission_grade_object($kalmediaassignobj->id, $userid);
-
-                $kalmediaassignobj->cmidnumber = $cm->idnumber;
-
-                kalmediaassign_grade_item_update($kalmediaassignobj, $grade);
-
-                // Write a log only if updating.
-                $event = \mod_kalmediaassign\event\grades_updated::create(array(
-                    'objectid' => $kalmediaassignobj->id,
-                    'context' => context_module::instance($cm->id),
-                    'relateduserid' => $userid
-                ));
-                $event->trigger();
-
-            }
-
+        if ($data->perpage > 0) {
+            set_user_preference('kalmediaassign_perpage', $data->perpage);
         }
 
-        $updated = false;
+        if (isset($data->quickgrade)) {
+            set_user_preference('kalmediaassign_quickgrade', $data->quickgrade);
+        } else {
+            set_user_preference('kalmediaassign_quickgrade', '0');
+        }
+
     }
+
+    if (empty($data)) {
+        $data = new stdClass();
+    }
+
+    $data->filter       = get_user_preferences('kalmediaassign_filter', 0);
+    $data->perpage      = get_user_preferences('kalmediaassign_perpage', 10);
+    $data->quickgrade   = get_user_preferences('kalmediaassign_quickgrade', 0);
+    $data->group_filter = get_user_preferences('kalmediaassign_group_filter', 0);
+
+    $gradedata = data_submitted();
+
+    // Check if fast grading was passed to the form and process the data.
+    if (!empty($gradedata->mode) && !empty($gradedata->users)) {
+
+        $usersubmission = array();
+        $time = time();
+        $updated = false;
+
+        foreach ($gradedata->users as $userid => $val) {
+
+            $param = array('mediaassignid' => $kalmediaassignobj->id,
+                           'userid' => $userid);
+
+            $usersubmissions = $DB->get_record('kalmediaassign_submission', $param);
+
+            if ($usersubmissions) {
+
+                if (array_key_exists($userid, $gradedata->menu)) {
+
+                    // Update grade.
+                    if (($gradedata->menu[$userid] != $usersubmissions->grade)) {
+
+                        $usersubmissions->grade = $gradedata->menu[$userid];
+                        $usersubmissions->timemarked = $time;
+                        $usersubmissions->teacher = $USER->id;
+
+                        $updated = true;
+                    }
+                }
+
+                if (array_key_exists($userid, $gradedata->submissioncomment)) {
+                    if (0 != strcmp($usersubmissions->submissioncomment, $gradedata->submissioncomment[$userid])) {
+                        $usersubmissions->submissioncomment = $gradedata->submissioncomment[$userid];
+                        $updated = true;
+                    }
+                }
+
+                // Trigger grade event.
+                if ($DB->update_record('kalmediaassign_submission', $usersubmissions)) {
+                    $grade = new stdClass();
+                    $grade->userid = $userid;
+                    $grade = kalmediaassign_get_submission_grade_object($kalmediaassignobj->id, $userid);
+
+                    $kalmediaassignobj->cmidnumber = $cm->idnumber;
+
+                    kalmediaassign_grade_item_update($kalmediaassignobj, $grade);
+
+                    // Write a log only if updating.
+                    $event = \mod_kalmediaassign\event\grades_updated::create(array(
+                        'objectid' => $kalmediaassignobj->id,
+                        'context' => context_module::instance($cm->id),
+                        'relateduserid' => $userid
+                    ));
+                    $event->trigger();
+
+                }
+
+            } else {
+                // No user submission however the instructor has submitted grade data.
+                $usersubmissions = new stdClass();
+                $usersubmissions->mediaassignid = $cm->instance;
+                $usersubmissions->userid = $userid;
+                $usersubmissions->entry_id = '';
+                $usersubmissions->teacher = $USER->id;
+                $usersubmissions->timemarked = $time;
+
+                /*
+                 * Need to prevent completely empty submissions from getting entered
+                 * into the media submissions' table.
+                 * Check for unchanged grade value and an empty feedback value.
+                 */
+                $emptygrade = array_key_exists($userid, $gradedata->menu) &&
+                              '-1' == $gradedata->menu[$userid];
+
+                $emptycomment = array_key_exists($userid, $gradedata->submissioncomment) &&
+                                empty($gradedata->submissioncomment[$userid]);
+
+                if ( $emptygrade && $emptycomment ) {
+                    continue;
+                }
+
+                if (array_key_exists($userid, $gradedata->menu)) {
+                    $usersubmissions->grade = $gradedata->menu[$userid];
+                }
+
+                if (array_key_exists($userid, $gradedata->submissioncomment)) {
+                    $usersubmissions->submissioncomment = $gradedata->submissioncomment[$userid];
+                }
+
+
+                // Trigger grade event.
+                if ($DB->insert_record('kalmediaassign_submission', $usersubmissions)) {
+
+                    $grade = new stdClass();
+                    $grade->userid = $userid;
+                    $grade = kalmediaassign_get_submission_grade_object($kalmediaassignobj->id, $userid);
+
+                    $kalmediaassignobj->cmidnumber = $cm->idnumber;
+
+                    kalmediaassign_grade_item_update($kalmediaassignobj, $grade);
+
+                    // Write a log only if updating.
+                    $event = \mod_kalmediaassign\event\grades_updated::create(array(
+                        'objectid' => $kalmediaassignobj->id,
+                        'context' => context_module::instance($cm->id),
+                        'relateduserid' => $userid
+                    ));
+                    $event->trigger();
+                }
+            }
+
+            $updated = false;
+        }
+    }
+
+    $renderer->display_submissions_table($cm, $data->group_filter, $data->filter, $data->perpage,
+                                         $data->quickgrade, $tifirst, $tilast, $page);
+
+    $prefform->set_data($data);
+    $prefform->display();
 }
-
-$renderer->display_submissions_table($cm, $data->group_filter, $data->filter, $data->perpage,
-                                     $data->quickgrade, $tifirst, $tilast, $page);
-
-$prefform->set_data($data);
-$prefform->display();
 
 echo $OUTPUT->footer();

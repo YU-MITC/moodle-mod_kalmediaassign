@@ -18,7 +18,7 @@
  * The grades_updated event.
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  * Event class of YU Kaltura Media assign.
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class grades_updated extends \core\event\base {
@@ -42,8 +42,8 @@ class grades_updated extends \core\event\base {
          * Select flags. c(reate), r(ead), u(pdate), d(elete).
          */
         $this->data['crud'] = 'u';
-        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'kalmediaassign';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'kalmediaassign_submission';
     }
 
     /**
@@ -86,6 +86,6 @@ class grades_updated extends \core\event\base {
      * @return array - object mapping.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'kalmediaassign', 'restore' => 'kalmediaassign');
+        return array('db' => 'kalmediaassign_submission', 'restore' => 'grade');
     }
 }

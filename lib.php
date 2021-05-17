@@ -18,7 +18,7 @@
  * Kaltura media assignment library of hooks
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -228,7 +228,7 @@ function kalmediaassign_refresh_events($courseid = 0) {
             return false;
         }
     }
-    foreach ($kalmediaassigns as $kalemdiaassign) {
+    foreach ($kalmediaassigns as $kalmediaassign) {
         // Use assignment's course column if courseid parameter is not given.
         if (!$courseid) {
             $courseid = $kalmediaassign->course;

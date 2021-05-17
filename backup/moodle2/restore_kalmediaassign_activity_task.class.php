@@ -19,7 +19,7 @@
  * @package    mod_kalmediaassign
  * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,7 +33,7 @@ require_once(dirname(__FILE__) . '/restore_kalmediaassign_stepslib.php');
  * @package    mod_kalmediaassign
  * @subpackage backup-moodle2
  * @copyright  (C) 2010 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
- * @copyright  (C) 2016-2020 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_kalmediaassign_activity_task extends restore_activity_task {
@@ -58,7 +58,7 @@ class restore_kalmediaassign_activity_task extends restore_activity_task {
      * processed by the link decoder.
      * @return object - decoded content.
      */
-    static public function define_decode_contents() {
+    public static function define_decode_contents() {
         $contents = array();
 
         $contents[] = new restore_decode_content('kalmediaassign', array('intro'), 'kalmediaassign');
@@ -71,7 +71,7 @@ class restore_kalmediaassign_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder.
      * @return array - list of rule.
      */
-    static public function define_decode_rules() {
+    public static function define_decode_rules() {
         $rules = array();
 
         $rules[] = new restore_decode_rule('KALMEDIAASSIGNVIEWBYID', '/mod/kalmediaassign/view.php?id=$1', 'course_module');
@@ -87,7 +87,7 @@ class restore_kalmediaassign_activity_task extends restore_activity_task {
      * It must return one array of restore_log_rule objects.
      * @return array - list of rule.
      */
-    static public function define_restore_log_rules() {
+    public static function define_restore_log_rules() {
         $rules = array();
 
         $rules[] = new restore_log_rule('kalmediaassign', 'add', 'view.php?id={course_module}', '{kalmediaassign}');
@@ -108,7 +108,7 @@ class restore_kalmediaassign_activity_task extends restore_activity_task {
      *
      * @return array - list of rule.
      */
-    static public function define_restore_log_rules_for_course() {
+    public static function define_restore_log_rules_for_course() {
         $rules = array();
 
         // Fix old wrong uses (missing extension).
