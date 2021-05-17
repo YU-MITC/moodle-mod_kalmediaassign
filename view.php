@@ -33,21 +33,21 @@ $id = optional_param('id', 0, PARAM_INT); // Course Module ID.
 
 // Retrieve module instance.
 if (empty($id)) {
-    print_error('invalidid', 'kalmediaassign');
+    throw new moodle_exception('invalidid', 'kalmediaassign');
 }
 
 if (!empty($id)) {
 
     if (! $cm = get_coursemodule_from_id('kalmediaassign', $id)) {
-        print_error('invalidcoursemodule');
+        throw new moodle_exception('invalidcoursemodule');
     }
 
     if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
-        print_error('coursemisconf');
+        throw new moodle_exception('coursemisconf');
     }
 
     if (! $kalmediaassign = $DB->get_record('kalmediaassign', array("id" => $cm->instance))) {
-        print_error('invalidid', 'kalmediaassign');
+        throw new moodle_exception('invalidid', 'kalmediaassign');
     }
 }
 
@@ -106,10 +106,13 @@ $completion->set_module_viewed($cm);
 
 if (local_yukaltura_has_mobile_flavor_enabled() && local_yukaltura_get_enable_html5()) {
     $uiconfid = local_yukaltura_get_player_uiconf('player');
-    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid));
+    $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
+    $url = new moodle_url(local_yukaltura_html5_javascript_url($uiconfid, $playertype));
     $PAGE->requires->js($url, true);
-    $url = new moodle_url('/local/yukaltura/js/frameapi.js');
-    $PAGE->requires->js($url, true);
+    if ($playertype == KALTURA_UNIVERSAL_STUDIO) {
+        $url = new moodle_url('/local/yukaltura/js/frameapi.js');
+        $PAGE->requires->js($url, true);
+    }
 }
 
 echo $OUTPUT->header();

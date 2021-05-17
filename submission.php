@@ -31,7 +31,7 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 if (!confirm_sesskey()) {
-    print_error('confirmsesskeybad', 'error');
+    throw new moodle_exception('confirmsesskeybad', 'error');
 }
 
 $entryid = required_param('entry_id', PARAM_TEXT);
@@ -40,15 +40,15 @@ $cmid    = required_param('cmid', PARAM_INT);
 global $USER, $OUTPUT, $DB, $PAGE;
 
 if (! $cm = get_coursemodule_from_id('kalmediaassign', $cmid)) {
-    print_error('invalidcoursemodule');
+    throw new moodle_exception('invalidcoursemodule');
 }
 
 if (! $course = $DB->get_record('course', array('id' => $cm->course))) {
-    print_error('coursemisconf');
+    throw new moodle_exception('coursemisconf');
 }
 
 if (! $kalmediaassignobj = $DB->get_record('kalmediaassign', array('id' => $cm->instance))) {
-    print_error('invalidid', 'kalmediaassign');
+    throw new moodle_exception('invalidid', 'kalmediaassign');
 }
 
 require_course_login($course->id, true, $cm);
@@ -60,13 +60,13 @@ $PAGE->set_heading($course->fullname);
 require_login();
 
 if (kalmediaassign_assignment_submission_expired($kalmediaassignobj) && !$kalmediaassignobj->preventlate) {
-    print_error('assignmentexpired', 'kalmediaassign', 'course/view.php?id='. $course->id);
+    throw new moodle_exception('assignmentexpired', 'kalmediaassign', 'course/view.php?id='. $course->id);
 }
 
 echo $OUTPUT->header();
 
 if (empty($entryid)) {
-    print_error('emptyentryid', 'kalmediaassign', $CFG->wwwroot . '/mod/kalmediaassign/view.php?id='.$cm->id);
+    throw new moodle_exception('emptyentryid', 'kalmediaassign', $CFG->wwwroot . '/mod/kalmediaassign/view.php?id='.$cm->id);
 }
 
 $param = array('mediaassignid' => $kalmediaassignobj->id, 'userid' => $USER->id);
@@ -105,7 +105,7 @@ if ($submission) {
         ));
         $event->trigger();
     } else {
-         print_error('not_update', 'kalmediaassign');
+         throw new moodle_exception('not_update', 'kalmediaassign');
     }
 } else {
     $submission = new stdClass();
@@ -131,7 +131,7 @@ if ($submission) {
         echo html_writer::end_tag('center');
 
     } else {
-         print_error('not_insert', 'kalmediaassign');
+         throw new moodle_exception('not_insert', 'kalmediaassign');
     }
 }
 

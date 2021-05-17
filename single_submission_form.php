@@ -114,7 +114,7 @@ class kalmediaassign_singlesubmission_form extends moodleform {
             } else {
                 list($entryobject->width, $entryobject->height) = kalmediaassign_get_player_dimensions();
                 $playertype = local_yukaltura_get_player_type($uiconfid, $connection);
-		if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
+                if ($playertype == KALTURA_TV_PLATFORM_STUDIO) {
                     $markup = local_yukaltura_get_dynamicembed_code($entryobject, $uiconfid, $connection, $session);
                 } else {
                     $markup = local_yukaltura_get_kwidget_code($entryobject, $uiconfid, $session);

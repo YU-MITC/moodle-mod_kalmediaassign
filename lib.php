@@ -228,7 +228,7 @@ function kalmediaassign_refresh_events($courseid = 0) {
             return false;
         }
     }
-    foreach ($kalmediaassigns as $kalemdiaassign) {
+    foreach ($kalmediaassigns as $kalmediaassign) {
         // Use assignment's course column if courseid parameter is not given.
         if (!$courseid) {
             $courseid = $kalmediaassign->course;

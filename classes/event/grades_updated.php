@@ -42,8 +42,8 @@ class grades_updated extends \core\event\base {
          * Select flags. c(reate), r(ead), u(pdate), d(elete).
          */
         $this->data['crud'] = 'u';
-        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'kalmediaassign';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'kalmediaassign_submission';
     }
 
     /**
@@ -86,6 +86,6 @@ class grades_updated extends \core\event\base {
      * @return array - object mapping.
      */
     public static function get_objectid_mapping() {
-        return array('db' => 'kalmediaassign', 'restore' => 'kalmediaassign');
+        return array('db' => 'kalmediaassign_submission', 'restore' => 'grade');
     }
 }
