@@ -18,14 +18,12 @@
  * This file contains the definition for the renderable classes for the assignment
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2022 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-if (!defined('MOODLE_INTERNAL')) {
-    // It must be included from a Moodle page.
-    die('Direct access to this script is forbidden.');
-}
+// It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
 global $PAGE;
 
@@ -37,7 +35,7 @@ require_login();
  * Renderable class of YU Kaltura Media assignment.
  *
  * @package    mod_kalmediaassign
- * @copyright  (C) 2016-2021 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
+ * @copyright  (C) 2016-2022 Yamaguchi University <gh-cc@mlex.cc.yamaguchi-u.ac.jp>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kalmediaassign_course_index_summary implements renderable {
