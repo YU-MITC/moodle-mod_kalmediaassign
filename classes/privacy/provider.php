@@ -24,6 +24,8 @@
 
 namespace mod_kalmediaassign\privacy;
 
+defined('MOODLE_INTERNAL') || die();
+
 interface kalmediaassign_interface extends
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,

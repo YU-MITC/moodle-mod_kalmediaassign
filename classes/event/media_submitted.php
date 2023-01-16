@@ -23,7 +23,6 @@
  */
 
 namespace mod_kalmediaassign\event;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Event class of YU Kaltura Media assign.
