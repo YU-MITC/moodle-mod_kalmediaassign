@@ -22,8 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+
+defined('MOODLE_INTERNAL') || die();
+
 
 if (file_exists($CFG->dirroot.'/calendar/lib.php')) {
     require_once($CFG->dirroot.'/calendar/lib.php');
