@@ -79,7 +79,7 @@ class submissions_table extends table_sql {
      */
     public function __construct($uniqueid, $cm, $gradinginfo, $quickgrade = false,
                          $tifirst = '', $tilast = '', $page = 0, $entries = array(),
-                         $connection) {
+                         $connection = null) {
 
         global $DB;
 
@@ -510,7 +510,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param object $clientobj - Kaltura client object.
      * @return string - HTML markup to display submission.
      */
-    public function display_submission($entryobj = null, $clientobj) {
+    public function display_submission($entryobj = null, $clientobj = null) {
         global $CFG;
 
         $imgsource = '';
@@ -1157,7 +1157,7 @@ class mod_kalmediaassign_renderer extends plugin_renderer_base {
      * @param string $tilast - lasttime of submissions.
      * @param int $page - number of page.
      */
-    public function display_submissions_table($cm, $groupfilter = 0, $filter = 'all', $perpage, $quickgrade = false,
+    public function display_submissions_table($cm, $groupfilter = 0, $filter = 'all', $perpage = 20, $quickgrade = false,
                                        $tifirst = '', $tilast = '', $page = 0) {
 
         global $DB, $COURSE, $USER;
