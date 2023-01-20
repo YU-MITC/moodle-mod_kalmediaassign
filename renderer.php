@@ -261,8 +261,6 @@ class submissions_table extends table_sql {
      */
     public function col_timemodified($data) {
         $attr = array('id' => 'ts'.$data->id);
-        echo "modified:" . $data->timemodified . "<br>" . PHP_EOL;
-        echo "due: " . $data->timedue . "<br>" . PHP_EOL;
         $datemodified = $data->timemodified;
         $datemodified = is_null($data->timemodified) || empty($data->timemodified) ? '' : userdate($datemodified);
 
