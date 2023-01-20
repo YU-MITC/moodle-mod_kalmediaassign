@@ -198,24 +198,23 @@ define(['jquery'], function($) {
                 if (element !== null && entryid !== "" && kalturahost !== "" && partnerid !== "" &&
                     uiconfid !== "" && modalwidth !== "" && modalheight !== "" && playerstudio !== "") {
                     if (playerstudio == "ovp") {
-                        var str = "<iframe type=\"text/javascript\" src=\"" + kalturahost + "/p/" + partnerid;
-                        str = str + "/embedPlaykitJs/uiconfid/" + uiconfid;
-                        str = str + "?iframeembed=true&entry_id=" + entryid + "\" ";
-                        str = str + "style=\"width: " + modalwidth + "px; height:" + modalheight + "px\" ";
-                        str = str + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
-                        //str = str + "allow=\"encrypted-media\">";
-                        str = str + ">";
-                        str = str + "</iframe>";
+                        var str1 = "<iframe type=\"text/javascript\" src=\"" + kalturahost + "/p/" + partnerid;
+                        str1 = str1 + "/embedPlaykitJs/uiconfid/" + uiconfid;
+                        str1 = str1 + "?iframeembed=true&entry_id=" + entryid + "\" ";
+                        str1 = str1 + "style=\"width: " + modalwidth + "px; height:" + modalheight + "px\" ";
+                        str1 = str1 + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\" ";
+                        str1 = str1 + ">";
+                        str1 = str1 + "</iframe>";
                         element.html("");
-                        element.html(str);
+                        element.html(str1);
                     } else {
-                        var str = "<iframe src=\"" + kalturahost + "/p/" + partnerid + "/sp/" + partnerid + "00";
-                        str = str + "/embedIframeJs/uiconf_id/" + uiconfid + "/partnerid" + partnerid;
-                        str = str + "?iframeembed=true&playerId=kaltura_player_" + datetime;
-                        str = str + "&entry_id=" + entryid + "\" width=\"" + modalwidth + "\" height=\"" + modalheight + "\" ";
-                        str = str + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
+                        var str2 = "<iframe src=\"" + kalturahost + "/p/" + partnerid + "/sp/" + partnerid + "00";
+                        str2 = str2 + "/embedIframeJs/uiconf_id/" + uiconfid + "/partnerid" + partnerid;
+                        str2 = str2 + "?iframeembed=true&playerId=kaltura_player_" + datetime;
+                        str2 = str2 + "&entry_id=" + entryid + "\" width=\"" + modalwidth + "\" height=\"" + modalheight + "\" ";
+                        str2 = str2 + "allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder=\"0\"></iframe>";
                         element.html("");
-                        element.html(str);
+                        element.html(str2);
                     }
                 } else {
                     window.alert("Not found.");
