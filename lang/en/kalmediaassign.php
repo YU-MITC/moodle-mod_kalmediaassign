@@ -118,7 +118,6 @@ $string['kalmediaassign:screenrecorder'] = 'Screen recorder';
 $string['cannotdisplaythumbnail'] = 'Unable to display thumbnail';
 $string['noassignments'] = 'No Kaltura media assignments found in the course';
 $string['table_failed'] = 'Submission table cannot be displayed due to an error.';
-$string['submitted'] = 'Submitted';
 $string['nosubmission'] = 'No submission';
 $string['nosubmissions'] = 'No submissions';
 $string['status_nosubmission'] = 'No submission';

@@ -75,7 +75,7 @@ require_capability('mod/kalmediaassign:gradesubmission', $context);
 $event = \mod_kalmediaassign\event\submission_detail_viewed::create(array(
     'objectid' => $kalmediaassignobj->id,
     'context' => context_module::instance($cm->id),
-    'relateduserid' => $userid
+    'relateduserid' => $userid,
 ));
 $event->trigger();
 
@@ -207,7 +207,7 @@ if ($submissionform->is_cancelled()) {
             $event = \mod_kalmediaassign\event\grades_updated::create(array(
                 'objectid' => $kalmediaassignobj->id,
                 'context' => context_module::instance($cm->id),
-                'relateduserid' => $userid
+                'relateduserid' => $userid,
             ));
             $event->trigger();
 

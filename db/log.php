@@ -28,5 +28,5 @@ $logs = array(
     array('module' => 'kalmediaassign', 'action' => 'add', 'mtable' => 'kalmediaassign', 'field' => 'name'),
     array('module' => 'kalmediaassign', 'action' => 'update', 'mtable' => 'kalmediaassign', 'field' => 'name'),
     array('module' => 'kalmediaassign', 'action' => 'view', 'mtable' => 'kalmediaassign', 'field' => 'name'),
-    array('module' => 'kalmediaassign', 'action' => 'delete', 'mtable' => 'kalmediaassign', 'field' => 'name')
+    array('module' => 'kalmediaassign', 'action' => 'delete', 'mtable' => 'kalmediaassign', 'field' => 'name'),
 );

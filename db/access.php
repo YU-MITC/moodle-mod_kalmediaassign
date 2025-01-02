@@ -33,9 +33,9 @@ $capabilities = array(
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
+            'manager' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' => 'moodle/course:manageactivities'
+        'clonepermissionsfrom' => 'moodle/course:manageactivities',
     ),
 
     'mod/kalmediaassign:gradesubmission' => array(
@@ -44,8 +44,8 @@ $capabilities = array(
         'archetypes' => array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
+            'manager' => CAP_ALLOW,
+        ),
     ),
 
     'mod/kalmediaassign:submit' => array(
@@ -53,15 +53,15 @@ $capabilities = array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
-            'student' => CAP_ALLOW
-        )
+            'student' => CAP_ALLOW,
+        ),
     ),
 
     'mod/kalmediaassign:screenrecorder' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_MODULE,
         'archetypes' => array(
-            'student' => CAP_ALLOW
-        )
-   )
+            'student' => CAP_ALLOW,
+        ),
+   ),
 );
