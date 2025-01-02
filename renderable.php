@@ -41,7 +41,7 @@ require_login();
 class kalmediaassign_course_index_summary implements renderable {
     /** @var array assignments A list of course module info and submission counts or statuses */
     public $assignments = array();
-    /** @var boolean usesections Does this course format support sections? */
+    /** @var bool usesections Does this course format support sections? */
     public $usesections = false;
     /** @var string courseformat The current course format name */
     public $courseformatname = '';
@@ -73,7 +73,7 @@ class kalmediaassign_course_index_summary implements renderable {
             'sectionname' => $sectionname,
             'timedue' => $timedue,
             'submissioninfo' => $submissioninfo,
-            'gradeinfo' => $gradeinfo
+            'gradeinfo' => $gradeinfo,
         );
     }
 }

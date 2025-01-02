@@ -118,7 +118,7 @@ if (empty($connection)) {
     // Write a log.
     $event = \mod_kalmediaassign\event\submission_page_viewed::create(array(
         'objectid' => $kalmediaassignobj->id,
-        'context' => context_module::instance($cm->id)
+        'context' => context_module::instance($cm->id),
     ));
     $event->trigger();
 
@@ -203,7 +203,7 @@ if (empty($connection)) {
                     $event = \mod_kalmediaassign\event\grades_updated::create(array(
                         'objectid' => $kalmediaassignobj->id,
                         'context' => context_module::instance($cm->id),
-                        'relateduserid' => $userid
+                        'relateduserid' => $userid,
                     ));
                     $event->trigger();
 
@@ -257,7 +257,7 @@ if (empty($connection)) {
                     $event = \mod_kalmediaassign\event\grades_updated::create(array(
                         'objectid' => $kalmediaassignobj->id,
                         'context' => context_module::instance($cm->id),
-                        'relateduserid' => $userid
+                        'relateduserid' => $userid,
                     ));
                     $event->trigger();
                 }
