@@ -32,5 +32,5 @@ $plugin->cron = 0;
 $plugin->supported = [403, 405];
 $plugin->dependencies = array(
     'local_yukaltura' => 2025010200,
-    'local_yumymedia' => 2025010200
+    'local_yumymedia' => 2025010200,
 );

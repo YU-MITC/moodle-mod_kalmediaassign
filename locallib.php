@@ -615,12 +615,12 @@ function kalmediaassign_update_calendar($kalmediaassign, $coursemoduleid) {
         if (kalmediaassign_show_intro($kalmediaassign)) {
             $event->description = array(
                 'text' => $intro,
-                'format' => $kalmediaassign->introformat
+                'format' => $kalmediaassign->introformat,
             );
         } else {
             $event->description = array(
                 'text' => '',
-                'format' => $kalmediaassign->introformat
+                'format' => $kalmediaassign->introformat,
             );
         }
 

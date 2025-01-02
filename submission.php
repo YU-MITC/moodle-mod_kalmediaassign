@@ -101,7 +101,7 @@ if ($submission) {
         $event = \mod_kalmediaassign\event\media_submitted::create(array(
             'objectid' => $kalmediaassignobj->id,
             'context' => context_module::instance($cm->id),
-            'relateduserid' => $USER->id
+            'relateduserid' => $USER->id,
         ));
         $event->trigger();
     } else {

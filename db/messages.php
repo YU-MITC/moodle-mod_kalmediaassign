@@ -28,6 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 $messageproviders = array (
 // Assignment submissions.
     'kalmediaassign_updates' => array (
-    )
+    ),
 
 );
